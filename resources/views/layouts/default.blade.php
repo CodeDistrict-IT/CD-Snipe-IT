@@ -859,9 +859,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
                 <div class="1hidden-xs pull-left">
                     <div class="pull-left" >
-                        <a target="_blank" href="https://snipeitapp.com" rel="noopener">Snipe-IT</a> is open source software,
-                        made with <i class="fas fa-heart" style="color: #a94442; font-size: 10px" aria-hidden="true"></i><span
-                                class="sr-only">love</span> by <a href="https://twitter.com/snipeitapp" rel="noopener">@snipeitapp</a>.
+                        This software is proprietary of <a target="_blank" href="https://codedistrict.com/" rel="noopener">Code District</a>, contributed by IT-Dept and Haroon Mahmood.
                     </div>
                     <div class="pull-right">
                     @if ($snipeSettings->version_footer!='off')
