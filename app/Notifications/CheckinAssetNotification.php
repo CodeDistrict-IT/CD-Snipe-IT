@@ -169,6 +169,7 @@ class CheckinAssetNotification extends Notification
                 'fields'        => $fields,
                 'expected_checkin'  => $this->expected_checkin,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Asset_Checkin_Notification'));
 
         return $message;

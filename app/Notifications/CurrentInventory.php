@@ -45,6 +45,7 @@ class CurrentInventory extends Notification
                 'licenses'  => $this->user->licenses,
                 'consumables'  => $this->user->consumables,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.inventory_report'));
 
         return $message;

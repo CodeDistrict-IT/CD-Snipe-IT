@@ -188,6 +188,7 @@ class CheckoutAccessoryNotification extends Notification
                 'accept_url'    => $accept_url,
                 'checkout_qty'  => $this->checkout_qty,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Confirm_accessory_delivery'));
     }
 }

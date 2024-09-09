@@ -166,6 +166,7 @@ class CheckinLicenseSeatNotification extends Notification
                 'note'          => $this->note,
                 'target'        => $this->target,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.License_Checkin_Notification'));
     }
 }

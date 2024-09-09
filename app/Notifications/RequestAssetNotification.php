@@ -118,6 +118,7 @@ class RequestAssetNotification extends Notification
                 'intro_text'        => trans('mail.a_user_requested'),
                 'qty'           => $this->item_quantity,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Item_Requested'));
 
         return $message;

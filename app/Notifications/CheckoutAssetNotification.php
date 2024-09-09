@@ -219,6 +219,7 @@ public function toGoogleChat()
                 'last_checkout' => $this->last_checkout,
                 'expected_checkin'  => $this->expected_checkin,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Confirm_asset_delivery'));
 
         return $message;

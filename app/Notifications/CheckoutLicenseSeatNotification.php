@@ -187,6 +187,7 @@ class CheckoutLicenseSeatNotification extends Notification
                 'req_accept'    => $req_accept,
                 'accept_url'    => $accept_url,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Confirm_license_delivery'));
     }
 }

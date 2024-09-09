@@ -160,6 +160,7 @@ class CheckinAccessoryNotification extends Notification
                 'note'          => $this->note,
                 'target'        => $this->target,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Accessory_Checkin_Notification'));
     }
 }
