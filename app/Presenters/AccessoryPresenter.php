@@ -110,14 +110,14 @@ class AccessoryPresenter extends Presenter
             ],
             [
                 'field' => 'broken_quantity',
-                'searchable' => true,
+                'searchable' => false,
                 'sortable' => true,
                 'visible' => true,
                 'title' => trans('admin/accessories/general.accessory_status.broken_damaged'),
             ],
             [
                 'field' => 'stolen_quantity',
-                'searchable' => true,
+                'searchable' => false,
                 'sortable' => true,
                 'visible' => true,
                 'title' => trans('admin/accessories/general.accessory_status.stolen_lost'),
