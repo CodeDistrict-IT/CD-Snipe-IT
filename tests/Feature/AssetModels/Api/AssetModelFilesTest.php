@@ -44,10 +44,10 @@ class AssetModelFilesTest extends TestCase
                 route('api.models.files.index', ['model_id' => $model[0]['id']]))
             ->assertOk()
             ->assertJsonStructure([
-                    'status',
-                    'messages',
-                    'payload',
-                ]);
+                'status',
+                'messages',
+                'payload',
+            ]);
     }
 
     public function testAssetModelApiDownloadsFile()

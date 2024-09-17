@@ -18,5 +18,9 @@ return [
     'use_default_eula_disabled' => '<del>Use the primary default EULA instead.</del> No primary default EULA is set. Please add one in Settings.',
     'clone' => 'Clone Accessory',
     'delete_disabled' => 'This accessory cannot be deleted yet because some items are still checked out.',
-
+    'accessory_status' => [
+        'working' => 'Working',
+        'stolen_lost' => 'Stolen/Lost',
+        'broken_damaged' => 'Broken/Damaged',
+    ],
 ];

@@ -49,6 +49,8 @@ class AccessoriesController extends Controller
                 'notes',
                 'created_at',
                 'min_amt',
+                'broken_quantity',
+                'stolen_quantity',
                 'company_id',
                 'notes',
                 'checkouts_count',

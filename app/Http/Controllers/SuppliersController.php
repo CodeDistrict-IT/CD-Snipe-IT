@@ -19,7 +19,6 @@ class SuppliersController extends Controller
     /**
      * Show a list of all suppliers
      *
-     * @return \Illuminate\Contracts\View\View
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

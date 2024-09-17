@@ -20,7 +20,6 @@ class AssetFilesController extends Controller
      * Upload a file to the server.
      *
      * @param  int  $assetId
-     * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *

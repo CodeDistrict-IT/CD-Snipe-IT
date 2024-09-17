@@ -136,7 +136,6 @@ class AssetModelsController extends Controller
      *
      * @param  ImageUploadRequest  $request
      * @param  int  $modelId
-     * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */

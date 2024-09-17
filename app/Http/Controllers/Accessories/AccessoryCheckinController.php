@@ -25,7 +25,6 @@ class AccessoryCheckinController extends Controller
      */
     public function create($accessoryUserId = null, $backto = null): View|RedirectResponse
     {
-        dd($accessoryUserId, $backto);
         if (is_null($accessory_user = DB::table('accessories_checkout')->find($accessoryUserId))) {
             return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.not_found'));
         }
@@ -60,6 +59,20 @@ class AccessoryCheckinController extends Controller
         $checkin_at = date('Y-m-d H:i:s');
         if ($request->filled('checkin_at')) {
             $checkin_at = $request->input('checkin_at').' '.$checkin_hours;
+        }
+
+        if ($request->filled('accessory_status')) {
+            if ($request->accessory_status === 'working') {
+                $accessory->qty = $accessory->qty + 1;
+            } elseif ($request->accessory_status === 'broken_damaged') {
+                $accessory->broken_quantity = $accessory->broken_quantity + 1;
+                $accessory->qty = $accessory->qty - 1;
+            } elseif ($request->accessory_status === 'stolen_lost') {
+                $accessory->stolen_quantity = $accessory->stolen_quantity + 1;
+                $accessory->qty = $accessory->qty - 1;
+            }
+
+            $accessory->save();
         }
 
         // Was the accessory updated?

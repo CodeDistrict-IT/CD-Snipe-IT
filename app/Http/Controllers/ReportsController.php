@@ -49,8 +49,6 @@ class ReportsController extends Controller
      * @author [A. Gianotto] [<snipe@snipe.net>]
      *
      * @since [v1.0]
-     *
-     * @return \Illuminate\Contracts\View\View
      */
     public function getAccessoryReport(): View
     {

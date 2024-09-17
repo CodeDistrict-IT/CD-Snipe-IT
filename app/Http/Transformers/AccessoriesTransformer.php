@@ -34,6 +34,8 @@ class AccessoriesTransformer
             'location' => ($accessory->location) ? ['id' => $accessory->location->id, 'name' => e($accessory->location->name)] : null,
             'notes' => ($accessory->notes) ? Helper::parseEscapedMarkedownInline($accessory->notes) : null,
             'qty' => ($accessory->qty) ? (int) $accessory->qty : null,
+            'broken_quantity' => ($accessory->broken_quantity) ? (int) $accessory->broken_quantity : 0,
+            'stolen_quantity' => ($accessory->stolen_quantity) ? (int) $accessory->stolen_quantity : 0,
             'purchase_date' => ($accessory->purchase_date) ? Helper::getFormattedDateObject($accessory->purchase_date, 'date') : null,
             'purchase_cost' => Helper::formatCurrencyOutput($accessory->purchase_cost),
             'order_number' => ($accessory->order_number) ? e($accessory->order_number) : null,
