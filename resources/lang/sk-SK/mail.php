@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Dátum prijatia',
     'checkout_date' => 'Dátum odovzdania',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Please click on the link at the bottom to confirm that you have received the accessory.',
     'click_on_the_link_asset' => 'Please click on the link at the bottom to confirm that you have received the asset.',

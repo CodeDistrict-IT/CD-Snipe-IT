@@ -9,6 +9,7 @@ class LicensePresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -97,7 +98,7 @@ class LicensePresenter extends Presenter
                 'sortable' => true,
                 'title' => trans('mail.min_QTY'),
                 'formatter' => 'minAmtFormatter',
-            ],[
+            ], [
                 'field' => 'purchase_date',
                 'searchable' => true,
                 'sortable' => true,
@@ -214,6 +215,7 @@ class LicensePresenter extends Presenter
 
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayoutSeats()
@@ -226,12 +228,12 @@ class LicensePresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('general.id'),
                 'visible' => false,
-           ],
-           [
+            ],
+            [
                 'field' => 'name',
                 'searchable' => false,
                 'sortable' => false,
-                'sorter'   => 'numericOnly',
+                'sorter' => 'numericOnly',
                 'switchable' => true,
                 'title' => trans('admin/licenses/general.seat'),
                 'visible' => true,
@@ -282,7 +284,7 @@ class LicensePresenter extends Presenter
                 'sortable' => false,
                 'visible' => false,
                 'title' => trans('general.notes'),
-                'formatter' => 'notesFormatter'
+                'formatter' => 'notesFormatter',
             ],
             [
                 'field' => 'checkincheckout',
@@ -300,6 +302,7 @@ class LicensePresenter extends Presenter
 
     /**
      * Link to this licenses Name
+     *
      * @return string
      */
     public function nameUrl()
@@ -309,6 +312,7 @@ class LicensePresenter extends Presenter
 
     /**
      * Link to this licenses Name
+     *
      * @return string
      */
     public function fullName()
@@ -318,6 +322,7 @@ class LicensePresenter extends Presenter
 
     /**
      * Link to this licenses serial
+     *
      * @return string
      */
     public function serialUrl()
@@ -327,6 +332,7 @@ class LicensePresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'เลือกออฟชั่นสำหรับรายงานสินทรัพย์ที่คุณต้องการ',
+    'info' => 'เลือกออฟชั่นสำหรับรายงานสินทรัพย์ที่คุณต้องการ',
     'deleted_user' => 'Deleted user',
     'send_reminder' => 'Send reminder',
     'reminder_sent' => 'Reminder sent',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'User City',
         'user_state' => 'User State',
         'user_country' => 'User Country',
-        'user_zip' => 'User Zip'
-    ]
+        'user_zip' => 'User Zip',
+    ],
 ];

@@ -10,15 +10,11 @@ use Illuminate\Notifications\Notification;
 class AuditNotification extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
-     *
-     * @param $params
      */
     public function __construct($params)
     {
@@ -45,6 +41,7 @@ class AuditNotification extends Notification
     public function toSlack()
     {
         $channel = ($this->settings->webhook_channel) ? $this->settings->webhook_channel : '';
+
         return (new SlackMessage)
             ->success()
             ->content(class_basename(get_class($this->params['item'])).' Audited')

@@ -142,7 +142,7 @@ class StoreAssetTest extends TestCase
                 'status_id' => $status->id,
                 'archive' => null,
                 'depreciate' => null,
-                'physical' => null
+                'physical' => null,
             ])
             ->assertOk()
             ->assertStatusMessageIs('success')
@@ -167,7 +167,7 @@ class StoreAssetTest extends TestCase
                 'status_id' => $status->id,
                 'archive' => '',
                 'depreciate' => '',
-                'physical' => ''
+                'physical' => '',
             ])
             ->assertOk()
             ->assertStatusMessageIs('success')
@@ -423,7 +423,7 @@ class StoreAssetTest extends TestCase
             ->assertStatusMessageIs('success')
             ->json();
 
-       Asset::find($response['payload']['id'])->delete();
+        Asset::find($response['payload']['id'])->delete();
 
         $this->actingAsForApi(User::factory()->superuser()->create())
             ->postJson(route('api.assets.store'), [

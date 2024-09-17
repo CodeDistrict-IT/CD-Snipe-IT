@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Usuku lokuhlola',
     'checkout_date' => 'Usuku lokuhlola',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Sicela uchofoze kusixhumanisi ngezansi ukuze uqinisekise ukuthi uthole i-accessory.',
     'click_on_the_link_asset' => 'Sicela uchofoze kusixhumanisi ngezansi ukuze uqinisekise ukuthi uthole ifa.',

@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class CreateLocationsTest extends TestCase
 {
-
     public function testRequiresPermissionToCreateLocation()
     {
         $this->actingAsForApi(User::factory()->create())
@@ -30,7 +29,6 @@ class CreateLocationsTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-
     }
 
     public function testUserCannotCreateLocationsThatAreTheirOwnParent()
@@ -45,12 +43,10 @@ class CreateLocationsTest extends TestCase
             ->assertStatusMessageIs('error')
             ->assertJson([
                 'messages' => [
-                    'parent_id'    => ['The parent id must not create a circular reference.'],
+                    'parent_id' => ['The parent id must not create a circular reference.'],
                 ],
             ])
             ->json();
 
-
     }
-
 }

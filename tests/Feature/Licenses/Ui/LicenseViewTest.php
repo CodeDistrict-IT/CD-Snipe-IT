@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Licenses\Ui;
 
-use App\Models\License;
 use App\Models\Depreciation;
+use App\Models\License;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -16,7 +16,7 @@ class LicenseViewTest extends TestCase
             ->get(route('licenses.show', $license))
             ->assertForbidden();
     }
-    
+
     public function testLicenseWithPurchaseDateDepreciatesCorrectly()
     {
         $depreciation = Depreciation::factory()->create(['months' => 12]);
@@ -25,7 +25,7 @@ class LicenseViewTest extends TestCase
             ->get(route('licenses.show', $license))
             ->assertOk()
             ->assertSee([
-                '2021-01-01'
+                '2021-01-01',
             ], false);
     }
 }

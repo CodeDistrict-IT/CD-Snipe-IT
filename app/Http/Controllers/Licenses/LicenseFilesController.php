@@ -7,20 +7,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Actionlog;
 use App\Models\License;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class LicenseFilesController extends Controller
 {
     /**
      * Validates and stores files associated with a license.
      *
-     * @param UploadFileRequest $request
-     * @param int $licenseId
+     * @param  int  $licenseId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @todo Switch to using the AssetFileRequest form request validator.
      */
     public function store(UploadFileRequest $request, $licenseId = null)
@@ -36,19 +39,19 @@ class LicenseFilesController extends Controller
                 }
 
                 foreach ($request->file('file') as $file) {
-                    $file_name = $request->handleFile('private_uploads/licenses/','license-'.$license->id, $file);
+                    $file_name = $request->handleFile('private_uploads/licenses/', 'license-'.$license->id, $file);
 
                     //Log the upload to the log
                     $license->logUpload($file_name, e($request->input('notes')));
                 }
 
-
-                    return redirect()->route('licenses.show', $license->id)->with('success', trans('admin/licenses/message.upload.success'));
+                return redirect()->route('licenses.show', $license->id)->with('success', trans('admin/licenses/message.upload.success'));
 
             }
 
             return redirect()->route('licenses.show', $license->id)->with('error', trans('admin/licenses/message.upload.nofiles'));
         }
+
         // Prepare the error message
         return redirect()->route('licenses.index')
             ->with('error', trans('admin/licenses/message.does_not_exist'));
@@ -58,10 +61,13 @@ class LicenseFilesController extends Controller
      * Deletes the selected license file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param int $licenseId
-     * @param int $fileId
+     *
+     * @param  int  $licenseId
+     * @param  int  $fileId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($licenseId = null, $fileId = null)
@@ -80,7 +86,7 @@ class LicenseFilesController extends Controller
                         Log::debug($e);
                     }
                 }
-                
+
                 $log->delete();
 
                 return redirect()->back()
@@ -97,10 +103,13 @@ class LicenseFilesController extends Controller
      * Allows the selected file to be viewed.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.4]
-     * @param int $licenseId
-     * @param int $fileId
+     *
+     * @param  int  $licenseId
+     * @param  int  $fileId
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show($licenseId = null, $fileId = null, $download = true)

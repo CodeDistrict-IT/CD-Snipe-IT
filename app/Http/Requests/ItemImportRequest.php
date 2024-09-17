@@ -60,11 +60,11 @@ class ItemImportRequest extends FormRequest
             $fieldMappings = array_change_key_case(array_flip($import->field_map), CASE_LOWER);
         }
         $importer->setCallbacks([$this, 'log'], [$this, 'progress'], [$this, 'errorCallback'])
-                 ->setUserId(Auth::id())
-                 ->setUpdating($this->get('import-update'))
-                 ->setShouldNotify($this->get('send-welcome'))
-                 ->setUsernameFormat('firstname.lastname')
-                 ->setFieldMappings($fieldMappings);
+            ->setUserId(Auth::id())
+            ->setUpdating($this->get('import-update'))
+            ->setShouldNotify($this->get('send-welcome'))
+            ->setUsernameFormat('firstname.lastname')
+            ->setFieldMappings($fieldMappings);
         $importer->import();
 
         return $this->errors;

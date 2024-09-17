@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'The value for :fieldname cannot be null.',
+    'import_field_empty' => 'The value for :fieldname cannot be null.',
     'in' => 'Valitud atribuut on kehtetu.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,7 +125,7 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
-    'percent'       => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
 
     'present' => 'Atribuudiväli peab olema kohal.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
@@ -155,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'Atribuut peab olema string.',
+    'string' => 'Atribuut peab olema string.',
     'two_column_unique_undeleted' => 'The :attribute must be unique across :table1 and :table2. ',
-    'unique_undeleted'     => ':attribute peab olema ainulaadne.',
-    'non_circular'         => 'The :attribute must not create a circular reference.',
-    'not_array'            => ':attribute cannot be an array.',
+    'unique_undeleted' => ':attribute peab olema ainulaadne.',
+    'non_circular' => 'The :attribute must not create a circular reference.',
+    'not_array' => ':attribute cannot be an array.',
     'disallow_same_pwd_as_user_fields' => 'Parool ei saa sisaldada kasutajanime.',
-    'letters'              => 'Parool peab sisaldama vähemalt ühte tähte.',
-    'numbers'              => 'Parool peab sisaldama vähemalt ühte numbrit.',
-    'case_diff'            => 'Parool peab sisaldama väike- ja suurtähti.',
-    'symbols'              => 'Parool peab sisaldama sümboleid.',
+    'letters' => 'Parool peab sisaldama vähemalt ühte tähte.',
+    'numbers' => 'Parool peab sisaldama vähemalt ühte numbrit.',
+    'case_diff' => 'Parool peab sisaldama väike- ja suurtähti.',
+    'symbols' => 'Parool peab sisaldama sümboleid.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => 'Atribuut: on juba võetud.',
     'uploaded' => 'Atribuut ei õnnestunud üles laadida.',
@@ -186,27 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Atribuudi väli sisaldab märk, mis pole lubatud.',
-        'email_array'      => 'Üks või mitu e-posti aadressi on kehtetu.',
-        'hashed_pass'      => 'Teie praegune parool on vale',
-        'dumbpwd'          => 'See parool on liiga levinud.',
+        'email_array' => 'Üks või mitu e-posti aadressi on kehtetu.',
+        'hashed_pass' => 'Teie praegune parool on vale',
+        'dumbpwd' => 'See parool on liiga levinud.',
         'statuslabel_type' => 'Peate valima kehtiva olekutüübi tüübi',
-        'custom_field_not_found'          => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
         'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => 'The :attribute must be a valid date in YYYY-MM-DD format',
-        'last_audit_date.date_format'   =>  'The :attribute must be a valid date in YYYY-MM-DD hh:mm:ss format',
-        'expiration_date.date_format'   =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'termination_date.date_format'  =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'expected_checkin.date_format'  =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'start_date.date_format'        =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'end_date.date_format'          =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'checkboxes'           => ':attribute contains invalid options.',
-        'radio_buttons'        => ':attribute is invalid.',
+        'purchase_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'last_audit_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD hh:mm:ss format',
+        'expiration_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'termination_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'expected_checkin.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'start_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'end_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'checkboxes' => ':attribute contains invalid options.',
+        'radio_buttons' => ':attribute is invalid.',
         'invalid_value_in_field' => 'Invalid value included in this field',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -232,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

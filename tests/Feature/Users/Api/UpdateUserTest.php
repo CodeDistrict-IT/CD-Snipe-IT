@@ -216,8 +216,8 @@ class UpdateUserTest extends TestCase
     {
         $this->settings->enableMultipleFullCompanySupport();
 
-        $companyA = Company::factory()->create(['name'=>'Company A']);
-        $companyB = Company::factory()->create(['name'=>'Company B']);
+        $companyA = Company::factory()->create(['name' => 'Company A']);
+        $companyB = Company::factory()->create(['name' => 'Company B']);
 
         $adminA = User::factory(['company_id' => $companyA->id])->admin()->create();
         $adminB = User::factory(['company_id' => $companyB->id])->admin()->create();
@@ -382,7 +382,6 @@ class UpdateUserTest extends TestCase
                 'groups' => [$newGroupToJoin->id],
             ]);
 
-
         $this->assertFalse($user->refresh()->groups->contains($newGroupToJoin),
             'Non-super-user was able to modify user group membership'
         );
@@ -410,8 +409,8 @@ class UpdateUserTest extends TestCase
         $user = User::factory()->create();
         $superUser = User::factory()->superuser()->create();
 
-        $groupA = Group::factory()->create(['name'=>'Group A']);
-        $groupB = Group::factory()->create(['name'=>'Group B']);
+        $groupA = Group::factory()->create(['name' => 'Group A']);
+        $groupB = Group::factory()->create(['name' => 'Group B']);
 
         $this->actingAsForApi($superUser)
             ->patchJson(route('api.users.update', $user), [
@@ -438,13 +437,13 @@ class UpdateUserTest extends TestCase
 
         // no assets assigned, therefore success
         $this->actingAsForApi($superUser)->patchJson(route('api.users.update', $user), [
-            'username'   => 'test',
+            'username' => 'test',
             'company_id' => $companyB->id,
         ])->assertStatusMessageIs('success');
 
         // same test but PUT
         $this->actingAsForApi($superUser)->putJson(route('api.users.update', $user), [
-            'username'   => 'test',
+            'username' => 'test',
             'first_name' => 'Test',
             'company_id' => $companyB->id,
         ])->assertStatusMessageIs('success');
@@ -453,16 +452,15 @@ class UpdateUserTest extends TestCase
 
         // asset assigned, therefore error
         $this->actingAsForApi($superUser)->patchJson(route('api.users.update', $user), [
-            'username'   => 'test',
+            'username' => 'test',
             'company_id' => $companyB->id,
         ])->assertStatusMessageIs('error');
 
         // same test but PUT
         $this->actingAsForApi($superUser)->putJson(route('api.users.update', $user), [
-            'username'   => 'test',
+            'username' => 'test',
             'first_name' => 'Test',
             'company_id' => $companyB->id,
         ])->assertStatusMessageIs('error');
     }
-
 }

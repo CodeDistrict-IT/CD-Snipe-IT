@@ -51,7 +51,7 @@ return [
 ',
     'checkout_date' => 'چک کردن تاریخ',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'لطفا روی لینک زیر کلیک کنید تا تأیید کنید که لوازم جانبی را دریافت کرده اید.',
     'click_on_the_link_asset' => 'لطفا روی لینک زیر کلیک کنید تا تأیید کنید که دارایی را دریافت کرده اید.',

@@ -4,8 +4,8 @@ namespace App\Http\Transformers;
 
 use App\Helpers\Helper;
 use App\Models\Company;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class CompaniesTransformer
@@ -20,16 +20,16 @@ class CompaniesTransformer
         return (new DatatablesTransformer)->transformDatatables($array, $total);
     }
 
-    public function transformCompany(Company $company = null)
+    public function transformCompany(?Company $company = null)
     {
         if ($company) {
             $array = [
                 'id' => (int) $company->id,
                 'name' => e($company->name),
-                'phone' => ($company->phone!='') ? e($company->phone): null,
-                'fax' => ($company->fax!='') ? e($company->fax): null,
-                'email' => ($company->email!='') ? e($company->email): null,
-                'image' =>   ($company->image) ? Storage::disk('public')->url('companies/'.e($company->image)) : null,
+                'phone' => ($company->phone != '') ? e($company->phone) : null,
+                'fax' => ($company->fax != '') ? e($company->fax) : null,
+                'email' => ($company->email != '') ? e($company->email) : null,
+                'image' => ($company->image) ? Storage::disk('public')->url('companies/'.e($company->image)) : null,
                 'created_at' => Helper::getFormattedDateObject($company->created_at, 'datetime'),
                 'updated_at' => Helper::getFormattedDateObject($company->updated_at, 'datetime'),
                 'assets_count' => (int) $company->assets_count,

@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use App\Http\Traits\TwoColumnUniqueUndeletedTrait;
 use App\Models\Traits\Searchable;
 use App\Presenters\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Gate;
-use Watson\Validating\ValidatingTrait;
-use App\Helpers\Helper;
 use Illuminate\Support\Str;
+use Watson\Validating\ValidatingTrait;
 
 /**
  * Model for Categories. Categories are a higher-level group
@@ -25,14 +25,16 @@ class Category extends SnipeModel
     use HasFactory;
 
     protected $presenter = \App\Presenters\CategoryPresenter::class;
+
     use Presentable;
     use SoftDeletes;
 
     protected $table = 'categories';
+
     protected $hidden = ['user_id', 'deleted_at'];
 
     protected $casts = [
-        'user_id'      => 'integer',
+        'user_id' => 'integer',
     ];
 
     /**
@@ -40,10 +42,10 @@ class Category extends SnipeModel
      */
     public $rules = [
         'user_id' => 'numeric|nullable',
-        'name'   => 'required|min:1|max:255|two_column_unique_undeleted:category_type',
-        'require_acceptance'   => 'boolean',
-        'use_default_eula'   => 'boolean',
-        'category_type'   => 'required|in:asset,accessory,consumable,component,license',
+        'name' => 'required|min:1|max:255|two_column_unique_undeleted:category_type',
+        'require_acceptance' => 'boolean',
+        'use_default_eula' => 'boolean',
+        'category_type' => 'required|in:asset,accessory,consumable,component,license',
     ];
 
     /**
@@ -54,9 +56,9 @@ class Category extends SnipeModel
      * @var bool
      */
     protected $injectUniqueIdentifier = true;
-    use ValidatingTrait;
-    use TwoColumnUniqueUndeletedTrait;
 
+    use TwoColumnUniqueUndeletedTrait;
+    use ValidatingTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -93,7 +95,9 @@ class Category extends SnipeModel
      * Checks if category can be deleted
      *
      * @author [Dan Meltzer] [<dmeltzer.devel@gmail.com>]
+     *
      * @since [v5.0]
+     *
      * @return bool
      */
     public function isDeletable()
@@ -108,7 +112,9 @@ class Category extends SnipeModel
      * Establishes the category -> accessories relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function accessories()
@@ -120,7 +126,9 @@ class Category extends SnipeModel
      * Establishes the category -> licenses relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.3]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function licenses()
@@ -132,7 +140,9 @@ class Category extends SnipeModel
      * Establishes the category -> consumables relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function consumables()
@@ -144,7 +154,9 @@ class Category extends SnipeModel
      * Establishes the category -> consumables relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function components()
@@ -159,7 +171,9 @@ class Category extends SnipeModel
      * It should only be used in a single category context.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return int
      */
     public function itemCount()
@@ -190,7 +204,9 @@ class Category extends SnipeModel
      * Establishes the category -> assets relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assets()
@@ -207,8 +223,10 @@ class Category extends SnipeModel
      * by their category.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.1.0]
      * @see \App\Models\Asset::scopeAssetsForShow()
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function showableAssets()
@@ -220,7 +238,9 @@ class Category extends SnipeModel
      * Establishes the category -> models relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function models()
@@ -233,7 +253,9 @@ class Category extends SnipeModel
      * checks for a settings level EULA
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return string | null
      */
     public function getEula()
@@ -260,7 +282,6 @@ class Category extends SnipeModel
      *
      * This will also correctly parse a 1/0 if "true"/"false" is passed.
      *
-     * @param $value
      * @return void
      */
     public function setCheckinEmailAttribute($value)
@@ -280,7 +301,7 @@ class Category extends SnipeModel
      * @author  Vincent Sposato <vincent.sposato@gmail.com>
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeRequiresAcceptance($query)
     {

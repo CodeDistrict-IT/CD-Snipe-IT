@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Assets\Ui;
 
-use App\Models\Accessory;
-use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\User;
 use Tests\TestCase;
@@ -18,10 +16,10 @@ class BulkDeleteAssetsTest extends TestCase
         $id_array = $assets->pluck('id')->toArray();
 
         $this->actingAs($user)->post('/hardware/bulkedit', [
-            'ids'          => $id_array,
-            'order'        => 'asc',
+            'ids' => $id_array,
+            'order' => 'asc',
             'bulk_actions' => 'delete',
-            'sort'         => 'id'
+            'sort' => 'id',
         ])->assertStatus(200);
     }
 
@@ -33,7 +31,7 @@ class BulkDeleteAssetsTest extends TestCase
         $id_array = $assets->pluck('id')->toArray();
 
         $this->actingAs($user)->post('/hardware/bulkdelete', [
-            'ids'          => $id_array,
+            'ids' => $id_array,
             'bulk_actions' => 'delete',
         ])->assertStatus(403);
     }
@@ -43,22 +41,7 @@ class BulkDeleteAssetsTest extends TestCase
         $user = User::factory()->viewAssets()->deleteAssets()->editAssets()->create();
         $response = $this->actingAs($user)
             ->post('/hardware/bulkdelete', [
-                'ids'          => null,
-                'bulk_actions' => 'delete',
-        ])
-        ->assertStatus(302)
-        ->assertRedirect(route('hardware.index'));
-
-       $this->followRedirects($response)->assertSee('alert-danger');
-    }
-
-    public function testPageRedirectFromInterstitialIfNoAssetsSelectedToRestore()
-    {
-        $user = User::factory()->viewAssets()->deleteAssets()->editAssets()->create();
-        $response = $this->actingAs($user)
-            ->from(route('hardware.index'))
-            ->post('/hardware/bulkrestore', [
-                'ids'          => null,
+                'ids' => null,
                 'bulk_actions' => 'delete',
             ])
             ->assertStatus(302)
@@ -67,6 +50,20 @@ class BulkDeleteAssetsTest extends TestCase
         $this->followRedirects($response)->assertSee('alert-danger');
     }
 
+    public function testPageRedirectFromInterstitialIfNoAssetsSelectedToRestore()
+    {
+        $user = User::factory()->viewAssets()->deleteAssets()->editAssets()->create();
+        $response = $this->actingAs($user)
+            ->from(route('hardware.index'))
+            ->post('/hardware/bulkrestore', [
+                'ids' => null,
+                'bulk_actions' => 'delete',
+            ])
+            ->assertStatus(302)
+            ->assertRedirect(route('hardware.index'));
+
+        $this->followRedirects($response)->assertSee('alert-danger');
+    }
 
     public function testBulkDeleteSelectedAssetsFromInterstitial()
     {
@@ -78,11 +75,11 @@ class BulkDeleteAssetsTest extends TestCase
         $response = $this->actingAs($user)
             ->from(route('hardware/bulkedit'))
             ->post('/hardware/bulkdelete', [
-            'ids'          => $id_array,
-            'bulk_actions' => 'delete',
-        ])->assertStatus(302);
+                'ids' => $id_array,
+                'bulk_actions' => 'delete',
+            ])->assertStatus(302);
 
-        Asset::findMany($id_array)->each(function (Asset $asset)  {
+        Asset::findMany($id_array)->each(function (Asset $asset) {
             $this->assertNotNull($asset->deleted_at);
         });
 
@@ -98,23 +95,22 @@ class BulkDeleteAssetsTest extends TestCase
         $id_array = $asset->pluck('id')->toArray();
 
         // Check that the assets are deleted
-        Asset::findMany($id_array)->each(function (Asset $asset)  {
+        Asset::findMany($id_array)->each(function (Asset $asset) {
             $this->assertNull($asset->deleted_at);
         });
 
         $response = $this->actingAs($user)
             ->from(route('hardware/bulkedit'))
             ->post(route('hardware/bulkrestore'), [
-                'ids'          => [$asset->id],
+                'ids' => [$asset->id],
             ])->assertStatus(302);
 
         $this->followRedirects($response)->assertSee('alert-success');
 
-        Asset::findMany($id_array)->each(function (Asset $asset)  {
+        Asset::findMany($id_array)->each(function (Asset $asset) {
             $this->assertNull($asset->deleted_at);
         });
     }
-
 
     public function testActionLogCreatedUponBulkDelete()
     {
@@ -124,7 +120,7 @@ class BulkDeleteAssetsTest extends TestCase
         $this->actingAs($user)
             ->from(route('hardware/bulkedit'))
             ->post('/hardware/bulkdelete', [
-                'ids'          => [$asset->id],
+                'ids' => [$asset->id],
                 'bulk_actions' => 'delete',
             ]);
 
@@ -147,7 +143,7 @@ class BulkDeleteAssetsTest extends TestCase
         $this->actingAs($user)
             ->from(route('hardware/bulkedit'))
             ->post(route('hardware/bulkrestore'), [
-                'ids'          => [$asset->id],
+                'ids' => [$asset->id],
                 'bulk_actions' => 'restore',
             ]);
 
@@ -161,6 +157,4 @@ class BulkDeleteAssetsTest extends TestCase
             ]
         );
     }
-
-
 }

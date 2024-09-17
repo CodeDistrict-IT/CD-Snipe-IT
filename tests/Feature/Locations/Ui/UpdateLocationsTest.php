@@ -18,7 +18,6 @@ class UpdateLocationsTest extends TestCase
             ->assertForbidden();
     }
 
-
     public function testUserCanEditLocations()
     {
         $location = Location::factory()->create(['name' => 'Test Location']);
@@ -59,14 +58,11 @@ class UpdateLocationsTest extends TestCase
             ->from(route('locations.edit', ['location' => $location->id]))
             ->put(route('locations.update', ['location' => $location]), [
                 'name' => 'Test Location',
-                'parent_id' => '100000000'
+                'parent_id' => '100000000',
             ])
             ->assertRedirect(route('locations.edit', ['location' => $location->id]));
 
         $this->followRedirects($response)->assertSee(trans('general.error'));
         $this->assertFalse(Location::where('name', 'Test Location')->exists());
     }
-
-
-
 }

@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Data de devolução',
     'checkout_date' => 'Data de saída',
     'checkedout_from' => 'Check-out de',
-    'checkedin_from'  => 'Check-in de',
+    'checkedin_from' => 'Check-in de',
     'checked_into' => 'Check-in em',
     'click_on_the_link_accessory' => 'Por favor clique no link na parte inferior para confirmar que recebeu o acessório.',
     'click_on_the_link_asset' => 'Por favor clique no link na parte inferior para confirmar que recebeu o ativo.',

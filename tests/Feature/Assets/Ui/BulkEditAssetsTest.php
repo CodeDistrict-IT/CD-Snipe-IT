@@ -22,10 +22,10 @@ class BulkEditAssetsTest extends TestCase
         $id_array = $assets->pluck('id')->toArray();
 
         $this->actingAs($user)->post('/hardware/bulkedit', [
-            'ids'          => $id_array,
-            'order'        => 'asc',
+            'ids' => $id_array,
+            'order' => 'asc',
             'bulk_actions' => 'edit',
-            'sort'         => 'id'
+            'sort' => 'id',
         ])->assertStatus(200);
     }
 
@@ -37,10 +37,10 @@ class BulkEditAssetsTest extends TestCase
         $id_array = $assets->pluck('id')->toArray();
 
         $this->actingAs($user)->post('/hardware/bulkedit', [
-            'ids'          => $id_array,
-            'order'        => 'asc',
+            'ids' => $id_array,
+            'order' => 'asc',
             'bulk_actions' => 'edit',
-            'sort'         => 'id'
+            'sort' => 'id',
         ])->assertStatus(403);
     }
 
@@ -57,19 +57,19 @@ class BulkEditAssetsTest extends TestCase
         $company1 = Company::factory()->create();
         $company2 = Company::factory()->create();
         $assets = Asset::factory()->count(10)->create([
-            'name'             => 'Old Asset Name',
-            'purchase_date'    => '2023-01-01',
+            'name' => 'Old Asset Name',
+            'purchase_date' => '2023-01-01',
             'expected_checkin' => '2023-01-01',
-            'status_id'        => $status1->id,
-            'model_id'         => $model1->id,
+            'status_id' => $status1->id,
+            'model_id' => $model1->id,
             // skipping locations on this test, it deserves it's own test
-            'purchase_cost'    => 1234.90,
-            'supplier_id'      => $supplier1->id,
-            'company_id'       => $company1->id,
-            'order_number'     => '123456',
-            'warranty_months'  => 24,
-            'next_audit_date'  => '2024-06-01',
-            'requestable'      => false
+            'purchase_cost' => 1234.90,
+            'supplier_id' => $supplier1->id,
+            'company_id' => $company1->id,
+            'order_number' => '123456',
+            'warranty_months' => 24,
+            'next_audit_date' => '2024-06-01',
+            'requestable' => false,
         ]);
 
         // gets the ids together to submit to the endpoint
@@ -77,19 +77,19 @@ class BulkEditAssetsTest extends TestCase
 
         // submits the ids and new values for each attribute
         $this->actingAs(User::factory()->editAssets()->create())->post(route('hardware/bulksave'), [
-            'ids'              => $id_array,
-            'name'             => 'New Asset Name',
-            'purchase_date'    => '2024-01-01',
+            'ids' => $id_array,
+            'name' => 'New Asset Name',
+            'purchase_date' => '2024-01-01',
             'expected_checkin' => '2024-01-01',
-            'status_id'        => $status2->id,
-            'model_id'         => $model2->id,
-            'purchase_cost'    => 5678.92,
-            'supplier_id'      => $supplier2->id,
-            'company_id'       => $company2->id,
-            'order_number'     => '7890',
-            'warranty_months'  => 36,
-            'next_audit_date'  => '2025-01-01',
-            'requestable'      => true
+            'status_id' => $status2->id,
+            'model_id' => $model2->id,
+            'purchase_cost' => 5678.92,
+            'supplier_id' => $supplier2->id,
+            'company_id' => $company2->id,
+            'order_number' => '7890',
+            'warranty_months' => 36,
+            'next_audit_date' => '2025-01-01',
+            'requestable' => true,
         ])
             ->assertStatus(302)
             ->assertSessionHasNoErrors();
@@ -125,19 +125,19 @@ class BulkEditAssetsTest extends TestCase
         $company1 = Company::factory()->create();
         $company2 = Company::factory()->create();
         $assets = Asset::factory()->count(10)->create([
-            'name'             => 'Old Asset Name',
-            'purchase_date'    => '2023-01-01',
+            'name' => 'Old Asset Name',
+            'purchase_date' => '2023-01-01',
             'expected_checkin' => '2023-01-01',
-            'status_id'        => $status1->id,
-            'model_id'         => $model1->id,
+            'status_id' => $status1->id,
+            'model_id' => $model1->id,
             // skipping locations on this test, it deserves it's own test
-            'purchase_cost'    => 1234.90,
-            'supplier_id'      => $supplier1->id,
-            'company_id'       => $company1->id,
-            'order_number'     => '123456',
-            'warranty_months'  => 24,
-            'next_audit_date'  => '2024-06-01',
-            'requestable'      => false
+            'purchase_cost' => 1234.90,
+            'supplier_id' => $supplier1->id,
+            'company_id' => $company1->id,
+            'order_number' => '123456',
+            'warranty_months' => 24,
+            'next_audit_date' => '2024-06-01',
+            'requestable' => false,
         ]);
 
         // gets the ids together to submit to the endpoint
@@ -145,19 +145,19 @@ class BulkEditAssetsTest extends TestCase
 
         // submits the ids and new values for each attribute
         $this->actingAs(User::factory()->editAssets()->create())->post(route('hardware/bulksave'), [
-            'ids'              => $id_array,
-            'null_name'        => '1',
-            'null_purchase_date'    => '1',
+            'ids' => $id_array,
+            'null_name' => '1',
+            'null_purchase_date' => '1',
             'null_expected_checkin_date' => '1',
-            'null_next_audit_date'        => '1',
-            'status_id'        => $status2->id,
-            'model_id'         => $model2->id,
+            'null_next_audit_date' => '1',
+            'status_id' => $status2->id,
+            'model_id' => $model2->id,
         ])
             ->assertStatus(302)
             ->assertSessionHasNoErrors();
 
         // asserts that each asset has the updated values
-        Asset::findMany($id_array)->each(function (Asset $asset) use ($status2, $model2, $supplier2, $company2) {
+        Asset::findMany($id_array)->each(function (Asset $asset) {
             $this->assertNull($asset->name);
             $this->assertNull($asset->purchase_date);
             $this->assertNull($asset->expected_checkin);
@@ -186,7 +186,7 @@ class BulkEditAssetsTest extends TestCase
         $id_array = $assets->pluck('id')->toArray();
 
         $this->actingAs(User::factory()->editAssets()->create())->post(route('hardware/bulksave'), [
-            'ids'           => $id_array,
+            'ids' => $id_array,
             $ram->db_column => 16,
             $cpu->db_column => '4.1',
         ])->assertStatus(302);
@@ -212,7 +212,7 @@ class BulkEditAssetsTest extends TestCase
         $id_array = $assets->pluck('id')->toArray();
 
         $this->actingAs(User::factory()->admin()->create())->post(route('hardware/bulksave'), [
-            'ids'                 => $id_array,
+            'ids' => $id_array,
             $encrypted->db_column => 'New Encrypted Text',
         ])->assertStatus(302);
 
@@ -243,13 +243,13 @@ class BulkEditAssetsTest extends TestCase
         $standard_id_array = $standard_assets->pluck('id')->toArray();
 
         $this->actingAs($admin_user)->post(route('hardware/bulksave'), [
-            'ids'                 => $admin_id_array,
+            'ids' => $admin_id_array,
             $encrypted->db_column => 'New Encrypted Text',
         ])->assertStatus(302);
 
         // do we want to return an error when this happens???
         $this->actingAs($edit_user)->post(route('hardware/bulksave'), [
-            'ids'                 => $standard_id_array,
+            'ids' => $standard_id_array,
             $encrypted->db_column => 'New Encrypted Text',
         ])->assertStatus(302);
 

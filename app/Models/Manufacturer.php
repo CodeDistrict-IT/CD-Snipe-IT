@@ -14,6 +14,7 @@ class Manufacturer extends SnipeModel
     use HasFactory;
 
     protected $presenter = \App\Presenters\ManufacturerPresenter::class;
+
     use Presentable;
     use SoftDeletes;
 
@@ -21,11 +22,11 @@ class Manufacturer extends SnipeModel
 
     // Declare the rules for the form validation
     protected $rules = [
-        'name'   => 'required|min:2|max:255|unique:manufacturers,name,NULL,id,deleted_at,NULL',
-        'url'   => 'nullable|starts_with:http://,https://,afp://,facetime://,file://,irc://',
-        'support_email'   => 'email|nullable',
-        'support_url'   => 'nullable|starts_with:http://,https://,afp://,facetime://,file://,irc://',
-        'warranty_lookup_url' => 'nullable|starts_with:http://,https://,afp://,facetime://,file://,irc://'
+        'name' => 'required|min:2|max:255|unique:manufacturers,name,NULL,id,deleted_at,NULL',
+        'url' => 'nullable|starts_with:http://,https://,afp://,facetime://,file://,irc://',
+        'support_email' => 'email|nullable',
+        'support_url' => 'nullable|starts_with:http://,https://,afp://,facetime://,file://,irc://',
+        'warranty_lookup_url' => 'nullable|starts_with:http://,https://,afp://,facetime://,file://,irc://',
     ];
 
     protected $hidden = ['user_id'];
@@ -38,6 +39,7 @@ class Manufacturer extends SnipeModel
      * @var bool
      */
     protected $injectUniqueIdentifier = true;
+
     use ValidatingTrait;
 
     /**

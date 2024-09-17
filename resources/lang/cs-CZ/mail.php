@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Datum převzetí',
     'checkout_date' => 'Datum vydání',
     'checkedout_from' => 'Zkontrolováno od',
-    'checkedin_from'  => 'Zaškrtnuto z',
+    'checkedin_from' => 'Zaškrtnuto z',
     'checked_into' => 'Ověřeno do',
     'click_on_the_link_accessory' => 'Kliknutím na odkaz v dolní části potvrďte, že jste obdrželi příslušné příslušenství.',
     'click_on_the_link_asset' => 'Kliknutím na odkaz v dolní části potvrďte, že jste obdrželi daný produkt.',

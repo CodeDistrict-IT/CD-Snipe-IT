@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class UpdateCategoriesTest extends TestCase
 {
-
     public function testCanUpdateCategoryViaPatchWithoutCategoryType()
     {
         $category = Category::factory()->create();
@@ -44,12 +43,11 @@ class UpdateCategoriesTest extends TestCase
             ->assertStatusMessageIs('error')
             ->assertStatus(200)
             ->json();
-        
+
         $category->refresh();
         $this->assertNotEquals('Test Category', $category->name, 'Name was not updated');
         $this->assertNotEquals('Test EULA', $category->eula_text, 'EULA was not updated');
         $this->assertNotEquals('accessory', $category->category_type, 'EULA was not updated');
 
     }
-
 }

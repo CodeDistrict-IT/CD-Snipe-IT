@@ -42,7 +42,7 @@ class StoreGroupTest extends TestCase
         $superuser = User::factory()->superuser()->create();
         $this->actingAsForApi($superuser)
             ->postJson(route('api.groups.store'), [
-                'name' => 'My Awesome Group'
+                'name' => 'My Awesome Group',
             ])
             ->assertOk();
 
@@ -57,7 +57,7 @@ class StoreGroupTest extends TestCase
         );
 
         $this->actingAsForApi($superuser)
-            ->getJson(route('api.groups.show',  ['group' => $group]))
+            ->getJson(route('api.groups.show', ['group' => $group]))
             ->assertOk();
     }
 

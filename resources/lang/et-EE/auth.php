@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -17,4 +17,4 @@ return array(
     'password' => 'Sisestatud parool on vale.',
     'throttle' => 'Liiga palju ebaõnnestunud sisselogimiskatseid. Palun proovi uuesti :seconds sekundi pärast.',
 
-);
+];

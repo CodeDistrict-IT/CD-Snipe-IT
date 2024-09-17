@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Checkouts\Api;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use App\Events\CheckoutableCheckedOut;
 use App\Models\Asset;
 use App\Models\Location;
@@ -10,6 +9,7 @@ use App\Models\Statuslabel;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class AssetCheckoutTest extends TestCase
@@ -96,7 +96,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $user,
                         'expected_location' => $userLocation,
                     ];
-                }
+                },
             ],
             'Checkout to User without location set' => [
                 function () {
@@ -108,7 +108,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $user,
                         'expected_location' => null,
                     ];
-                }
+                },
             ],
             'Checkout to Asset with location set' => [
                 function () {
@@ -121,7 +121,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $asset,
                         'expected_location' => $location,
                     ];
-                }
+                },
             ],
             'Checkout to Asset without location set' => [
                 function () {
@@ -133,7 +133,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $asset,
                         'expected_location' => null,
                     ];
-                }
+                },
             ],
             'Checkout to Location' => [
                 function () {
@@ -144,7 +144,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $location,
                         'expected_location' => $location,
                     ];
-                }
+                },
             ],
         ];
     }

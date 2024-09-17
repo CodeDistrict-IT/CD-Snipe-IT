@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use NotificationChannels\GoogleChat\Card;
 use NotificationChannels\GoogleChat\GoogleChatChannel;
 use NotificationChannels\GoogleChat\GoogleChatMessage;
@@ -17,7 +18,7 @@ use NotificationChannels\GoogleChat\Section;
 use NotificationChannels\GoogleChat\Widgets\KeyValue;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
-use Illuminate\Support\Facades\Log;
+
 class CheckinAssetNotification extends Notification
 {
     use Queueable;
@@ -25,7 +26,7 @@ class CheckinAssetNotification extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param $params
+     * @param  $params
      */
     public function __construct(Asset $asset, $checkedOutTo, User $checkedInBy, $note)
     {
@@ -60,7 +61,7 @@ class CheckinAssetNotification extends Notification
 
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             Log::debug('use webhook');
             $notifyBy[] = 'slack';
         }
@@ -94,12 +95,13 @@ class CheckinAssetNotification extends Notification
             ->content(':arrow_down: :computer: '.trans('mail.Asset_Checkin_Notification'))
             ->from($botname)
             ->to($channel)
-            ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
+            ->attachment(function ($attachment) use ($item, $note, $fields) {
                 $attachment->title(htmlspecialchars_decode($item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($note);
             });
     }
+
     public function toMicrosoftTeams()
     {
         $admin = $this->admin;
@@ -113,10 +115,11 @@ class CheckinAssetNotification extends Notification
             ->addStartGroupToSection('activityText')
             ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityText')
             ->fact(trans('mail.checked_into'), $item->location->name ? $item->location->name : '')
-            ->fact(trans('mail.Asset_Checkin_Notification')." by ", $admin->present()->fullName())
+            ->fact(trans('mail.Asset_Checkin_Notification').' by ', $admin->present()->fullName())
             ->fact(trans('admin/hardware/form.status'), $item->assetstatus->name)
             ->fact(trans('mail.notes'), $note ?: '');
     }
+
     public function toGoogleChat()
     {
         $target = $this->target;
@@ -136,7 +139,7 @@ class CheckinAssetNotification extends Notification
                             KeyValue::create(
                                 trans('mail.checked_into') ?: '',
                                 $item->location->name ? $item->location->name : '',
-                                trans('admin/hardware/form.status').": ".$item->assetstatus->name,
+                                trans('admin/hardware/form.status').': '.$item->assetstatus->name,
                             )
                                 ->onClick(route('hardware.show', $item->id))
                         )
@@ -161,13 +164,13 @@ class CheckinAssetNotification extends Notification
 
         $message = (new MailMessage)->markdown('notifications.markdown.checkin-asset',
             [
-                'item'          => $this->item,
-                'status'        => $this->item->assetstatus?->name,
-                'admin'         => $this->admin,
-                'note'          => $this->note,
-                'target'        => $this->target,
-                'fields'        => $fields,
-                'expected_checkin'  => $this->expected_checkin,
+                'item' => $this->item,
+                'status' => $this->item->assetstatus?->name,
+                'admin' => $this->admin,
+                'note' => $this->note,
+                'target' => $this->target,
+                'fields' => $fields,
+                'expected_checkin' => $this->expected_checkin,
             ])
             ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Asset_Checkin_Notification'));

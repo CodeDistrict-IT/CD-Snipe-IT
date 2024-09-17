@@ -9,6 +9,7 @@ class ManufacturerPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -151,6 +152,7 @@ class ManufacturerPresenter extends Presenter
 
     /**
      * Link to this manufacturers name
+     *
      * @return string
      */
     public function nameUrl()
@@ -160,6 +162,7 @@ class ManufacturerPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'The value for :fieldname cannot be null.',
+    'import_field_empty' => 'The value for :fieldname cannot be null.',
     'in' => 'ویژگی انتخاب شده نامعتبر است.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,7 +125,7 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
-    'percent'       => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
 
     'present' => 'فیلد attribute باید باشد.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
@@ -155,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'attribute باید یک رشته باشد.',
+    'string' => 'attribute باید یک رشته باشد.',
     'two_column_unique_undeleted' => 'The :attribute must be unique across :table1 and :table2. ',
-    'unique_undeleted'     => ': attribute باید منحصر به فرد باشد.',
-    'non_circular'         => 'ویژگی : نباید یک مرجع دایره ای ایجاد کند',
-    'not_array'            => ':attribute cannot be an array.',
+    'unique_undeleted' => ': attribute باید منحصر به فرد باشد.',
+    'non_circular' => 'ویژگی : نباید یک مرجع دایره ای ایجاد کند',
+    'not_array' => ':attribute cannot be an array.',
     'disallow_same_pwd_as_user_fields' => 'رمز عبور نمی تواند همان آدرس ایمیل باشد.',
-    'letters'              => 'گذرواژه باید دارای حداقل یک رقم باشد.',
-    'numbers'              => 'گذرواژه باید دارای حداقل یک رقم باشد.',
-    'case_diff'            => 'رمز عبور باید از حروف مختلط استفاده کند.',
-    'symbols'              => 'رمز عبور نباید حاوی فضای خالی باشد.',
+    'letters' => 'گذرواژه باید دارای حداقل یک رقم باشد.',
+    'numbers' => 'گذرواژه باید دارای حداقل یک رقم باشد.',
+    'case_diff' => 'رمز عبور باید از حروف مختلط استفاده کند.',
+    'symbols' => 'رمز عبور نباید حاوی فضای خالی باشد.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => 'ویژگی در حال حاضر گرفته شده است.',
     'uploaded' => 'ویژگی: attribute failed to upload.',
@@ -186,27 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'فیلد attribute شامل یک شخصیت است که مجاز نیست.',
-        'email_array'      => 'یک یا چند آدرس ایمیل نامعتبر است',
-        'hashed_pass'      => 'رمز عبور فعلی شما اشتباه است',
-        'dumbpwd'          => 'این رمز عبور خیلی رایج است',
+        'email_array' => 'یک یا چند آدرس ایمیل نامعتبر است',
+        'hashed_pass' => 'رمز عبور فعلی شما اشتباه است',
+        'dumbpwd' => 'این رمز عبور خیلی رایج است',
         'statuslabel_type' => 'شما باید نوع برچسب معتبر را انتخاب کنید',
-        'custom_field_not_found'          => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
         'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => 'The :attribute must be a valid date in YYYY-MM-DD format',
-        'last_audit_date.date_format'   =>  'The :attribute must be a valid date in YYYY-MM-DD hh:mm:ss format',
-        'expiration_date.date_format'   =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'termination_date.date_format'  =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'expected_checkin.date_format'  =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'start_date.date_format'        =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'end_date.date_format'          =>  'The :attribute must be a valid date in YYYY-MM-DD format',
-        'checkboxes'           => ':attribute contains invalid options.',
-        'radio_buttons'        => ':attribute is invalid.',
+        'purchase_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'last_audit_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD hh:mm:ss format',
+        'expiration_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'termination_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'expected_checkin.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'start_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'end_date.date_format' => 'The :attribute must be a valid date in YYYY-MM-DD format',
+        'checkboxes' => ':attribute contains invalid options.',
+        'radio_buttons' => ':attribute is invalid.',
         'invalid_value_in_field' => 'Invalid value included in this field',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -232,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

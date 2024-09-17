@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -17,4 +17,4 @@ return array(
     'password' => 'A senha fornecida está incorreta.',
     'throttle' => 'Tentativas de login excedidas. Por favor, tente de novo em :seconds segundos.',
 
-);
+];

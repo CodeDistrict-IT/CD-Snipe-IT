@@ -21,14 +21,18 @@ class Actionlog extends SnipeModel
 
     // This is to manually set the source (via setActionSource()) for determineActionSource()
     protected ?string $source = null;
+
     protected $with = ['admin'];
 
     protected $presenter = \App\Presenters\ActionlogPresenter::class;
-    use SoftDeletes;
+
     use Presentable;
+    use SoftDeletes;
 
     protected $table = 'action_logs';
+
     public $timestamps = true;
+
     protected $fillable = [
         'created_at',
         'item_type',
@@ -38,7 +42,7 @@ class Actionlog extends SnipeModel
         'note',
         'target_id',
         'target_type',
-        'stored_eula'
+        'stored_eula',
     ];
 
     use Searchable;
@@ -55,7 +59,7 @@ class Actionlog extends SnipeModel
         'user_id',
         'remote_ip',
         'user_agent',
-        'action_source'
+        'action_source',
     ];
 
     /**
@@ -65,16 +69,18 @@ class Actionlog extends SnipeModel
      */
     protected $searchableRelations = [
         'company' => ['name'],
-        'admin' => ['first_name','last_name','username', 'email'],
-        'user'  => ['first_name','last_name','username', 'email'],
-        'assets'  => ['asset_tag','name'],
+        'admin' => ['first_name', 'last_name', 'username', 'email'],
+        'user' => ['first_name', 'last_name', 'username', 'email'],
+        'assets' => ['asset_tag', 'name'],
     ];
 
     /**
      * Override from Builder to automatically add the company
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public static function boot()
@@ -94,12 +100,13 @@ class Actionlog extends SnipeModel
         });
     }
 
-
     /**
      * Establishes the actionlog -> item relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function item()
@@ -111,7 +118,9 @@ class Actionlog extends SnipeModel
      * Establishes the actionlog -> company relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function company()
@@ -119,12 +128,13 @@ class Actionlog extends SnipeModel
         return $this->hasMany(\App\Models\Company::class, 'id', 'company_id');
     }
 
-
     /**
      * Establishes the actionlog -> asset relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assets()
@@ -136,7 +146,9 @@ class Actionlog extends SnipeModel
      * Establishes the actionlog -> item type relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function itemType()
@@ -152,7 +164,9 @@ class Actionlog extends SnipeModel
      * Establishes the actionlog -> target type relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function targetType()
@@ -164,26 +178,29 @@ class Actionlog extends SnipeModel
         return camel_case(class_basename($this->target_type));
     }
 
-
     /**
      * Establishes the actionlog -> uploads relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function uploads()
     {
         return $this->morphTo('item')
-                    ->where('action_type', '=', 'uploaded')
-                    ->withTrashed();
+            ->where('action_type', '=', 'uploaded')
+            ->withTrashed();
     }
 
     /**
      * Establishes the actionlog -> userlog relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function userlog()
@@ -195,20 +212,24 @@ class Actionlog extends SnipeModel
      * Establishes the actionlog -> admin user relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function admin()
     {
         return $this->belongsTo(User::class, 'user_id')
-                    ->withTrashed();
+            ->withTrashed();
     }
 
     /**
      * Establishes the actionlog -> user relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function user()
@@ -221,7 +242,9 @@ class Actionlog extends SnipeModel
      * Establishes the actionlog -> target relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function target()
@@ -233,7 +256,9 @@ class Actionlog extends SnipeModel
      * Establishes the actionlog -> location relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function location()
@@ -241,12 +266,13 @@ class Actionlog extends SnipeModel
         return $this->belongsTo(\App\Models\Location::class, 'location_id')->withTrashed();
     }
 
-
     /**
      * Check if the file exists, and if it does, force a download
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return string | false
      */
     public function get_src($type = 'assets', $fieldname = 'filename')
@@ -264,13 +290,15 @@ class Actionlog extends SnipeModel
      * Saves the log record with the action type
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return bool
      */
     public function logaction($actiontype)
     {
         $this->action_type = $actiontype;
-        $this->remote_ip =  request()->ip();
+        $this->remote_ip = request()->ip();
         $this->user_agent = request()->header('User-Agent');
         $this->action_source = $this->determineActionSource();
 
@@ -285,7 +313,9 @@ class Actionlog extends SnipeModel
      * Calculate the number of days until the next audit
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return int
      */
     public function daysUntilNextAudit($monthInterval = 12, $asset = null)
@@ -308,7 +338,9 @@ class Actionlog extends SnipeModel
      * Calculate the date of the next audit
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Datetime
      */
     public function calcNextAuditDate($monthInterval = 12, $asset = null)
@@ -319,46 +351,48 @@ class Actionlog extends SnipeModel
             return \Carbon::parse($asset->next_audit_date);
         }
 
-        return  \Carbon::parse($last_audit_date)->addMonths($monthInterval)->toDateString();
+        return \Carbon::parse($last_audit_date)->addMonths($monthInterval)->toDateString();
     }
 
     /**
      * Gets action logs in chronological order, excluding uploads
      *
      * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
      * @since v1.0
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getListingOfActionLogsChronologicalOrder()
     {
         return $this->all()
-                 ->where('action_type', '!=', 'uploaded')
-                 ->orderBy('item_id', 'asc')
-                 ->orderBy('created_at', 'asc')
-                 ->get();
+            ->where('action_type', '!=', 'uploaded')
+            ->orderBy('item_id', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->get();
     }
 
     /**
      * Determines what the type of request is so we can log it to the action_log
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since v6.3.0
-     * @return string
      */
     public function determineActionSource(): string
     {
         // This is a manually set source
-        if($this->source) {
+        if ($this->source) {
             return $this->source;
         }
 
         // This is an API call
-        if (((request()->header('content-type') && (request()->header('accept'))=='application/json'))
+        if (((request()->header('content-type') && (request()->header('accept')) == 'application/json'))
             && (starts_with(request()->header('authorization'), 'Bearer '))) {
             return 'api';
         }
 
-       // This is probably NOT an API call
+        // This is probably NOT an API call
         if (request()->filled('_token')) {
             return 'gui';
         }

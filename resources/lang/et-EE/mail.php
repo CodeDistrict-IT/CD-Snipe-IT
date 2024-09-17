@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Tagastamise kuupäev',
     'checkout_date' => 'Väljastamise kuupäev',
     'checkedout_from' => 'Väljastatud',
-    'checkedin_from'  => 'Vastu võetud',
+    'checkedin_from' => 'Vastu võetud',
     'checked_into' => 'Väljastatud',
     'click_on_the_link_accessory' => 'Klõpsake allosas oleval lingil, et kinnitada, et olete lisaseadme kätte saanud.',
     'click_on_the_link_asset' => 'Klõpsake allosas oleval lingil, et kinnitada, et olete vara vastu võtnud.',

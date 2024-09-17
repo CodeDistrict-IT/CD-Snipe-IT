@@ -2,14 +2,14 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+
 class StorageHelper
 {
-    public static function downloader($filename, $disk = 'default') : BinaryFileResponse | RedirectResponse | StreamedResponse
+    public static function downloader($filename, $disk = 'default'): BinaryFileResponse|RedirectResponse|StreamedResponse
     {
         if ($disk == 'default') {
             $disk = config('filesystems.default');

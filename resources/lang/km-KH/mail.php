@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'កាលបរិច្ឆេទត្រឡប់មកវិញ',
     'checkout_date' => 'ថ្ងៃប្រគល់អោយ',
     'checkedout_from' => 'Checked out ពី',
-    'checkedin_from'  => 'Checked in ពី',
+    'checkedin_from' => 'Checked in ពី',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'សូមចុចលើតំណភ្ជាប់នៅខាងក្រោមដើម្បីបញ្ជាក់ថាអ្នកបានទទួលគ្រឿងបន្លាស់។',
     'click_on_the_link_asset' => 'សូមចុចលើតំណភ្ជាប់នៅខាងក្រោម ដើម្បីបញ្ជាក់ថាអ្នកបានទទួលទ្រព្យសកម្ម។',

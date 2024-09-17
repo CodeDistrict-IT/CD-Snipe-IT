@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Data przypisania',
     'checkout_date' => 'Data przypisania',
     'checkedout_from' => 'Zamówiono z',
-    'checkedin_from'  => 'Sprawdzone od',
+    'checkedin_from' => 'Sprawdzone od',
     'checked_into' => 'Sprawdzone w',
     'click_on_the_link_accessory' => 'Proszę kliknąć link poniżej aby potwierdzić otrzymanie sprzętu.',
     'click_on_the_link_asset' => 'Proszę kliknąć link poniżej aby potwierdzić otrzymanie sprzętu.',

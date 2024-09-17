@@ -16,19 +16,19 @@ class Supplier extends SnipeModel
     protected $table = 'suppliers';
 
     protected $rules = [
-        'name'               => 'required|min:1|max:255|unique_undeleted',
-        'fax'               => 'min:7|max:35|nullable',
-        'phone'             => 'min:7|max:35|nullable',
-        'contact'           => 'max:100|nullable',
-        'notes'             => 'max:191|nullable', // Default string length is 191 characters..
-        'email'             => 'email|max:150|nullable',
-        'address'            => 'max:250|nullable',
-        'address2'           => 'max:250|nullable',
-        'city'               => 'max:191|nullable',
-        'state'              => 'min:2|max:191|nullable',
-        'country'            => 'min:2|max:191|nullable',
-        'zip'               => 'max:10|nullable',
-        'url'               => 'sometimes|nullable|string|max:250',
+        'name' => 'required|min:1|max:255|unique_undeleted',
+        'fax' => 'min:7|max:35|nullable',
+        'phone' => 'min:7|max:35|nullable',
+        'contact' => 'max:100|nullable',
+        'notes' => 'max:191|nullable', // Default string length is 191 characters..
+        'email' => 'email|max:150|nullable',
+        'address' => 'max:250|nullable',
+        'address2' => 'max:250|nullable',
+        'city' => 'max:191|nullable',
+        'state' => 'min:2|max:191|nullable',
+        'country' => 'min:2|max:191|nullable',
+        'zip' => 'max:10|nullable',
+        'url' => 'sometimes|nullable|string|max:250',
     ];
 
     /**
@@ -39,9 +39,10 @@ class Supplier extends SnipeModel
      * @var bool
      */
     protected $injectUniqueIdentifier = true;
-    use ValidatingTrait;
-    use UniqueUndeletedTrait;
+
     use Searchable;
+    use UniqueUndeletedTrait;
+    use ValidatingTrait;
 
     /**
      * The attributes that should be included when searching the model.
@@ -71,20 +72,23 @@ class Supplier extends SnipeModel
      * Otherwise calling "count()" on each model results in n+1.
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assetsRelation()
     {
         return $this->hasMany(Asset::class)->whereNull('deleted_at')->selectRaw('supplier_id, count(*) as count')->groupBy('supplier_id');
     }
-    
 
     /**
      * Establishes the supplier -> assets relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assets()
@@ -96,7 +100,9 @@ class Supplier extends SnipeModel
      * Establishes the supplier -> accessories relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function accessories()
@@ -108,7 +114,9 @@ class Supplier extends SnipeModel
      * Establishes the supplier -> component relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v6.1.1]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function components()
@@ -120,7 +128,9 @@ class Supplier extends SnipeModel
      * Establishes the supplier -> component relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v6.1.1]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function consumables()
@@ -132,7 +142,9 @@ class Supplier extends SnipeModel
      * Establishes the supplier -> asset maintenances relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function asset_maintenances()
@@ -144,7 +156,9 @@ class Supplier extends SnipeModel
      * Return the number of assets by supplier
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return int
      */
     public function num_assets()
@@ -160,7 +174,9 @@ class Supplier extends SnipeModel
      * Establishes the supplier -> license relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function licenses()
@@ -172,7 +188,9 @@ class Supplier extends SnipeModel
      * Return the number of licenses by supplier
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return int
      */
     public function num_licenses()
@@ -186,12 +204,14 @@ class Supplier extends SnipeModel
      * @todo this should be handled via validation, no?
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function addhttp($url)
     {
-        if (($url!='') && (! preg_match('~^(?:f|ht)tps?://~i', $url))) {
+        if (($url != '') && (! preg_match('~^(?:f|ht)tps?://~i', $url))) {
             $url = 'http://'.$url;
         }
 

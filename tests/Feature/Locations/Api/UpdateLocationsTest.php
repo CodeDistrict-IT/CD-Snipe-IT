@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class UpdateLocationsTest extends TestCase
 {
-
     public function testRequiresPermissionToEditLocation()
     {
         $this->actingAsForApi(User::factory()->create())
@@ -33,6 +32,4 @@ class UpdateLocationsTest extends TestCase
         $this->assertEquals('Test Location', $location->name, 'Name was not updated');
 
     }
-
-    
 }

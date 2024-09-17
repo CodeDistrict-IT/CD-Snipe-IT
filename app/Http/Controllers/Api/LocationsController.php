@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
-use App\Http\Requests\ImageUploadRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImageUploadRequest;
 use App\Http\Transformers\AssetsTransformer;
 use App\Http\Transformers\LocationsTransformer;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Models\Asset;
 use App\Models\Location;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Http\JsonResponse;
 
 class LocationsController extends Controller
 {
@@ -21,10 +21,12 @@ class LocationsController extends Controller
      * Display a listing of the resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse|array
     {
         $this->authorize('view', Location::class);
         $allowed_columns = [
@@ -48,7 +50,7 @@ class LocationsController extends Controller
             'rtd_assets_count',
             'currency',
             'ldap_ou',
-            ];
+        ];
 
         $locations = Location::with('parent', 'manager', 'children')->select([
             'locations.id',
@@ -113,8 +115,6 @@ class LocationsController extends Controller
         $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
         $sort = in_array($request->input('sort'), $allowed_columns) ? $request->input('sort') : 'created_at';
 
-
-
         switch ($request->input('sort')) {
             case 'parent':
                 $locations->OrderParent($order);
@@ -127,22 +127,20 @@ class LocationsController extends Controller
                 break;
         }
 
-
         $total = $locations->count();
         $locations = $locations->skip($offset)->take($limit)->get();
 
         return (new LocationsTransformer)->transformLocations($locations, $total);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\ImageUploadRequest  $request
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Location::class);
         $location = new Location;
@@ -160,10 +158,12 @@ class LocationsController extends Controller
      * Display the specified resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function show($id) : JsonResponse | array
+    public function show($id): JsonResponse|array
     {
         $this->authorize('view', Location::class);
         $location = Location::with('parent', 'manager', 'children')
@@ -192,16 +192,16 @@ class LocationsController extends Controller
         return (new LocationsTransformer)->transformLocation($location);
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\ImageUploadRequest  $request
+     *
      * @param  int  $id
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Location::class);
         $location = Location::findOrFail($id);
@@ -212,6 +212,7 @@ class LocationsController extends Controller
         if ($location->isValid()) {
 
             $location->save();
+
             return response()->json(
                 Helper::formatStandardApiResponse(
                     'success',
@@ -224,12 +225,13 @@ class LocationsController extends Controller
         return response()->json(Helper::formatStandardApiResponse('error', null, $location->getErrors()));
     }
 
-    public function assets(Request $request, Location $location) : JsonResponse | array
+    public function assets(Request $request, Location $location): JsonResponse|array
     {
         $this->authorize('view', Asset::class);
         $this->authorize('view', $location);
         $assets = Asset::where('assigned_to', '=', $location->id)->where('assigned_type', '=', Location::class)->with('model', 'model.category', 'assetstatus', 'location', 'company', 'defaultLoc');
         $assets = $assets->get();
+
         return (new AssetsTransformer)->transformAssets($assets, $assets->count(), $request);
     }
 
@@ -237,10 +239,12 @@ class LocationsController extends Controller
      * Remove the specified resource from storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Location::class);
         $location = Location::withCount('assignedAssets as assigned_assets_count')
@@ -253,7 +257,7 @@ class LocationsController extends Controller
 
         if (! $location->isDeletable()) {
             return response()
-                    ->json(Helper::formatStandardApiResponse('error', null, trans('admin/locations/message.assoc_users')));
+                ->json(Helper::formatStandardApiResponse('error', null, trans('admin/locations/message.assoc_users')));
         }
         $this->authorize('delete', $location);
         $location->delete();
@@ -286,10 +290,11 @@ class LocationsController extends Controller
      * sea... this time.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
         // If a user is in the process of editing their profile, as determined by the referrer,
         // then we check that they have permission to edit their own location.

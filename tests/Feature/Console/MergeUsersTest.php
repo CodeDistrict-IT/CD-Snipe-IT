@@ -3,13 +3,12 @@
 namespace Tests\Feature\Console;
 
 use App\Models\Accessory;
+use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\Consumable;
 use App\Models\LicenseSeat;
 use App\Models\User;
-use App\Models\Actionlog;
 use Tests\TestCase;
-
 
 class MergeUsersTest extends TestCase
 {
@@ -130,6 +129,4 @@ class MergeUsersTest extends TestCase
         $this->assertEquals(1, $user1->refresh()->userlog->count());
 
     }
-
-
 }

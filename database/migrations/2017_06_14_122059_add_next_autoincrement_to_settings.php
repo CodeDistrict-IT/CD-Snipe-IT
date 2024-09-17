@@ -19,7 +19,7 @@ class AddNextAutoincrementToSettings extends Migration
             $next = 1;
         }
 
-        Schema::table('settings', function (Blueprint $table) use ($next) {
+        Schema::table('settings', function (Blueprint $table) {
             $table->bigInteger('next_auto_tag_base')->default('1');
         });
 

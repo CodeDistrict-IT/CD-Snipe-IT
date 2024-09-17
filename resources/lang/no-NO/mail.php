@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Innsjekkdato',
     'checkout_date' => 'Utsjekkdato',
     'checkedout_from' => 'Sjekket ut fra',
-    'checkedin_from'  => 'Sjekket inn fra',
+    'checkedin_from' => 'Sjekket inn fra',
     'checked_into' => 'Sjekket inn',
     'click_on_the_link_accessory' => 'Vennligst klikk på lenken nedenfor for å bekreft at du har mottatt tilbehøret.',
     'click_on_the_link_asset' => 'Vennligst klikk på lenken nedenfor for å bekreft at du har mottatt eiendelen.',

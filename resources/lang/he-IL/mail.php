@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'תאריך הגעה',
     'checkout_date' => 'תבדוק את התאריך',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'לחץ על הקישור בתחתית הדף כדי לאשר שקיבלת את האביזר.',
     'click_on_the_link_asset' => 'לחץ על הקישור שבתחתית כדי לאשר שקיבלת את הנכס.',

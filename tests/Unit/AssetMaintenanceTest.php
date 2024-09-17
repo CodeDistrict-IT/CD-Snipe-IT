@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use App\Models\AssetMaintenance;
@@ -17,7 +18,7 @@ class AssetMaintenanceTest extends TestCase
 
     public function testSetsCostsAppropriately()
     {
-        $c = new AssetMaintenance();
+        $c = new AssetMaintenance;
         $c->cost = '0.00';
         $this->assertTrue($c->cost === null);
         $c->cost = '9.54';

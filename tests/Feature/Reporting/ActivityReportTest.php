@@ -2,15 +2,11 @@
 
 namespace Tests\Feature\Reporting;
 
+use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\Company;
 use App\Models\User;
-use App\Models\Actionlog;
-use Database\Factories\ActionlogFactory;
 use Illuminate\Testing\Fluent\AssertableJson;
-use Illuminate\Testing\TestResponse;
-use League\Csv\Reader;
-use PHPUnit\Framework\Assert;
 use Tests\TestCase;
 
 class ActivityReportTest extends TestCase
@@ -60,8 +56,7 @@ class ActivityReportTest extends TestCase
             ->assertJsonStructure([
                 'rows',
             ])
-            ->assertJson(fn(AssertableJson $json) => $json->has('rows', 5)->etc());
-
+            ->assertJson(fn (AssertableJson $json) => $json->has('rows', 5)->etc());
 
         $this->actingAsForApi($userInCompanyB)
             ->getJson(
@@ -70,12 +65,7 @@ class ActivityReportTest extends TestCase
             ->assertJsonStructure([
                 'rows',
             ])
-            ->assertJson(fn(AssertableJson $json) => $json->has('rows', 7)->etc());
-
-
-
-
+            ->assertJson(fn (AssertableJson $json) => $json->has('rows', 7)->etc());
 
     }
-
 }

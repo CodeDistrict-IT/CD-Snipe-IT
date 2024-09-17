@@ -1,11 +1,11 @@
 <?php
 
-return array(
+return [
 
-    'actions'	 	        => 'សកម្មភាព',
-    'action' 		        => 'សកម្មភាព',
-    'by'      		        => 'By',
-    'item' 			        => 'ធាតុ',
-    'no_matching_records'   => 'No matching records found',
+    'actions' => 'សកម្មភាព',
+    'action' => 'សកម្មភាព',
+    'by' => 'By',
+    'item' => 'ធាតុ',
+    'no_matching_records' => 'No matching records found',
 
-);
+];

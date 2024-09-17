@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
-
 
 /**
  * This controller handles all actions related to the Admin Dashboard
  * for the Snipe-IT Asset Management application.
  *
  * @author A. Gianotto <snipe@snipe.net>
+ *
  * @version v1.0
  */
 class DashboardController extends Controller
@@ -22,9 +22,10 @@ class DashboardController extends Controller
      * the user's checked-out assets.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
      */
-    public function index() : View | RedirectResponse
+    public function index(): View|RedirectResponse
     {
         // Show the page
         if (auth()->user()->hasAccess('admin')) {

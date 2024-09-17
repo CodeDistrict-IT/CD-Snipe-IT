@@ -2,15 +2,15 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use App\Helpers\Helper;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\AuthenticationException;
 use ArieTimmerman\Laravel\SCIMServer\Exceptions\SCIMException;
-use Illuminate\Support\Facades\Log;
-use Throwable;
-use JsonException;
 use Carbon\Exceptions\InvalidFormatException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use JsonException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -38,7 +38,6 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Throwable  $exception
      * @return void
      */
     public function report(Throwable $exception)
@@ -47,20 +46,20 @@ class Handler extends ExceptionHandler
             if (class_exists(Log::class)) {
                 Log::error($exception);
             }
+
             return parent::report($exception);
         }
     }
 
     /**
      * Render an exception into an HTTP response.
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $e
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function render($request, Throwable $e)
     {
-
 
         // CSRF token mismatch error
         if ($e instanceof \Illuminate\Session\TokenMismatchException) {
@@ -77,9 +76,10 @@ class Handler extends ExceptionHandler
         if ($e instanceof SCIMException) {
             try {
                 $e->report(); // logs as 'debug', so shouldn't get too noisy
-            } catch(\Exception $reportException) {
+            } catch (\Exception $reportException) {
                 //do nothing
             }
+
             return $e->render($request); // ALL SCIMExceptions have the 'render()' method
         }
 
@@ -99,7 +99,8 @@ class Handler extends ExceptionHandler
             // Handle API requests that fail because the model doesn't exist
             if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
                 $className = last(explode('\\', $e->getModel()));
-                return response()->json(Helper::formatStandardApiResponse('error', null, $className . ' not found'), 200);
+
+                return response()->json(Helper::formatStandardApiResponse('error', null, $className.' not found'), 200);
             }
 
             // Handle API requests that fail because of an HTTP status code and return a useful error message
@@ -109,10 +110,10 @@ class Handler extends ExceptionHandler
 
                 switch ($e->getStatusCode()) {
                     case '404':
-                       return response()->json(Helper::formatStandardApiResponse('error', null, $statusCode . ' endpoint not found'), 404);
+                        return response()->json(Helper::formatStandardApiResponse('error', null, $statusCode.' endpoint not found'), 404);
                     case '429':
                         return response()->json(Helper::formatStandardApiResponse('error', null, 'Too many requests'), 429);
-                     case '405':
+                    case '405':
                         return response()->json(Helper::formatStandardApiResponse('error', null, 'Method not allowed'), 405);
                     default:
                         return response()->json(Helper::formatStandardApiResponse('error', null, $statusCode), $statusCode);
@@ -121,26 +122,22 @@ class Handler extends ExceptionHandler
             }
         }
 
-
-
-
-        if ($this->isHttpException($e) && (isset($statusCode)) && ($statusCode == '404' )) {
+        if ($this->isHttpException($e) && (isset($statusCode)) && ($statusCode == '404')) {
             return response()->view('layouts/basic', [
-                'content' => view('errors/404')
-            ],$statusCode);
+                'content' => view('errors/404'),
+            ], $statusCode);
         }
 
         return parent::render($request, $e);
 
     }
 
- /**
+    /**
      * Convert an authentication exception into an unauthenticated response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
-  */
+     */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
@@ -155,8 +152,7 @@ class Handler extends ExceptionHandler
         return response()->json(Helper::formatStandardApiResponse('error', null, $exception->errors()), 200);
     }
 
-
-    /** 
+    /**
      * A list of the inputs that are never flashed for validation exceptions.
      *
      * @var array

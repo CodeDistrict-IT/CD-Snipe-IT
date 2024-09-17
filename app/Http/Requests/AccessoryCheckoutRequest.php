@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Gate;
 
 class AccessoryCheckoutRequest extends ImageUploadRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -24,9 +23,9 @@ class AccessoryCheckoutRequest extends ImageUploadRequest
             $this->diff = ($this->accessory->numRemaining() - $this->checkout_qty);
             $this->merge([
                 'checkout_qty' => $this->checkout_qty ?? 1,
-                'number_remaining_after_checkout' =>  (int) ($this->accessory->numRemaining() - $this->checkout_qty),
-                'number_currently_remaining' =>  (int) $this->accessory->numRemaining(),
-                'checkout_difference' =>  (int) $this->diff,
+                'number_remaining_after_checkout' => (int) ($this->accessory->numRemaining() - $this->checkout_qty),
+                'number_currently_remaining' => (int) $this->accessory->numRemaining(),
+                'checkout_difference' => (int) $this->diff,
             ]);
 
             \Log::debug('---------------------------------------------');
@@ -44,10 +43,10 @@ class AccessoryCheckoutRequest extends ImageUploadRequest
 
         return array_merge(
             [
-                'assigned_user'         => 'required_without_all:assigned_asset,assigned_location',
-                'assigned_asset'        => 'required_without_all:assigned_user,assigned_location',
-                'assigned_location'     => 'required_without_all:assigned_user,assigned_asset',
-                
+                'assigned_user' => 'required_without_all:assigned_asset,assigned_location',
+                'assigned_asset' => 'required_without_all:assigned_user,assigned_location',
+                'assigned_location' => 'required_without_all:assigned_user,assigned_asset',
+
                 'number_remaining_after_checkout' => [
                     'min:0',
                     'required',
@@ -71,6 +70,7 @@ class AccessoryCheckoutRequest extends ImageUploadRequest
                 'checkout_qty' => $this->checkout_qty,
             ]),
         ];
+
         return $messages;
     }
 }

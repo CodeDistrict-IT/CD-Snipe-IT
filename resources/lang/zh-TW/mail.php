@@ -42,7 +42,7 @@ return [
     'checkin_date' => '繳回日期',
     'checkout_date' => '借出日期',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => '請點擊鏈結確認您已收到配件。',
     'click_on_the_link_asset' => '請點擊鏈結確認您已收到資產。',

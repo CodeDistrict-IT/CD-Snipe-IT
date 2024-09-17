@@ -8,18 +8,17 @@ use App\Helpers\Helper;
 use App\Http\Traits\UniqueUndeletedTrait;
 use App\Models\Traits\Acceptable;
 use App\Models\Traits\Searchable;
-use App\Presenters\Presentable;
 use App\Presenters\AssetPresenter;
-use Illuminate\Support\Facades\Auth;
+use App\Presenters\Presentable;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Watson\Validating\ValidatingTrait;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Model for Assets.
@@ -28,53 +27,55 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Asset extends Depreciable
 {
-
     protected $presenter = AssetPresenter::class;
+
     protected $with = ['model', 'admin'];
 
     use CompanyableTrait;
-    use HasFactory, Loggable, Requestable, Presentable, SoftDeletes, ValidatingTrait, UniqueUndeletedTrait;
+    use HasFactory, Loggable, Presentable, Requestable, SoftDeletes, UniqueUndeletedTrait, ValidatingTrait;
 
     public const LOCATION = 'location';
+
     public const ASSET = 'asset';
+
     public const USER = 'user';
 
     use Acceptable;
 
     /**
      * Run after the checkout acceptance was declined by the user
-     * 
-     * @param  User   $acceptedBy
-     * @param  string $signature
-     */ 
+     *
+     * @param  User  $acceptedBy
+     * @param  string  $signature
+     */
     public function declinedCheckout(User $declinedBy, $signature)
     {
-      $this->assigned_to = null;
-      $this->assigned_type = null;
-      $this->accepted = null;      
-      $this->save();        
+        $this->assigned_to = null;
+        $this->assigned_type = null;
+        $this->accepted = null;
+        $this->save();
     }
 
     /**
-    * The database table used by the model.
-    *
-    * @var string
-    */
+     * The database table used by the model.
+     *
+     * @var string
+     */
     protected $table = 'assets';
 
     /**
      * Leaving this commented out, since we need to test further, but this would eager load the model relationship every single
      * time the asset model is loaded.
      */
-     // protected $with = ['model'];
+    // protected $with = ['model'];
 
     /**
-    * Whether the model should inject it's identifier to the unique
-    * validation rules before attempting validation. If this property
-    * is not set in the model it will default to true.
-    *
+     * Whether the model should inject it's identifier to the unique
+     * validation rules before attempting validation. If this property
+     * is not set in the model it will default to true.
+     *
      * @var bool
-    */
+     */
     protected $injectUniqueIdentifier = true;
 
     protected $casts = [
@@ -85,54 +86,53 @@ class Asset extends Depreciable
         'expected_checkin' => 'datetime:m-d-Y',
         'last_audit_date' => 'datetime',
         'next_audit_date' => 'datetime:m-d-Y',
-        'model_id'       => 'integer',
-        'status_id'      => 'integer',
-        'company_id'     => 'integer',
-        'location_id'    => 'integer',
+        'model_id' => 'integer',
+        'status_id' => 'integer',
+        'company_id' => 'integer',
+        'location_id' => 'integer',
         'rtd_company_id' => 'integer',
-        'supplier_id'    => 'integer',
-        'created_at'     => 'datetime',
-        'updated_at'   => 'datetime',
-        'deleted_at'  => 'datetime',
+        'supplier_id' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
     protected $rules = [
-        'model_id'          => ['required', 'integer', 'exists:models,id,deleted_at,NULL', 'not_array'],
-        'status_id'         => ['required', 'integer', 'exists:status_labels,id'],
-        'asset_tag'         => ['required', 'min:1', 'max:255', 'unique_undeleted:assets,asset_tag', 'not_array'],
-        'name'              => ['nullable', 'max:255'],
-        'company_id'        => ['nullable', 'integer', 'exists:companies,id'],
-        'warranty_months'   => ['nullable', 'numeric', 'digits_between:0,240'],
-        'last_checkout'     => ['nullable', 'date_format:Y-m-d H:i:s'],
-        'last_checkin'      => ['nullable', 'date_format:Y-m-d H:i:s'],
-        'expected_checkin'  => ['nullable', 'date'],
-        'last_audit_date'   => ['nullable', 'date_format:Y-m-d H:i:s'],
-        'next_audit_date'   => ['nullable', 'date'],
+        'model_id' => ['required', 'integer', 'exists:models,id,deleted_at,NULL', 'not_array'],
+        'status_id' => ['required', 'integer', 'exists:status_labels,id'],
+        'asset_tag' => ['required', 'min:1', 'max:255', 'unique_undeleted:assets,asset_tag', 'not_array'],
+        'name' => ['nullable', 'max:255'],
+        'company_id' => ['nullable', 'integer', 'exists:companies,id'],
+        'warranty_months' => ['nullable', 'numeric', 'digits_between:0,240'],
+        'last_checkout' => ['nullable', 'date_format:Y-m-d H:i:s'],
+        'last_checkin' => ['nullable', 'date_format:Y-m-d H:i:s'],
+        'expected_checkin' => ['nullable', 'date'],
+        'last_audit_date' => ['nullable', 'date_format:Y-m-d H:i:s'],
+        'next_audit_date' => ['nullable', 'date'],
         //'after:last_audit_date'],
-        'location_id'       => ['nullable', 'exists:locations,id'],
-        'rtd_location_id'   => ['nullable', 'exists:locations,id'],
-        'purchase_date'     => ['nullable', 'date', 'date_format:Y-m-d'],
-        'serial'            => ['nullable', 'unique_undeleted:assets,serial'],
-        'purchase_cost'     => ['nullable', 'numeric', 'gte:0'],
-        'supplier_id'       => ['nullable', 'exists:suppliers,id'],
-        'asset_eol_date'    => ['nullable', 'date'],
-        'eol_explicit'      => ['nullable', 'boolean'],
-        'byod'              => ['nullable', 'boolean'],
-        'order_number'      => ['nullable', 'string', 'max:191'],
-        'notes'             => ['nullable', 'string', 'max:65535'],
-        'assigned_to'       => ['nullable', 'integer'],
-        'requestable'       => ['nullable', 'boolean'],
-        'assigned_user'     => ['nullable', 'exists:users,id,deleted_at,NULL'],
+        'location_id' => ['nullable', 'exists:locations,id'],
+        'rtd_location_id' => ['nullable', 'exists:locations,id'],
+        'purchase_date' => ['nullable', 'date', 'date_format:Y-m-d'],
+        'serial' => ['nullable', 'unique_undeleted:assets,serial'],
+        'purchase_cost' => ['nullable', 'numeric', 'gte:0'],
+        'supplier_id' => ['nullable', 'exists:suppliers,id'],
+        'asset_eol_date' => ['nullable', 'date'],
+        'eol_explicit' => ['nullable', 'boolean'],
+        'byod' => ['nullable', 'boolean'],
+        'order_number' => ['nullable', 'string', 'max:191'],
+        'notes' => ['nullable', 'string', 'max:65535'],
+        'assigned_to' => ['nullable', 'integer'],
+        'requestable' => ['nullable', 'boolean'],
+        'assigned_user' => ['nullable', 'exists:users,id,deleted_at,NULL'],
         'assigned_location' => ['nullable', 'exists:locations,id,deleted_at,NULL'],
-        'assigned_asset'    => ['nullable', 'exists:assets,id,deleted_at,NULL']
+        'assigned_asset' => ['nullable', 'exists:assets,id,deleted_at,NULL'],
     ];
 
-
     /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'asset_tag',
         'assigned_to',
@@ -172,21 +172,21 @@ class Asset extends Depreciable
      * @var array
      */
     protected $searchableAttributes = [
-      'name',
-      'asset_tag',
-      'serial',
-      'order_number',
-      'purchase_cost',
-      'notes',
-      'created_at',
-      'updated_at',
-      'purchase_date',
-      'expected_checkin',
-      'next_audit_date',
-      'last_audit_date',
-      'last_checkin',
-      'last_checkout',
-      'asset_eol_date',
+        'name',
+        'asset_tag',
+        'serial',
+        'order_number',
+        'purchase_cost',
+        'notes',
+        'created_at',
+        'updated_at',
+        'purchase_date',
+        'expected_checkin',
+        'next_audit_date',
+        'last_audit_date',
+        'last_checkin',
+        'last_checkout',
+        'asset_eol_date',
     ];
 
     /**
@@ -195,13 +195,13 @@ class Asset extends Depreciable
      * @var array
      */
     protected $searchableRelations = [
-        'assetstatus'        => ['name'],
-        'supplier'           => ['name'],
-        'company'            => ['name'],
-        'defaultLoc'         => ['name'],
-        'location'           => ['name'],
-        'model'              => ['name', 'model_number', 'eol'],
-        'model.category'     => ['name'],
+        'assetstatus' => ['name'],
+        'supplier' => ['name'],
+        'company' => ['name'],
+        'defaultLoc' => ['name'],
+        'location' => ['name'],
+        'model' => ['name', 'model_number', 'eol'],
+        'model.category' => ['name'],
         'model.manufacturer' => ['name'],
     ];
 
@@ -226,17 +226,17 @@ class Asset extends Depreciable
 
             if (($model) && ($model->fieldset)) {
 
-                foreach ($model->fieldset->fields as $field){
-                    if($field->format == 'BOOLEAN'){
+                foreach ($model->fieldset->fields as $field) {
+                    if ($field->format == 'BOOLEAN') {
                         $this->{$field->db_column} = filter_var($this->{$field->db_column}, FILTER_VALIDATE_BOOLEAN);
                     }
                 }
 
                 $this->rules += $model->fieldset->validation_rules();
 
-                if ($this->model->fieldset){
-                    foreach ($this->model->fieldset->fields as $field){
-                        if($field->format == 'BOOLEAN'){
+                if ($this->model->fieldset) {
+                    foreach ($this->model->fieldset->fields as $field) {
+                        if ($field->format == 'BOOLEAN') {
                             $this->{$field->db_column} = filter_var($this->{$field->db_column}, FILTER_VALIDATE_BOOLEAN);
                         }
                     }
@@ -247,7 +247,6 @@ class Asset extends Depreciable
         return parent::save($params);
     }
 
-
     public function getDisplayNameAttribute()
     {
         return $this->present()->name();
@@ -255,6 +254,7 @@ class Asset extends Depreciable
 
     /**
      * Returns the warranty expiration date as Carbon object
+     *
      * @return \Carbon|null
      */
     public function getWarrantyExpiresAttribute()
@@ -273,12 +273,13 @@ class Asset extends Depreciable
         return null;
     }
 
-
     /**
      * Establishes the asset -> company relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function company()
@@ -293,7 +294,9 @@ class Asset extends Depreciable
      * that the status is deployable
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return bool
      */
     public function availableForCheckout()
@@ -304,15 +307,14 @@ class Asset extends Depreciable
 
             // The asset status is not archived and is deployable
             if (($this->assetstatus) && ($this->assetstatus->archived == '0')
-                && ($this->assetstatus->deployable == '1'))
-            {
+                && ($this->assetstatus->deployable == '1')) {
                 return true;
 
             }
         }
+
         return false;
     }
-
 
     /**
      * Checks the asset out to the target
@@ -320,14 +322,17 @@ class Asset extends Depreciable
      * @todo The admin parameter is never used. Can probably be removed.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param User $user
-     * @param User $admin
-     * @param Carbon $checkout_at
-     * @param Carbon $expected_checkin
-     * @param string $note
-     * @param null $name
+     *
+     * @param  User  $user
+     * @param  User  $admin
+     * @param  Carbon  $checkout_at
+     * @param  Carbon  $expected_checkin
+     * @param  string  $note
+     * @param  null  $name
      * @return bool
+     *
      * @since [v3.0]
+     *
      * @return bool
      */
     public function checkOut($target, $admin = null, $checkout_at = null, $expected_checkin = null, $note = null, $name = null, $location = null)
@@ -388,7 +393,9 @@ class Asset extends Depreciable
      * Sets the detailedNameAttribute
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return string
      */
     public function getDetailedNameAttribute()
@@ -406,7 +413,9 @@ class Asset extends Depreciable
      * Pulls in the validation rules
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return array
      */
     public function validationRules()
@@ -414,25 +423,27 @@ class Asset extends Depreciable
         return $this->rules;
     }
 
-
     /**
      * Establishes the asset -> depreciation relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function depreciation()
     {
-        return $this->hasOneThrough(\App\Models\Depreciation::class,\App\Models\AssetModel::class,'id','id','model_id','depreciation_id');
+        return $this->hasOneThrough(\App\Models\Depreciation::class, \App\Models\AssetModel::class, 'id', 'id', 'model_id', 'depreciation_id');
     }
-
 
     /**
      * Get components assigned to this asset
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function components()
@@ -440,14 +451,15 @@ class Asset extends Depreciable
         return $this->belongsToMany('\App\Models\Component', 'components_assets', 'asset_id', 'component_id')->withPivot('id', 'assigned_qty', 'created_at');
     }
 
-
     /**
      * Get depreciation attribute from associated asset model
      *
      * @todo Is this still needed?
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function get_depreciation()
@@ -457,21 +469,22 @@ class Asset extends Depreciable
         }
     }
 
-
     /**
      * Get uploads for this asset
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function uploads()
     {
         return $this->hasMany('\App\Models\Actionlog', 'item_id')
-                  ->where('item_type', '=', Asset::class)
-                  ->where('action_type', '=', 'uploaded')
-                  ->whereNotNull('filename')
-                  ->orderBy('created_at', 'desc');
+            ->where('item_type', '=', Asset::class)
+            ->where('action_type', '=', 'uploaded')
+            ->whereNotNull('filename')
+            ->orderBy('created_at', 'desc');
     }
 
     /**
@@ -481,28 +494,31 @@ class Asset extends Depreciable
      * this method is an easy way of seeing if we are checked out to a user.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
     public function checkedOutToUser(): bool
     {
-      return $this->assignedType() === self::USER;
+        return $this->assignedType() === self::USER;
     }
 
     public function checkedOutToLocation(): bool
     {
-      return $this->assignedType() === self::LOCATION;
+        return $this->assignedType() === self::LOCATION;
     }
 
     public function checkedOutToAsset(): bool
     {
-      return $this->assignedType() === self::ASSET;
+        return $this->assignedType() === self::ASSET;
     }
 
     /**
      * Get the target this asset is checked out to
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assignedTo()
@@ -516,7 +532,9 @@ class Asset extends Depreciable
      * Sigh.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assignedAssets()
@@ -524,14 +542,15 @@ class Asset extends Depreciable
         return $this->morphMany(self::class, 'assigned', 'assigned_type', 'assigned_to')->withTrashed();
     }
 
-
     /**
      * Get the asset's location based on the assigned user
      *
      * @todo Refactor this if possible. It's awful.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \ArrayObject
      */
     public function assetLoc($iterations = 1, $first_asset = null)
@@ -559,12 +578,14 @@ class Asset extends Depreciable
                 if (($this->assignedTo) && $this->assignedTo->userLoc) {
                     return $this->assignedTo->userLoc;
                 }
+
                 //this makes no sense
                 return $this->defaultLoc;
 
             }
 
         }
+
         return $this->defaultLoc;
     }
 
@@ -572,7 +593,9 @@ class Asset extends Depreciable
      * Gets the lowercased name of the type of target the asset is assigned to
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return string
      */
     public function assignedType()
@@ -580,20 +603,21 @@ class Asset extends Depreciable
         return $this->assigned_type ? strtolower(class_basename($this->assigned_type)) : null;
     }
 
-
-
     /**
      * This is annoying, but because we don't say "assets" in our route names, we have to make an exception here
+     *
      * @todo - normalize the route names - API endpoint URLS can stay the same
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.1.0]
+     *
      * @return string
      */
     public function targetShowRoute()
     {
         $route = str_plural($this->assignedType());
-        if ($route=='assets') {
+        if ($route == 'assets') {
             return 'hardware';
         }
 
@@ -601,12 +625,13 @@ class Asset extends Depreciable
 
     }
 
-
     /**
      * Get the asset's location based on default RTD location
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function defaultLoc()
@@ -621,7 +646,9 @@ class Asset extends Depreciable
      * and if not, check for an image uploaded to the asset model.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return string | false
      */
     public function getImageUrl()
@@ -635,27 +662,30 @@ class Asset extends Depreciable
         return false;
     }
 
-
     /**
      * Get the asset's logs
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assetlog()
     {
         return $this->hasMany(\App\Models\Actionlog::class, 'item_id')
-                  ->where('item_type', '=', self::class)
-                  ->orderBy('created_at', 'desc')
-                  ->withTrashed();
+            ->where('item_type', '=', self::class)
+            ->orderBy('created_at', 'desc')
+            ->withTrashed();
     }
 
     /**
      * Get the list of checkouts for this asset
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function checkouts()
@@ -669,7 +699,9 @@ class Asset extends Depreciable
      * Get the list of checkins for this asset
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function checkins()
@@ -684,7 +716,9 @@ class Asset extends Depreciable
      * Get the asset's user requests
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function userRequests()
@@ -695,25 +729,28 @@ class Asset extends Depreciable
             ->withTrashed();
     }
 
-
     /**
      * Get maintenances for this asset
      *
      * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
      * @since 1.0
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assetmaintenances()
     {
         return $this->hasMany(\App\Models\AssetMaintenance::class, 'asset_id')
-                  ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc');
     }
 
     /**
      * Get action logs history for this asset
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function admin()
@@ -721,13 +758,13 @@ class Asset extends Depreciable
         return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 
-
-
     /**
      * Establishes the asset -> status relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assetstatus()
@@ -739,7 +776,9 @@ class Asset extends Depreciable
      * Establishes the asset -> model relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function model()
@@ -750,9 +789,10 @@ class Asset extends Depreciable
     /**
      * Return the assets with a warranty expiring within x days
      *
-     * @param $days
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return mixed
      */
     public static function getExpiringWarrantee($days = 30)
@@ -764,18 +804,19 @@ class Asset extends Depreciable
             ->whereNotNull('purchase_date')
             ->whereNull('deleted_at')
             ->whereRaw('DATE_ADD(`purchase_date`,INTERVAL `warranty_months` MONTH) <= DATE(NOW() + INTERVAL '
-                                 . $days
-                                 . ' DAY) AND DATE_ADD(`purchase_date`, INTERVAL `warranty_months` MONTH) > NOW()')
+                                 .$days
+                                 .' DAY) AND DATE_ADD(`purchase_date`, INTERVAL `warranty_months` MONTH) > NOW()')
             ->orderByRaw('DATE_ADD(`purchase_date`,INTERVAL `warranty_months` MONTH)')
             ->get();
     }
-
 
     /**
      * Establishes the asset -> assigned licenses relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function licenses()
@@ -787,7 +828,9 @@ class Asset extends Depreciable
      * Establishes the asset -> license seats relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function licenseseats()
@@ -799,7 +842,9 @@ class Asset extends Depreciable
      * Establishes the asset -> aupplier relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function supplier()
@@ -811,7 +856,9 @@ class Asset extends Depreciable
      * Establishes the asset -> location relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function location()
@@ -819,18 +866,18 @@ class Asset extends Depreciable
         return $this->belongsTo(\App\Models\Location::class, 'location_id');
     }
 
-
     /**
      * Get the next autoincremented asset tag
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return string | false
      */
     public static function autoincrement_asset(int $additional_increment = 0)
     {
         $settings = \App\Models\Setting::getSettings();
-
 
         if ($settings->auto_increment_assets == '1') {
             if ($settings->zerofill_count > 0) {
@@ -843,14 +890,15 @@ class Asset extends Depreciable
         }
     }
 
-
     /**
      * Get the next base number for the auto-incrementer.
      *
      * We'll add the zerofill and prefixes on the fly as we generate the number.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return int
      */
     public static function nextAutoIncrement($assets)
@@ -861,21 +909,16 @@ class Asset extends Depreciable
         foreach ($assets as $asset) {
             $results = preg_match("/\d+$/", $asset['asset_tag'], $matches);
 
-            if ($results)
-            {
+            if ($results) {
                 $number = $matches[0];
 
-                if ($number > $max)
-                {
+                if ($number > $max) {
                     $max = $number;
                 }
             }
         }
 
-
     }
-
-
 
     /**
      * Add zerofilling based on Settings
@@ -883,7 +926,9 @@ class Asset extends Depreciable
      * We'll add the zerofill and prefixes on the fly as we generate the number.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return string
      */
     public static function zerofill($num, $zerofill = 3)
@@ -896,7 +941,9 @@ class Asset extends Depreciable
      * asset model category
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return bool
      */
     public function checkin_email()
@@ -910,7 +957,9 @@ class Asset extends Depreciable
      * Determine whether this asset requires acceptance by the assigned user
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return bool
      */
     public function requireAcceptance()
@@ -921,12 +970,13 @@ class Asset extends Depreciable
 
     }
 
-
     /**
      * Determine whether this asset's next audit date is before the last audit date
      *
      * @return bool
+     *
      * @since [v6.4.1]
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
      * */
     public function checkInvalidNextAuditDate()
@@ -934,16 +984,18 @@ class Asset extends Depreciable
         if (($this->last_audit_date) && ($this->next_audit_date) && ($this->last_audit_date > $this->next_audit_date)) {
             return true;
         }
+
         return false;
     }
-
 
     /**
      * Checks for a category-specific EULA, and if that doesn't exist,
      * checks for a settings level EULA
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return string | false
      */
     public function getEula()
@@ -962,11 +1014,14 @@ class Asset extends Depreciable
 
         return false;
     }
-    public function getComponentCost(){
+
+    public function getComponentCost()
+    {
         $cost = 0;
-        foreach($this->components as $component) {
-            $cost += $component->pivot->assigned_qty*$component->purchase_cost;
+        foreach ($this->components as $component) {
+            $cost += $component->pivot->assigned_qty * $component->purchase_cost;
         }
+
         return $cost;
     }
 
@@ -982,10 +1037,9 @@ class Asset extends Depreciable
      * This is kind of dumb and confusing, since we already cast it that way AND it's a date field
      * in the database, but here we are.
      *
-     * @param $value
+     * @param  $value
      * @return void
      */
-
     protected function nextAuditDate(): Attribute
     {
         return Attribute::make(
@@ -1032,10 +1086,9 @@ class Asset extends Depreciable
      *
      * This will also correctly parse a 1/0 if "true"/"false" is passed.
      *
-     * @param $value
+     * @param  $value
      * @return void
      */
-
     protected function requestable(): Attribute
     {
         return Attribute::make(
@@ -1044,18 +1097,16 @@ class Asset extends Depreciable
         );
     }
 
-
     /**
-    * -----------------------------------------------
-    * BEGIN QUERY SCOPES
-    * -----------------------------------------------
-    **/
+     * -----------------------------------------------
+     * BEGIN QUERY SCOPES
+     * -----------------------------------------------
+     **/
 
     /**
      * Run additional, advanced searches.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
-     * @param  array  $terms The search terms
+     * @param  array  $terms  The search terms
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function advancedTextSearch(Builder $query, array $terms)
@@ -1111,28 +1162,23 @@ class Asset extends Depreciable
         return $query;
     }
 
-
     /**
-    * Query builder scope for hardware
-    *
-    * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
-
+     * Query builder scope for hardware
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeHardware($query)
     {
         return $query->where('physical', '=', '1');
     }
 
     /**
-    * Query builder scope for pending assets
-    *
-    * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
-
+     * Query builder scope for pending assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopePending($query)
     {
         return $query->whereHas('assetstatus', function ($query) {
@@ -1142,15 +1188,12 @@ class Asset extends Depreciable
         });
     }
 
-
     /**
-    * Query builder scope for searching location
-    *
-    * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
-
+     * Query builder scope for searching location
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeAssetsByLocation($query, $location)
     {
         return $query->where(function ($query) use ($location) {
@@ -1172,33 +1215,28 @@ class Asset extends Depreciable
         });
     }
 
-
     /**
-    * Query builder scope for RTD assets
-    *
-    * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
-
+     * Query builder scope for RTD assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeRTD($query)
     {
         return $query->whereNull('assets.assigned_to')
-                   ->whereHas('assetstatus', function ($query) {
-                       $query->where('deployable', '=', 1)
-                             ->where('pending', '=', 0)
-                             ->where('archived', '=', 0);
-                   });
+            ->whereHas('assetstatus', function ($query) {
+                $query->where('deployable', '=', 1)
+                    ->where('pending', '=', 0)
+                    ->where('archived', '=', 0);
+            });
     }
 
-  /**
-   * Query builder scope for Undeployable assets
-   *
-   * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-   *
-   * @return \Illuminate\Database\Query\Builder          Modified query builder
-   */
-
+    /**
+     * Query builder scope for Undeployable assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeUndeployable($query)
     {
         return $query->whereHas('assetstatus', function ($query) {
@@ -1211,11 +1249,9 @@ class Asset extends Depreciable
     /**
      * Query builder scope for non-Archived assets
      *
-     * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
-
     public function scopeNotArchived($query)
     {
         return $query->whereHas('assetstatus', function ($query) {
@@ -1240,12 +1276,12 @@ class Asset extends Depreciable
      * now = May 4, 2019
      *
      * @author A. Gianotto <snipe@snipe.net>
-     * @since v4.6.16
-     * @param Setting $settings
      *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @since v4.6.16
+     *
+     * @param  Setting  $settings
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
-
     public function scopeDueForAudit($query, $settings)
     {
         $interval = $settings->audit_warning_days ?? 0;
@@ -1266,12 +1302,12 @@ class Asset extends Depreciable
      * for an upcoming API call for retrieving a report on overdue assets.
      *
      * @author A. Gianotto <snipe@snipe.net>
-     * @since v4.6.16
-     * @param Setting $settings
      *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @since v4.6.16
+     *
+     * @param  Setting  $settings
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
-
     public function scopeOverdueForAudit($query)
     {
         return $query->whereNotNull('assets.next_audit_date')
@@ -1288,12 +1324,12 @@ class Asset extends Depreciable
      * for an upcoming API call for retrieving a report on assets that will need to be audited.
      *
      * @author A. Gianotto <snipe@snipe.net>
-     * @since v4.6.16
-     * @param Setting $settings
      *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @since v4.6.16
+     *
+     * @param  Setting  $settings
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
-
     public function scopeDueOrOverdueForAudit($query, $settings)
     {
 
@@ -1304,16 +1340,16 @@ class Asset extends Depreciable
         });
     }
 
-
     /**
      * Query builder scope for Assets that are DUE for checkin, based on the assets.expected_checkin
      * and settings.audit_warning_days. It checks to see if assets.expected_checkin is now
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since v6.4.0
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     *
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
-
     public function scopeDueForCheckin($query, $settings)
     {
         $interval = $settings->due_checkin_days ?? 0;
@@ -1331,8 +1367,10 @@ class Asset extends Depreciable
      * Query builder scope for Assets that are overdue for checkin OR overdue
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since v6.4.0
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     *
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOverdueForCheckin($query)
     {
@@ -1347,8 +1385,10 @@ class Asset extends Depreciable
      * Query builder scope for Assets that are due for checkin OR overdue
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since v6.4.0
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     *
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeDueOrOverdueForCheckin($query, $settings)
     {
@@ -1359,7 +1399,6 @@ class Asset extends Depreciable
         });
     }
 
-
     /**
      * Query builder scope for Archived assets counting
      *
@@ -1367,15 +1406,13 @@ class Asset extends Depreciable
      * has chosen to not display archived assets in their regular lists
      * and views, it will return the correct number.
      *
-     * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
-
     public function scopeAssetsForShow($query)
     {
 
-        if (Setting::getSettings()->show_archived_in_list!=1) {
+        if (Setting::getSettings()->show_archived_in_list != 1) {
             return $query->whereHas('assetstatus', function ($query) {
                 $query->where('archived', '=', 0);
             });
@@ -1385,14 +1422,12 @@ class Asset extends Depreciable
 
     }
 
-  /**
-   * Query builder scope for Archived assets
-   *
-   * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-   *
-   * @return \Illuminate\Database\Query\Builder          Modified query builder
-   */
-
+    /**
+     * Query builder scope for Archived assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeArchived($query)
     {
         return $query->whereHas('assetstatus', function ($query) {
@@ -1402,89 +1437,80 @@ class Asset extends Depreciable
         });
     }
 
-  /**
-   * Query builder scope for Deployed assets
-   *
-   * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-   *
-   * @return \Illuminate\Database\Query\Builder          Modified query builder
-   */
-
+    /**
+     * Query builder scope for Deployed assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeDeployed($query)
     {
         return $query->where('assigned_to', '>', '0');
     }
 
-  /**
-   * Query builder scope for Requestable assets
-   *
-   * @param  \Illuminate\Database\Query\Builder $query Query builder instance
-   *
-   * @return \Illuminate\Database\Query\Builder          Modified query builder
-   */
-
+    /**
+     * Query builder scope for Requestable assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeRequestableAssets($query)
     {
         $table = $query->getModel()->getTable();
 
         return Company::scopeCompanyables($query->where($table.'.requestable', '=', 1))
-        ->whereHas('assetstatus', function ($query) {
-            $query->where(function ($query) {
-                $query->where('deployable', '=', 1)
-                      ->where('archived', '=', 0); // you definitely can't request something that's archived
-            })->orWhere('pending', '=', 1); // we've decided that even though an asset may be 'pending', you can still request it
-        });
+            ->whereHas('assetstatus', function ($query) {
+                $query->where(function ($query) {
+                    $query->where('deployable', '=', 1)
+                        ->where('archived', '=', 0); // you definitely can't request something that's archived
+                })->orWhere('pending', '=', 1); // we've decided that even though an asset may be 'pending', you can still request it
+            });
     }
 
-
     /**
-   * scopeInModelList
-   * Get all assets in the provided listing of model ids
-   *
-   * @param       $query
-   * @param array $modelIdListing
-   *
-   * @return mixed
-   * @author  Vincent Sposato <vincent.sposato@gmail.com>
-   * @version v1.0
-   */
+     * scopeInModelList
+     * Get all assets in the provided listing of model ids
+     *
+     *
+     * @return mixed
+     *
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
+     * @version v1.0
+     */
     public function scopeInModelList($query, array $modelIdListing)
     {
         return $query->whereIn('assets.model_id', $modelIdListing);
     }
 
-  /**
-  * Query builder scope to get not-yet-accepted assets
-  *
-  * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-  *
-  * @return \Illuminate\Database\Query\Builder          Modified query builder
-  */
+    /**
+     * Query builder scope to get not-yet-accepted assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeNotYetAccepted($query)
     {
         return $query->where('accepted', '=', 'pending');
     }
 
-  /**
-  * Query builder scope to get rejected assets
-  *
-  * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-  *
-  * @return \Illuminate\Database\Query\Builder          Modified query builder
-  */
+    /**
+     * Query builder scope to get rejected assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeRejected($query)
     {
         return $query->where('accepted', '=', 'rejected');
     }
 
-
-  /**
-  * Query builder scope to get accepted assets
-  *
-  * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-  *
-  * @return \Illuminate\Database\Query\Builder          Modified query builder
-  */
+    /**
+     * Query builder scope to get accepted assets
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeAccepted($query)
     {
         return $query->where('accepted', '=', 'accepted');
@@ -1494,9 +1520,8 @@ class Asset extends Depreciable
      * Query builder scope to search on text for complex Bootstrap Tables API.
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $search      Search term
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $search  Search term
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeAssignedSearch($query, $search)
     {
@@ -1551,9 +1576,10 @@ class Asset extends Depreciable
      * Query builder scope to search the department ID of users assigned to assets
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v5.0]
-     * @return string | false
      *
+     * @since [v5.0]
+     *
+     * @return string | false
      * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeCheckedOutToTargetInDepartment($query, $search)
@@ -1562,20 +1588,17 @@ class Asset extends Depreciable
             $leftJoin->on('assets_dept_users.id', '=', 'assets.assigned_to')
                 ->where('assets.assigned_type', '=', User::class);
         })->where(function ($query) use ($search) {
-                    $query->whereIn('assets_dept_users.department_id', $search);
+            $query->whereIn('assets_dept_users.department_id', $search);
 
         })->withTrashed()->whereNull('assets.deleted_at'); //workaround for laravel bug
     }
-
-
 
     /**
      * Query builder scope to search on text filters for complex Bootstrap Tables API
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text   $filter   JSON array of search keys and terms
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $filter  JSON array of search keys and terms
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeByFilter($query, $filter)
     {
@@ -1592,8 +1615,7 @@ class Asset extends Depreciable
                     $query->where('assets.name', 'LIKE', '%'.$search_val.'%');
                 }
 
-
-                if ($fieldname =='serial') {
+                if ($fieldname == 'serial') {
                     $query->where('assets.serial', 'LIKE', '%'.$search_val.'%');
                 }
 
@@ -1631,7 +1653,7 @@ class Asset extends Depreciable
                     });
                 }
 
-                if ($fieldname =='assigned_to') {
+                if ($fieldname == 'assigned_to') {
                     $query->whereHasMorph('assignedTo', [User::class], function ($query) use ($search_val) {
                         $query->where(function ($query) use ($search_val) {
                             $query->where('users.first_name', 'LIKE', '%'.$search_val.'%')
@@ -1639,7 +1661,6 @@ class Asset extends Depreciable
                         });
                     });
                 }
-
 
                 if ($fieldname == 'manufacturer') {
                     $query->whereHas('model', function ($query) use ($search_val) {
@@ -1679,7 +1700,6 @@ class Asset extends Depreciable
                     });
                 }
 
-
                 if ($fieldname == 'company') {
                     $query->where(function ($query) use ($search_val) {
                         $query->whereHas('company', function ($query) use ($search_val) {
@@ -1695,152 +1715,134 @@ class Asset extends Depreciable
                         });
                     });
                 }
-            
 
-            /**
-             * THIS CLUNKY BIT IS VERY IMPORTANT
-             *
-             * Although inelegant, this section matters a lot when querying against fields that do not
-             * exist on the asset table. There's probably a better way to do this moving forward, for
-             * example using the Schema:: methods to determine whether or not a column actually exists,
-             * or even just using the $searchableRelations variable earlier in this file.
-             *
-             * In short, this set of statements tells the query builder to ONLY query against an
-             * actual field that's being passed if it doesn't meet known relational fields. This
-             * allows us to query custom fields directly in the assets table
-             * (regardless of their name) and *skip* any fields that we already know can only be
-             * searched through relational searches that we do earlier in this method.
-             *
-             * For example, we do not store "location" as a field on the assets table, we store
-             * that relationship through location_id on the assets table, therefore querying
-             * assets.location would fail, as that field doesn't exist -- plus we're already searching
-             * against those relationships earlier in this method.
-             *
-             * - snipe 
-             *
-             */
-
-            if (($fieldname!='category') && ($fieldname!='model_number') && ($fieldname!='rtd_location') && ($fieldname!='location') && ($fieldname!='supplier')
-                && ($fieldname!='status_label') && ($fieldname!='assigned_to') && ($fieldname!='model') && ($fieldname!='company') && ($fieldname!='manufacturer')) {
-                    $query->where('assets.'.$fieldname, 'LIKE', '%' . $search_val . '%');
-            }
-
+                /**
+                 * THIS CLUNKY BIT IS VERY IMPORTANT
+                 *
+                 * Although inelegant, this section matters a lot when querying against fields that do not
+                 * exist on the asset table. There's probably a better way to do this moving forward, for
+                 * example using the Schema:: methods to determine whether or not a column actually exists,
+                 * or even just using the $searchableRelations variable earlier in this file.
+                 *
+                 * In short, this set of statements tells the query builder to ONLY query against an
+                 * actual field that's being passed if it doesn't meet known relational fields. This
+                 * allows us to query custom fields directly in the assets table
+                 * (regardless of their name) and *skip* any fields that we already know can only be
+                 * searched through relational searches that we do earlier in this method.
+                 *
+                 * For example, we do not store "location" as a field on the assets table, we store
+                 * that relationship through location_id on the assets table, therefore querying
+                 * assets.location would fail, as that field doesn't exist -- plus we're already searching
+                 * against those relationships earlier in this method.
+                 *
+                 * - snipe
+                 */
+                if (($fieldname != 'category') && ($fieldname != 'model_number') && ($fieldname != 'rtd_location') && ($fieldname != 'location') && ($fieldname != 'supplier')
+                    && ($fieldname != 'status_label') && ($fieldname != 'assigned_to') && ($fieldname != 'model') && ($fieldname != 'company') && ($fieldname != 'manufacturer')) {
+                    $query->where('assets.'.$fieldname, 'LIKE', '%'.$search_val.'%');
+                }
 
             }
-
 
         });
 
     }
 
-
     /**
-    * Query builder scope to order on model
-    *
-    * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-    * @param  text                              $order       Order
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
+     * Query builder scope to order on model
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeOrderModels($query, $order)
     {
         return $query->join('models as asset_models', 'assets.model_id', '=', 'asset_models.id')->orderBy('asset_models.name', $order);
     }
 
     /**
-    * Query builder scope to order on model number
-    *
-    * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-    * @param  text                              $order       Order
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
+     * Query builder scope to order on model number
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeOrderModelNumber($query, $order)
     {
         return $query->leftJoin('models as model_number_sort', 'assets.model_id', '=', 'model_number_sort.id')->orderBy('model_number_sort.model_number', $order);
     }
 
-
     /**
-    * Query builder scope to order on assigned user
-    *
-    * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-    * @param  text                              $order       Order
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
+     * Query builder scope to order on assigned user
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeOrderAssigned($query, $order)
     {
         return $query->leftJoin('users as users_sort', 'assets.assigned_to', '=', 'users_sort.id')->select('assets.*')->orderBy('users_sort.first_name', $order)->orderBy('users_sort.last_name', $order);
     }
 
     /**
-    * Query builder scope to order on status
-    *
-    * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-    * @param  text                              $order       Order
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
+     * Query builder scope to order on status
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeOrderStatus($query, $order)
     {
         return $query->join('status_labels as status_sort', 'assets.status_id', '=', 'status_sort.id')->orderBy('status_sort.name', $order);
     }
 
     /**
-    * Query builder scope to order on company
-    *
-    * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-    * @param  text                              $order       Order
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
+     * Query builder scope to order on company
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeOrderCompany($query, $order)
     {
         return $query->leftJoin('companies as company_sort', 'assets.company_id', '=', 'company_sort.id')->orderBy('company_sort.name', $order);
     }
 
-
     /**
      * Query builder scope to return results of a category
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text $order Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeInCategory($query, $category_id)
     {
         return $query->join('models as category_models', 'assets.model_id', '=', 'category_models.id')
             ->join('categories', 'category_models.category_id', '=', 'categories.id')
-            ->whereIn('category_models.category_id', (!is_array($category_id) ? explode(',',$category_id): $category_id));
-            //->whereIn('category_models.category_id', $category_id);
+            ->whereIn('category_models.category_id', (! is_array($category_id) ? explode(',', $category_id) : $category_id));
+        //->whereIn('category_models.category_id', $category_id);
     }
 
     /**
      * Query builder scope to return results of a manufacturer
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text $order Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeByManufacturer($query, $manufacturer_id)
     {
         return $query->join('models', 'assets.model_id', '=', 'models.id')
-            ->join('manufacturers', 'models.manufacturer_id', '=', 'manufacturers.id')->whereIn('models.manufacturer_id', (!is_array($manufacturer_id) ? explode(',',$manufacturer_id): $manufacturer_id));
+            ->join('manufacturers', 'models.manufacturer_id', '=', 'manufacturers.id')->whereIn('models.manufacturer_id', (! is_array($manufacturer_id) ? explode(',', $manufacturer_id) : $manufacturer_id));
     }
 
-
-
     /**
-    * Query builder scope to order on category
-    *
-    * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-    * @param  text                              $order         Order
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
+     * Query builder scope to order on category
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeOrderCategory($query, $order)
     {
         return $query->join('models as order_model_category', 'assets.model_id', '=', 'order_model_category.id')
@@ -1848,14 +1850,12 @@ class Asset extends Depreciable
             ->orderBy('category_order.name', $order);
     }
 
-
     /**
      * Query builder scope to order on manufacturer
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order         Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderManufacturer($query, $order)
     {
@@ -1864,14 +1864,13 @@ class Asset extends Depreciable
             ->orderBy('manufacturer_order.name', $order);
     }
 
-   /**
-    * Query builder scope to order on location
-    *
-    * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-    * @param  text                              $order       Order
-    *
-    * @return \Illuminate\Database\Query\Builder          Modified query builder
-    */
+    /**
+     * Query builder scope to order on location
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
+     */
     public function scopeOrderLocation($query, $order)
     {
         return $query->leftJoin('locations as asset_locations', 'asset_locations.id', '=', 'assets.location_id')->orderBy('asset_locations.name', $order);
@@ -1879,24 +1878,22 @@ class Asset extends Depreciable
 
     /**
      * Query builder scope to order on default
-     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
      *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderRtdLocation($query, $order)
     {
         return $query->leftJoin('locations as rtd_asset_locations', 'rtd_asset_locations.id', '=', 'assets.rtd_location_id')->orderBy('rtd_asset_locations.name', $order);
     }
 
-
     /**
      * Query builder scope to order on supplier name
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderSupplier($query, $order)
     {
@@ -1907,9 +1904,8 @@ class Asset extends Depreciable
      * Query builder scope to search on location ID
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $search      Search term
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $search  Search term
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeByLocationId($query, $search)
     {
@@ -1921,13 +1917,12 @@ class Asset extends Depreciable
 
     }
 
-
     /**
      * Query builder scope to search on depreciation name
-     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $search      Search term
      *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
+     * @param  text  $search  Search term
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeByDepreciationId($query, $search)
     {
@@ -1935,6 +1930,4 @@ class Asset extends Depreciable
             ->join('depreciations', 'models.depreciation_id', '=', 'depreciations.id')->where('models.depreciation_id', '=', $search);
 
     }
-
-
 }

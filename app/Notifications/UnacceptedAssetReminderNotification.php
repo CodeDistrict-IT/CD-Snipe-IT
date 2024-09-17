@@ -2,10 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Asset;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -48,9 +45,9 @@ class UnacceptedAssetReminderNotification extends Notification
         $accept_url = route('account.accept');
         $message = (new MailMessage)->markdown('notifications.markdown.asset-reminder',
             [
-                'count'          => $this->count,
-                'assigned_to'  => $this->target->present()->fullName,
-                'link'           => route('account.accept'),
+                'count' => $this->count,
+                'assigned_to' => $this->target->present()->fullName,
+                'link' => route('account.accept'),
                 'accept_url' => $accept_url,
             ])
             ->subject(trans('mail.unaccepted_asset_reminder'));

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Categories\Ui;
 
-use App\Models\AssetModel;
 use App\Models\Category;
 use App\Models\User;
 use Tests\TestCase;
@@ -26,7 +25,7 @@ class CreateCategoriesTest extends TestCase
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('categories.store'), [
                 'name' => 'Test Category',
-                'category_type' => 'asset'
+                'category_type' => 'asset',
             ])
             ->assertRedirect(route('categories.index'));
 
@@ -41,11 +40,10 @@ class CreateCategoriesTest extends TestCase
             ->from(route('categories.create'))
             ->post(route('categories.store'), [
                 'name' => 'Test Category',
-                'category_type' => 'invalid'
+                'category_type' => 'invalid',
             ])
             ->assertRedirect(route('categories.create'));
 
         $this->assertFalse(Category::where('name', 'Test Category')->exists());
     }
-
 }

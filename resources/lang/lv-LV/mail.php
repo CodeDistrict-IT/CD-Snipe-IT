@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Reģistrēšanās datums',
     'checkout_date' => 'Izrakstīšanās datums',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Lūdzu, noklikšķiniet uz saites apakšā, lai apstiprinātu, ka esat saņēmis piederumu.',
     'click_on_the_link_asset' => 'Lūdzu, noklikšķiniet uz saites apakšā, lai apstiprinātu, ka esat saņēmis šo īpašumu.',

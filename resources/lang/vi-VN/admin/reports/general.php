@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Chọn các tùy chọn bạn muốn cho báo cáo tài sản.',
+    'info' => 'Chọn các tùy chọn bạn muốn cho báo cáo tài sản.',
     'deleted_user' => 'Deleted user',
     'send_reminder' => 'Send reminder',
     'reminder_sent' => 'Reminder sent',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'User City',
         'user_state' => 'User State',
         'user_country' => 'User Country',
-        'user_zip' => 'User Zip'
-    ]
+        'user_zip' => 'User Zip',
+    ],
 ];

@@ -42,7 +42,7 @@ return [
     'checkin_date' => '반입 일자',
     'checkout_date' => '반출 일자',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => '부속품을 받았다면 아래 링크를 클릭하세요.',
     'click_on_the_link_asset' => '자산을 받았다면 아래 링크를 클릭하세요.',

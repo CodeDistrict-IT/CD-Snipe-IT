@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ldap;
 use App\Models\SamlNonce;
 use App\Models\Setting;
 use App\Models\User;
-use App\Models\Ldap;
 use App\Services\Saml;
 use Com\Tecnick\Barcode\Barcode;
 use Google2FA;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
 use Redirect;
 
 /**
@@ -24,6 +23,7 @@ use Redirect;
  * database users and LDAP users.
  *
  * @author [A. Gianotto] [<snipe@snipe.net>]
+ *
  * @version    v1.0
  */
 class LoginController extends Controller
@@ -48,7 +48,6 @@ class LoginController extends Controller
     /**
      * Create a new authentication controller instance.
      *
-     * @param Saml $saml
      *
      * @return void
      */
@@ -68,13 +67,12 @@ class LoginController extends Controller
             return redirect()->intended('/');
         }
 
-        if (!$request->session()->has('loggedout')) {
+        if (! $request->session()->has('loggedout')) {
             // If the environment is set to ALWAYS require SAML, go straight to the SAML route.
             // We don't need to check other settings, as this should override those.
             if (config('app.require_saml')) {
                 return redirect()->route('saml.login');
             }
-
 
             if ($this->saml->isEnabled() && Setting::getSettings()->saml_forcelogin == '1' && ! ($request->has('nosaml') || $request->session()->has('error'))) {
                 return redirect()->route('saml.login');
@@ -95,8 +93,6 @@ class LoginController extends Controller
      *
      * @since 5.0.0
      *
-     * @param Request $request
-     *
      * @return User
      *
      * @throws \Exception
@@ -111,14 +107,14 @@ class LoginController extends Controller
             try {
                 $user = $saml->samlLogin($samlData);
                 $notValidAfter = new \Carbon\Carbon(@$samlData['assertionNotOnOrAfter']);
-                if(\Carbon::now()->greaterThanOrEqualTo($notValidAfter)) {
-                    abort(400,"Expired SAML Assertion");
+                if (\Carbon::now()->greaterThanOrEqualTo($notValidAfter)) {
+                    abort(400, 'Expired SAML Assertion');
                 }
-                if(SamlNonce::where('nonce', @$samlData['nonce'])->count() > 0) {
-                    abort(400,"Assertion has already been used");
+                if (SamlNonce::where('nonce', @$samlData['nonce'])->count() > 0) {
+                    abort(400, 'Assertion has already been used');
                 }
-                Log::debug("okay, fine, this is a new nonce then. Good for you.");
-                if (!is_null($user)) {
+                Log::debug('okay, fine, this is a new nonce then. Good for you.');
+                if (! is_null($user)) {
                     Auth::login($user);
                 } else {
                     $username = $saml->getUsername();
@@ -131,7 +127,7 @@ class LoginController extends Controller
                     $user->last_login = \Carbon::now();
                     $user->saveQuietly();
                 }
-                $s = new SamlNonce();
+                $s = new SamlNonce;
                 $s->nonce = @$samlData['nonce'];
                 $s->not_valid_after = $notValidAfter;
                 $s->save();
@@ -141,16 +137,14 @@ class LoginController extends Controller
                 throw $e;
             }
 
-        // Fallthrough with better logging
+            // Fallthrough with better logging
         } else {
 
             // Better logging
             if (empty($samlData)) {
-                Log::debug("SAML page requested, but samlData seems empty.");
+                Log::debug('SAML page requested, but samlData seems empty.');
             }
         }
-
-
 
     }
 
@@ -161,48 +155,44 @@ class LoginController extends Controller
      *
      * @since 5.0.0
      *
-     * @param Request $request
-     *
-     * @return User
-     *
      * @throws \Exception
      */
     private function loginViaLdap(Request $request): User
     {
-        Log::debug("Binding user to LDAP.");
-         $ldap_user = Ldap::findAndBindUserLdap($request->input('username'), $request->input('password'));
-         if (!$ldap_user) {
-             Log::debug("LDAP user ".$request->input('username')." not found in LDAP or could not bind");
-             throw new \Exception("Could not find user in LDAP directory");
-         } else {
-             Log::debug("LDAP user ".$request->input('username')." successfully bound to LDAP");
-         }
+        Log::debug('Binding user to LDAP.');
+        $ldap_user = Ldap::findAndBindUserLdap($request->input('username'), $request->input('password'));
+        if (! $ldap_user) {
+            Log::debug('LDAP user '.$request->input('username').' not found in LDAP or could not bind');
+            throw new \Exception('Could not find user in LDAP directory');
+        } else {
+            Log::debug('LDAP user '.$request->input('username').' successfully bound to LDAP');
+        }
 
-         // Check if the user already exists in the database and was imported via LDAP
-         $user = User::where('username', '=', $request->input('username'))->whereNull('deleted_at')->where('ldap_import', '=', 1)->where('activated', '=', '1')->first(); // FIXME - if we get more than one we should fail. and we sure about this ldap_import thing?
-         Log::debug("Local auth lookup complete");
+        // Check if the user already exists in the database and was imported via LDAP
+        $user = User::where('username', '=', $request->input('username'))->whereNull('deleted_at')->where('ldap_import', '=', 1)->where('activated', '=', '1')->first(); // FIXME - if we get more than one we should fail. and we sure about this ldap_import thing?
+        Log::debug('Local auth lookup complete');
 
-         // The user does not exist in the database. Try to get them from LDAP.
-         // If user does not exist and authenticates successfully with LDAP we
-         // will create it on the fly and sign in with default permissions
-         if (!$user) {
-             Log::debug("Local user ".$request->input('username')." does not exist");
-             Log::debug("Creating local user ".$request->input('username'));
+        // The user does not exist in the database. Try to get them from LDAP.
+        // If user does not exist and authenticates successfully with LDAP we
+        // will create it on the fly and sign in with default permissions
+        if (! $user) {
+            Log::debug('Local user '.$request->input('username').' does not exist');
+            Log::debug('Creating local user '.$request->input('username'));
 
-             if ($user = Ldap::createUserFromLdap($ldap_user, $request->input('password'))) {
-                 Log::debug("Local user created.");
-             } else {
-                 Log::debug("Could not create local user.");
-                 throw new \Exception("Could not create local user");
-             }
-             // If the user exists and they were imported from LDAP already
-         } else {
-             Log::debug("Local user ".$request->input('username')." exists in database. Updating existing user against LDAP.");
+            if ($user = Ldap::createUserFromLdap($ldap_user, $request->input('password'))) {
+                Log::debug('Local user created.');
+            } else {
+                Log::debug('Could not create local user.');
+                throw new \Exception('Could not create local user');
+            }
+            // If the user exists and they were imported from LDAP already
+        } else {
+            Log::debug('Local user '.$request->input('username').' exists in database. Updating existing user against LDAP.');
 
-             $ldap_attr = Ldap::parseAndMapLdapAttributes($ldap_user);
+            $ldap_attr = Ldap::parseAndMapLdapAttributes($ldap_user);
 
             $user->password = $user->noPassword();
-            if (Setting::getSettings()->ldap_pw_sync=='1') {
+            if (Setting::getSettings()->ldap_pw_sync == '1') {
                 $user->password = bcrypt($request->input('password'));
             }
 
@@ -211,6 +201,7 @@ class LoginController extends Controller
             $user->last_name = $ldap_attr['lastname']; //FIXME (or TODO?) - do we need to map additional fields that we now support? E.g. country, phone, etc.
             $user->saveQuietly();
         } // End if(!user)
+
         return $user;
     }
 
@@ -218,8 +209,8 @@ class LoginController extends Controller
     {
         $header_name = Setting::getSettings()->login_remote_user_header_name ?: 'REMOTE_USER';
         $remote_user = $request->server($header_name);
-        if (!isset($remote_user)) {
-          $remote_user = $request->server('REDIRECT_'.$header_name);
+        if (! isset($remote_user)) {
+            $remote_user = $request->server('REDIRECT_'.$header_name);
         }
         if (Setting::getSettings()->login_remote_user_enabled == '1' && isset($remote_user) && ! empty($remote_user)) {
             Log::debug("Authenticating via HTTP header $header_name.");
@@ -269,11 +260,13 @@ class LoginController extends Controller
         //If the environment is set to ALWAYS require SAML, return access denied
         if (config('app.require_saml')) {
             Log::debug('require SAML is enabled in the .env - return a 403');
+
             return view('errors.403');
         }
 
         if (Setting::getSettings()->login_common_disabled == '1') {
             Log::debug('login_common_disabled is set to 1 - return a 403');
+
             return view('errors.403');
         }
 
@@ -303,7 +296,7 @@ class LoginController extends Controller
                 Auth::login($user, $request->input('remember'));
 
                 // If the user was unable to login via LDAP, log the error and let them fall through to
-            // local authentication.
+                // local authentication.
             } catch (\Exception $e) {
                 Log::debug('There was an error authenticating the LDAP user: '.$e->getMessage());
             }
@@ -331,10 +324,10 @@ class LoginController extends Controller
             $user->activated = 1;
             $user->saveQuietly();
         }
+
         // Redirect to the users page
         return redirect()->intended()->with('success', trans('auth/message.signin.success'));
     }
-
 
     /**
      * Two factor enrollment page
@@ -365,7 +358,7 @@ class LoginController extends Controller
         $secret = Google2FA::generateSecretKey();
         $user->two_factor_secret = $secret;
 
-        $barcode = new Barcode();
+        $barcode = new Barcode;
         $barcode_obj =
             $barcode->getBarcodeObj(
                 'QRCODE',
@@ -413,7 +406,6 @@ class LoginController extends Controller
     /**
      * Two factor code submission
      *
-     * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -441,11 +433,9 @@ class LoginController extends Controller
         return redirect()->route('two-factor')->with('error', trans('auth/message.two_factor.invalid_code'));
     }
 
-
     /**
      * Logout page.
      *
-     * @param Request $request
      *
      * @return Illuminate\Http\RedirectResponse
      */
@@ -457,9 +447,9 @@ class LoginController extends Controller
         $samlLogout = $request->session()->get('saml_logout');
         $sloRedirectUrl = null;
         $sloRequestUrl = null;
-    
+
         // Only allow GET if we are doing SAML SLO otherwise abort with 405
-        if ($request->isMethod('GET') && !$samlLogout) {
+        if ($request->isMethod('GET') && ! $samlLogout) {
             abort(405);
         }
 
@@ -480,7 +470,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate(true);
 
-        if ($request->session()->has('password_hash_'.Auth::getDefaultDriver())){
+        if ($request->session()->has('password_hash_'.Auth::getDefaultDriver())) {
             $request->session()->remove('password_hash_'.Auth::getDefaultDriver());
         }
 
@@ -498,11 +488,9 @@ class LoginController extends Controller
         return redirect()->route('login')->with(['success' => trans('auth/message.logout.success'), 'loggedout' => true]);
     }
 
-
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
@@ -513,7 +501,6 @@ class LoginController extends Controller
         ]);
     }
 
-
     public function username()
     {
         return 'username';
@@ -522,7 +509,6 @@ class LoginController extends Controller
     /**
      * Redirect the user after determining they are locked out.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     protected function sendLockoutResponse(Request $request)
@@ -540,11 +526,9 @@ class LoginController extends Controller
             ->withErrors([$this->username() => $message]);
     }
 
-
     /**
      * Override the lockout time and duration
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
     protected function hasTooManyLoginAttempts(Request $request)

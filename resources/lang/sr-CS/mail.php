@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Datum razduženja',
     'checkout_date' => 'Datum zaduženja',
     'checkedout_from' => 'Zaduženo iz',
-    'checkedin_from'  => 'Razduženo od',
+    'checkedin_from' => 'Razduženo od',
     'checked_into' => 'Razduženo u',
     'click_on_the_link_accessory' => 'Kliknite na link pri dnu da biste potvrdili da ste primili dodatnu opremu.',
     'click_on_the_link_asset' => 'Kliknite na link pri dnu da biste potvrdili da ste primili resurs, imovinu.',

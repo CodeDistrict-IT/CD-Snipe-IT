@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'تاريخ الادخال',
     'checkout_date' => 'تاريخ الاخراج',
     'checkedout_from' => 'الخروج من',
-    'checkedin_from'  => 'تم التحقق من',
+    'checkedin_from' => 'تم التحقق من',
     'checked_into' => 'تم التحقق من الدخول',
     'click_on_the_link_accessory' => 'الرجاء النقر على الرابط الموجود في الأسفل لتأكيد استلامك للملحق.',
     'click_on_the_link_asset' => 'يرجى النقر على الرابط في الجزء السفلي للتأكد من أنك قد تلقيت مادة العرض.',

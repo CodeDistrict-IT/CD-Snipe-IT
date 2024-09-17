@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Dooro xulashooyinka aad rabto warbixinta hantidaada.',
+    'info' => 'Dooro xulashooyinka aad rabto warbixinta hantidaada.',
     'deleted_user' => 'Isticmaale la tirtiray',
     'send_reminder' => 'Soo dir xasuusin',
     'reminder_sent' => 'Xusuusin la diray',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Isticmaalka Magaalada',
         'user_state' => 'Gobolka Isticmaalaha',
         'user_country' => 'Dalka Isticmaalaha',
-        'user_zip' => 'Isticmaalaha Zip'
-    ]
+        'user_zip' => 'Isticmaalaha Zip',
+    ],
 ];

@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'Стойността за :fieldname не може да бъде празна.',
+    'import_field_empty' => 'Стойността за :fieldname не може да бъде празна.',
     'in' => 'Избраният :attribute е невалиден.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,7 +125,7 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
-    'percent'       => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
 
     'present' => 'Полето на атрибута трябва да е налице.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
@@ -155,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'Атрибутът: трябва да е низ.',
+    'string' => 'Атрибутът: трябва да е низ.',
     'two_column_unique_undeleted' => ':attribute трябва да бъде уникален за :table1 и :table2. ',
-    'unique_undeleted'     => ':attribute трябва да бъде уникален.',
-    'non_circular'         => ':attribute не трябва да създава препрадка към себе си.',
-    'not_array'            => ':attribute не може да бъде масив.',
+    'unique_undeleted' => ':attribute трябва да бъде уникален.',
+    'non_circular' => ':attribute не трябва да създава препрадка към себе си.',
+    'not_array' => ':attribute не може да бъде масив.',
     'disallow_same_pwd_as_user_fields' => 'Паролата не може да бъде същата, като потребителското име.',
-    'letters'              => 'Паролата трябва да съдържа поне една буква.',
-    'numbers'              => 'Паролата трябва да съдържа поне една цифра.',
-    'case_diff'            => 'Паролата трябва да съдържа главни и малки букви.',
-    'symbols'              => 'Паролата трябва да съдържа символи.',
+    'letters' => 'Паролата трябва да съдържа поне една буква.',
+    'numbers' => 'Паролата трябва да съдържа поне една цифра.',
+    'case_diff' => 'Паролата трябва да съдържа главни и малки букви.',
+    'symbols' => 'Паролата трябва да съдържа символи.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => ':attribute вече е вписан.',
     'uploaded' => 'Атрибутът: не успя да качи.',
@@ -186,27 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Полето атрибут: съдържа знак, който не е разрешен.',
-        'email_array'      => 'Един или повече имейл адреси са невалидни.',
-        'hashed_pass'      => 'Текущата ви парола е неправилна',
-        'dumbpwd'          => 'Тази парола е твърде често срещана.',
+        'email_array' => 'Един или повече имейл адреси са невалидни.',
+        'hashed_pass' => 'Текущата ви парола е неправилна',
+        'dumbpwd' => 'Тази парола е твърде често срещана.',
         'statuslabel_type' => 'Трябва да изберете валиден тип етикет на състоянието',
-        'custom_field_not_found'          => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
         'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ':values трябва да бъде валидна дата в YYYY-MM-DD формат',
-        'last_audit_date.date_format'   =>  ':attribute трябва да бъде валидна дата в YYYY-MM-DD hh:mm:ss формат',
-        'expiration_date.date_format'   =>  ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
-        'termination_date.date_format'  =>  ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
-        'expected_checkin.date_format'  =>  ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
-        'start_date.date_format'        =>  ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
-        'end_date.date_format'          =>  ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
-        'checkboxes'           => ':attribute съдържа невалидни опции.',
-        'radio_buttons'        => ':attribute е невалиден.',
+        'purchase_date.date_format' => ':values трябва да бъде валидна дата в YYYY-MM-DD формат',
+        'last_audit_date.date_format' => ':attribute трябва да бъде валидна дата в YYYY-MM-DD hh:mm:ss формат',
+        'expiration_date.date_format' => ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
+        'termination_date.date_format' => ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
+        'expected_checkin.date_format' => ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
+        'start_date.date_format' => ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
+        'end_date.date_format' => ':attribute трябва да бъде валидна дата в YYYY-MM-DD формат',
+        'checkboxes' => ':attribute съдържа невалидни опции.',
+        'radio_buttons' => ':attribute е невалиден.',
         'invalid_value_in_field' => 'В това поле е включена невалидна стойност',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -232,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

@@ -7,26 +7,28 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Actionlog;
 use App\Models\Asset;
-use \Illuminate\Http\Response;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AssetFilesController extends Controller
 {
     /**
      * Upload a file to the server.
      *
-     * @param UploadFileRequest $request
-     * @param int $assetId
+     * @param  int  $assetId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      *@since [v1.0]
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
-    public function store(UploadFileRequest $request, $assetId = null) : RedirectResponse
+    public function store(UploadFileRequest $request, $assetId = null): RedirectResponse
     {
         if (! $asset = Asset::find($assetId)) {
             return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
@@ -40,8 +42,8 @@ class AssetFilesController extends Controller
             }
 
             foreach ($request->file('file') as $file) {
-                $file_name = $request->handleFile('private_uploads/assets/','hardware-'.$asset->id, $file);
-                
+                $file_name = $request->handleFile('private_uploads/assets/', 'hardware-'.$asset->id, $file);
+
                 $asset->logUpload($file_name, $request->get('notes'));
             }
 
@@ -55,11 +57,13 @@ class AssetFilesController extends Controller
      * Check for permissions and display the file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param  int $assetId
-     * @param  int $fileId
+     *
+     * @param  int  $assetId
+     * @param  int  $fileId
+     *
      * @since [v1.0]
      */
-    public function show($assetId = null, $fileId = null) : View | RedirectResponse | Response | StreamedResponse | BinaryFileResponse
+    public function show($assetId = null, $fileId = null): View|RedirectResponse|Response|StreamedResponse|BinaryFileResponse
     {
         $asset = Asset::find($assetId);
         // the asset is valid
@@ -104,11 +108,13 @@ class AssetFilesController extends Controller
      * Delete the associated file
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param  int $assetId
-     * @param  int $fileId
+     *
+     * @param  int  $assetId
+     * @param  int  $fileId
+     *
      * @since [v1.0]
      */
-    public function destroy($assetId = null, $fileId = null) : RedirectResponse
+    public function destroy($assetId = null, $fileId = null): RedirectResponse
     {
         $asset = Asset::find($assetId);
         $this->authorize('update', $asset);

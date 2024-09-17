@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Fecha de ingreso',
     'checkout_date' => 'Fecha de asignación',
     'checkedout_from' => 'Asignado desde',
-    'checkedin_from'  => 'Devuelto desde',
+    'checkedin_from' => 'Devuelto desde',
     'checked_into' => 'Devuelto en',
     'click_on_the_link_accessory' => 'Haga clic en el enlace en la parte inferior para confirmar que ha recibido el accesorio.',
     'click_on_the_link_asset' => 'Haga clic en el enlace en la parte inferior para confirmar que ha recibido el activo.',

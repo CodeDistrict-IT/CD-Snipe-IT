@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Asset;
 use App\Models\CustomField;
-use Schema;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class PaveIt extends Command
 {
@@ -42,9 +40,9 @@ class PaveIt extends Command
     public function handle()
     {
 
-        if (!$this->option('force')) {
+        if (! $this->option('force')) {
             $confirmation = $this->confirm("\n****************************************************\nTHIS WILL DELETE ALL OF THE DATA IN YOUR DATABASE. \nThere is NO undo. This WILL destroy ALL of your data, \nINCLUDING ANY non-Snipe-IT tables you have in this database. \n****************************************************\n\nDo you wish to continue? No backsies! ");
-            if (!$confirmation) {
+            if (! $confirmation) {
                 $this->error('ABORTING');
                 exit(-1);
             }
@@ -76,16 +74,16 @@ class PaveIt extends Command
 
         foreach ($tables as $table) {
             if (in_array($table, $except_tables)) {
-                $this->info($table. ' is SKIPPED.');
+                $this->info($table.' is SKIPPED.');
             } else {
                 \DB::statement('truncate '.$table);
-                $this->info($table. ' is TRUNCATED.');
+                $this->info($table.' is TRUNCATED.');
             }
         }
 
         // Leave in the demo oauth keys so we don't have to reset them every day in the demos
         \DB::statement('delete from oauth_clients WHERE id > 2');
         \DB::statement('delete from oauth_access_tokens WHERE id > 2');
-    
+
     }
 }

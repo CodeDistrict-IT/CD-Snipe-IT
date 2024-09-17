@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Välj de alternativ du vill ha för din tillgångsrapport.',
+    'info' => 'Välj de alternativ du vill ha för din tillgångsrapport.',
     'deleted_user' => 'Raderad användare',
     'send_reminder' => 'Skicka påminnelse',
     'reminder_sent' => 'Påminnelse har skickats',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Användarens stad',
         'user_state' => 'Användarens tillstånd',
         'user_country' => 'Användarens land',
-        'user_zip' => 'Användar Zip'
-    ]
+        'user_zip' => 'Användar Zip',
+    ],
 ];

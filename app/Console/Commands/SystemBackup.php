@@ -41,7 +41,7 @@ class SystemBackup extends Command
             $filename = $this->option('filename');
 
             // Make sure the filename ends in .zip
-            if (!ends_with($filename, '.zip')) {
+            if (! ends_with($filename, '.zip')) {
                 $filename = $filename.'.zip';
             }
 

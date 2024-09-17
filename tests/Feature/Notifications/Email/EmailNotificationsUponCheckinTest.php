@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Notifications\Email;
 
-use PHPUnit\Framework\Attributes\Group;
 use App\Events\CheckoutableCheckedIn;
 use App\Models\Asset;
 use App\Models\User;
 use App\Notifications\CheckinAssetNotification;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
 #[Group('notifications')]

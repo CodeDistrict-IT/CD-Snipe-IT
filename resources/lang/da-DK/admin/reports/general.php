@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Vælg de ønskede muligheder for din aktivrapport.',
+    'info' => 'Vælg de ønskede muligheder for din aktivrapport.',
     'deleted_user' => 'Slettet bruger',
     'send_reminder' => 'Send påmindelse',
     'reminder_sent' => 'Påmindelse sendt',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Bruger By',
         'user_state' => 'Bruger Status',
         'user_country' => 'Bruger Land',
-        'user_zip' => 'Bruger Zip'
-    ]
+        'user_zip' => 'Bruger Zip',
+    ],
 ];

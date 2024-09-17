@@ -167,6 +167,7 @@ class AssetModelPresenter extends Presenter
 
     /**
      * Formatted note for this model
+     *
      * @return string
      */
     public function note()
@@ -187,6 +188,7 @@ class AssetModelPresenter extends Presenter
 
     /**
      * Pretty name for this model
+     *
      * @return string
      */
     public function modelName()
@@ -206,15 +208,17 @@ class AssetModelPresenter extends Presenter
 
     /**
      * Standard url for use to view page.
+     *
      * @return string
      */
     public function nameUrl()
     {
-        return  (string) link_to_route('models.show', $this->name, $this->id);
+        return (string) link_to_route('models.show', $this->name, $this->id);
     }
 
     /**
      * Generate img tag to this models image.
+     *
      * @return string
      */
     public function imageUrl()
@@ -228,6 +232,7 @@ class AssetModelPresenter extends Presenter
 
     /**
      * Generate img tag to this models image.
+     *
      * @return string
      */
     public function imageSrc()
@@ -241,6 +246,7 @@ class AssetModelPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

@@ -10,15 +10,11 @@ use Illuminate\Notifications\Notification;
 class ExpectedCheckinNotification extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
-     *
-     * @param $params
      */
     public function __construct($params)
     {

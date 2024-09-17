@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Skiladagsetning',
     'checkout_date' => 'Ráðstöfunardagsetning',
     'checkedout_from' => 'Skráð út frá',
-    'checkedin_from'  => 'Skráð inn frá',
+    'checkedin_from' => 'Skráð inn frá',
     'checked_into' => 'Skráð inní',
     'click_on_the_link_accessory' => 'Please click on the link at the bottom to confirm that you have received the accessory.',
     'click_on_the_link_asset' => 'Please click on the link at the bottom to confirm that you have received the asset.',

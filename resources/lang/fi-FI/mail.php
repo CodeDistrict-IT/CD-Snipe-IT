@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Palautuspäivä',
     'checkout_date' => 'Luovutuspäivä',
     'checkedout_from' => 'Luovutettu lähteestä',
-    'checkedin_from'  => 'Tarkistettu alkaen',
+    'checkedin_from' => 'Tarkistettu alkaen',
     'checked_into' => 'Tarkastettu sisään',
     'click_on_the_link_accessory' => 'Klikkaa alla olevaa linkkiä vahvistaaksesi, että olet vastaanottanut oheistarvikeen.',
     'click_on_the_link_asset' => 'Klikkaa alla olevaa linkkiä vahvistaaksesi, että olet vastaanottanut laitteen.',

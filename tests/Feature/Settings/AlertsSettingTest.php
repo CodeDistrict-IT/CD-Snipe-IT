@@ -3,12 +3,8 @@
 namespace Tests\Feature\Settings;
 
 use App\Models\Asset;
-use Tests\TestCase;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use App\Models\User;
-use App\Models\Setting;
-
+use Tests\TestCase;
 
 class AlertsSettingTest extends TestCase
 {
@@ -19,5 +15,4 @@ class AlertsSettingTest extends TestCase
             ->get(route('settings.alerts.index'))
             ->assertForbidden();
     }
-
 }

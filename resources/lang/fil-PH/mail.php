@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Ang Petsa ng Pag-checkin',
     'checkout_date' => 'Ang Petsa ng Pagcheck-out',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Paki-klik sa link na nasa ibaba para i-komperma na ikaw ay nakakatanggap ng aksesorya.',
     'click_on_the_link_asset' => 'Paki-klik sa link na nasa ibaba para i-komperma na ikaw ay nakakatanggap ng asset.',

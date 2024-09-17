@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Gate;
 
 class StoreAccessoryRequest extends ImageUploadRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -46,6 +45,7 @@ class StoreAccessoryRequest extends ImageUploadRequest
     public function messages(): array
     {
         $messages = ['category_type.in' => trans('admin/accessories/message.invalid_category_type')];
+
         return $messages;
     }
 

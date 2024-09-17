@@ -2,18 +2,18 @@
 
 namespace App\Livewire;
 
+use App\Models\AssetModel;
 use App\Models\CustomField;
+use App\Models\CustomFieldset;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
-
-use App\Models\CustomFieldset;
-use App\Models\AssetModel;
 
 class CustomFieldSetDefaultValuesForModel extends Component
 {
     public $add_default_values;
 
     public $fieldset_id;
+
     public $model_id;
 
     public array $selectedValues = [];
@@ -57,8 +57,6 @@ class CustomFieldSetDefaultValuesForModel extends Component
      * dynamically added (this is especially true for checkboxes).
      *
      * Let's go ahead and initialize selectedValues with all the potential keys (custom field db_columns).
-     *
-     * @return void
      */
     private function initializeSelectedValuesArray(): void
     {
@@ -74,8 +72,6 @@ class CustomFieldSetDefaultValuesForModel extends Component
     /**
      * Populate the selectedValues array with the
      * default values or old input for each field.
-     *
-     * @return void
      */
     private function populatedSelectedValuesArray(): void
     {
@@ -93,7 +89,7 @@ class CustomFieldSetDefaultValuesForModel extends Component
         // back with the old input.
         // Let's use what they had previously set.
         if (old('default_values')) {
-            $defaultValue = old('default_values.' . $field->id);
+            $defaultValue = old('default_values.'.$field->id);
         }
 
         // on first load the default value for checkboxes will be

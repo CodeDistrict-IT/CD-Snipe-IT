@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Notifications\Webhooks;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
 use App\Events\CheckoutableCheckedIn;
 use App\Models\Accessory;
 use App\Models\Asset;
@@ -16,6 +14,8 @@ use App\Notifications\CheckinAssetNotification;
 use App\Notifications\CheckinLicenseSeatNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
 #[Group('notifications')]
@@ -31,17 +31,17 @@ class SlackNotificationsUponCheckinTest extends TestCase
     public static function assetCheckInTargets(): array
     {
         return [
-            'Asset checked out to user' => [fn() => User::factory()->create()],
-            'Asset checked out to asset' => [fn() => Asset::factory()->laptopMbp()->create()],
-            'Asset checked out to location' => [fn() => Location::factory()->create()],
+            'Asset checked out to user' => [fn () => User::factory()->create()],
+            'Asset checked out to asset' => [fn () => Asset::factory()->laptopMbp()->create()],
+            'Asset checked out to location' => [fn () => Location::factory()->create()],
         ];
     }
 
     public static function licenseCheckInTargets(): array
     {
         return [
-            'License checked out to user' => [fn() => User::factory()->create()],
-            'License checked out to asset' => [fn() => Asset::factory()->laptopMbp()->create()],
+            'License checked out to user' => [fn () => User::factory()->create()],
+            'License checked out to asset' => [fn () => Asset::factory()->laptopMbp()->create()],
         ];
     }
 

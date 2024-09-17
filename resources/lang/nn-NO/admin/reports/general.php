@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Velg de alternativene du ønsker skal inngå i rapporten.',
+    'info' => 'Velg de alternativene du ønsker skal inngå i rapporten.',
     'deleted_user' => 'Slettet bruker',
     'send_reminder' => 'Send påminnelse',
     'reminder_sent' => 'Påminnelse sendt',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Bruker by',
         'user_state' => 'Bruker tilstand',
         'user_country' => 'Bruker Land',
-        'user_zip' => 'Brukers postnummer'
-    ]
+        'user_zip' => 'Brukers postnummer',
+    ],
 ];

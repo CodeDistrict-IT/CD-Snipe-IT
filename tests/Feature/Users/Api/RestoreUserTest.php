@@ -3,15 +3,11 @@
 namespace Tests\Feature\Users\Api;
 
 use App\Models\Company;
-use App\Models\LicenseSeat;
-use App\Models\Location;
 use App\Models\User;
 use Tests\TestCase;
 
 class RestoreUserTest extends TestCase
 {
-
-
     public function testErrorReturnedViaApiIfUserDoesNotExist()
     {
         $this->actingAsForApi(User::factory()->deleteUsers()->create())
@@ -32,7 +28,6 @@ class RestoreUserTest extends TestCase
             ->assertStatusMessageIs('error')
             ->json();
     }
-
 
     public function testDeniedPermissionsForRestoringUserViaApi()
     {
@@ -98,8 +93,4 @@ class RestoreUserTest extends TestCase
         $this->assertNull($userFromA->deleted_at);
 
     }
-
-
-
-
 }

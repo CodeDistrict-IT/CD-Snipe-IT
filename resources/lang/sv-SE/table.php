@@ -1,11 +1,11 @@
 <?php
 
-return array(
+return [
 
-    'actions'	 	        => 'Handlingar',
-    'action' 		        => 'Handling',
-    'by'      		        => 'Av',
-    'item' 			        => 'Artikel',
-    'no_matching_records'   => 'No matching records found',
+    'actions' => 'Handlingar',
+    'action' => 'Handling',
+    'by' => 'Av',
+    'item' => 'Artikel',
+    'no_matching_records' => 'No matching records found',
 
-);
+];

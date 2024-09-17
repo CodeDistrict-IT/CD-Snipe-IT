@@ -9,6 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use NotificationChannels\GoogleChat\Card;
 use NotificationChannels\GoogleChat\GoogleChatChannel;
 use NotificationChannels\GoogleChat\GoogleChatMessage;
@@ -16,20 +17,17 @@ use NotificationChannels\GoogleChat\Section;
 use NotificationChannels\GoogleChat\Widgets\KeyValue;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
-use Illuminate\Support\Facades\Log;
 
 class CheckoutConsumableNotification extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
      *
-     * @param $params
+     * @param  $params
      */
     public function __construct(Consumable $consumable, $checkedOutTo, User $checkedOutBy, $acceptance, $note)
     {
@@ -60,7 +58,7 @@ class CheckoutConsumableNotification extends Notification
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = 'slack';
         }
 
@@ -113,12 +111,13 @@ class CheckoutConsumableNotification extends Notification
             ->content(':arrow_up: :paperclip: Consumable Checked Out')
             ->from($botname)
             ->to($channel)
-            ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
+            ->attachment(function ($attachment) use ($item, $note, $fields) {
                 $attachment->title(htmlspecialchars_decode($item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($note);
             });
     }
+
     public function toMicrosoftTeams()
     {
         $target = $this->target;
@@ -133,11 +132,12 @@ class CheckoutConsumableNotification extends Notification
             ->title(trans('mail.Consumable_checkout_notification'))
             ->addStartGroupToSection('activityText')
             ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityTitle')
-            ->fact(trans('mail.Consumable_checkout_notification')." by ", $admin->present()->fullName())
+            ->fact(trans('mail.Consumable_checkout_notification').' by ', $admin->present()->fullName())
             ->fact(trans('mail.assigned_to'), $target->present()->fullName())
             ->fact(trans('admin/consumables/general.remaining'), $item->numRemaining())
             ->fact(trans('mail.notes'), $note ?: '');
     }
+
     public function toGoogleChat()
     {
         $target = $this->target;
@@ -181,13 +181,13 @@ class CheckoutConsumableNotification extends Notification
 
         return (new MailMessage)->markdown('notifications.markdown.checkout-consumable',
             [
-                'item'          => $this->item,
-                'admin'         => $this->admin,
-                'note'          => $this->note,
-                'target'        => $this->target,
-                'eula'          => $eula,
-                'req_accept'    => $req_accept,
-                'accept_url'    => $accept_url,
+                'item' => $this->item,
+                'admin' => $this->admin,
+                'note' => $this->note,
+                'target' => $this->target,
+                'eula' => $eula,
+                'req_accept' => $req_accept,
+                'accept_url' => $accept_url,
             ])
             ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Confirm_consumable_delivery'));

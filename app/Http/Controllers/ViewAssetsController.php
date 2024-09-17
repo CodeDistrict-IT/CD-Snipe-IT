@@ -10,9 +10,9 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Notifications\RequestAssetCancelation;
 use App\Notifications\RequestAssetNotification;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 /**
  * This controller handles all actions related to the ability for users
@@ -24,9 +24,8 @@ class ViewAssetsController extends Controller
 {
     /**
      * Redirect to the profile page.
-     *
      */
-    public function getIndex() : View | RedirectResponse
+    public function getIndex(): View|RedirectResponse
     {
         $user = User::with(
             'assets',
@@ -37,7 +36,7 @@ class ViewAssetsController extends Controller
             'licenses',
         )->find(auth()->id());
 
-        $field_array = array();
+        $field_array = [];
 
         // Loop through all the custom fields that are applied to any model the user has assigned
         foreach ($user->assets as $asset) {
@@ -50,7 +49,7 @@ class ViewAssetsController extends Controller
                     if ($field->display_in_user_view == '1') {
                         $field_array[$field->db_column] = $field->name;
                     }
-                    
+
                 }
             }
 
@@ -60,7 +59,7 @@ class ViewAssetsController extends Controller
         array_unique($field_array);
 
         if (isset($user->id)) {
-            return view('account/view-assets', compact('user', 'field_array' ))
+            return view('account/view-assets', compact('user', 'field_array'))
                 ->with('settings', Setting::getSettings());
         }
 
@@ -72,7 +71,7 @@ class ViewAssetsController extends Controller
     /**
      * Returns view of requestable items for a user.
      */
-    public function getRequestableIndex() : View
+    public function getRequestableIndex(): View
     {
         $assets = Asset::with('model', 'defaultLoc', 'location', 'assignedTo', 'requests')->Hardware()->RequestableAssets();
         $models = AssetModel::with('category', 'requests', 'assets')->RequestableModels()->get();
@@ -80,7 +79,7 @@ class ViewAssetsController extends Controller
         return view('account/requestable-assets', compact('assets', 'models'));
     }
 
-    public function getRequestItem(Request $request, $itemType, $itemId = null, $cancel_by_admin = false, $requestingUser = null) : RedirectResponse
+    public function getRequestItem(Request $request, $itemType, $itemId = null, $cancel_by_admin = false, $requestingUser = null): RedirectResponse
     {
         $item = null;
         $fullItemType = 'App\\Models\\'.studly_case($itemType);
@@ -92,7 +91,7 @@ class ViewAssetsController extends Controller
 
         $user = auth()->user();
 
-        $logaction = new Actionlog();
+        $logaction = new Actionlog;
         $logaction->item_id = $data['asset_id'] = $item->id;
         $logaction->item_type = $fullItemType;
         $logaction->created_at = $data['requested_date'] = date('Y-m-d H:i:s');
@@ -141,9 +140,10 @@ class ViewAssetsController extends Controller
 
     /**
      * Process a specific requested asset
-     * @param null $assetId
+     *
+     * @param  null  $assetId
      */
-    public function getRequestAsset($assetId = null) : RedirectResponse
+    public function getRequestAsset($assetId = null): RedirectResponse
     {
         $user = auth()->user();
 
@@ -162,7 +162,7 @@ class ViewAssetsController extends Controller
         $data['item_quantity'] = 1;
         $settings = Setting::getSettings();
 
-        $logaction = new Actionlog();
+        $logaction = new Actionlog;
         $logaction->item_id = $data['asset_id'] = $asset->id;
         $logaction->item_type = $data['item_type'] = Asset::class;
         $logaction->created_at = $data['requested_date'] = date('Y-m-d H:i:s');
@@ -193,7 +193,7 @@ class ViewAssetsController extends Controller
         return redirect()->route('requestable-assets')->with('success')->with('success', trans('admin/hardware/message.requests.success'));
     }
 
-    public function getRequestedAssets() : View
+    public function getRequestedAssets(): View
     {
         return view('account/requested');
     }

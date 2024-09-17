@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Date de dissociation',
     'checkout_date' => 'Date d\'association',
     'checkedout_from' => 'Verrouillé depuis',
-    'checkedin_from'  => 'Enregistré depuis',
+    'checkedin_from' => 'Enregistré depuis',
     'checked_into' => 'Vérifié dans',
     'click_on_the_link_accessory' => 'Merci de cliquer sur le lien ci-dessous pour confirmer la bonne réception de l\'accessoire.',
     'click_on_the_link_asset' => 'Cliquez sur le lien ci-dessous pour confirmer que vous avez reçu l\'actif.',

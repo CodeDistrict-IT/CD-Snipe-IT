@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'Wartość dla :fieldname nie może być pusta.',
+    'import_field_empty' => 'Wartość dla :fieldname nie może być pusta.',
     'in' => 'Wybrane :attribute jest niewłaściwe.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,7 +125,7 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
-    'percent'       => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
 
     'present' => ':attribute nie może być puste.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
@@ -155,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'Atrybut: atrybut musi być ciągiem.',
+    'string' => 'Atrybut: atrybut musi być ciągiem.',
     'two_column_unique_undeleted' => ':attribute musi być unikalny pomiędzy :table1 i :table2. ',
-    'unique_undeleted'     => 'Wartość :attribute musi być unikalna.',
-    'non_circular'         => ':attribute nie może tworzyć odwołań cyklicznych.',
-    'not_array'            => ':attribute nie może być tablicą.',
+    'unique_undeleted' => 'Wartość :attribute musi być unikalna.',
+    'non_circular' => ':attribute nie może tworzyć odwołań cyklicznych.',
+    'not_array' => ':attribute nie może być tablicą.',
     'disallow_same_pwd_as_user_fields' => 'Hasło nie może być takie samo jak nazwa użytkownika.',
-    'letters'              => 'Hasło musi zawierać co najmniej jedną literę.',
-    'numbers'              => 'Hasło musi zawierać co najmniej jedną cyfrę.',
-    'case_diff'            => 'Hasło musi zawierać małe i wielkie litery.',
-    'symbols'              => 'Hasło musi zawierać znaki specjalne.',
+    'letters' => 'Hasło musi zawierać co najmniej jedną literę.',
+    'numbers' => 'Hasło musi zawierać co najmniej jedną cyfrę.',
+    'case_diff' => 'Hasło musi zawierać małe i wielkie litery.',
+    'symbols' => 'Hasło musi zawierać znaki specjalne.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => ':attribute został już wzięty.',
     'uploaded' => 'Nie udało się przesłać atrybutu:.',
@@ -186,27 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Pole: attribute zawiera znak, który nie jest dozwolony.',
-        'email_array'      => 'Jeden lub więcej adresów e-mail jest nieprawidłowy.',
-        'hashed_pass'      => 'Twoje bieżące hasło jest niepoprawne',
-        'dumbpwd'          => 'To hasło jest zbyt powszechne.',
+        'email_array' => 'Jeden lub więcej adresów e-mail jest nieprawidłowy.',
+        'hashed_pass' => 'Twoje bieżące hasło jest niepoprawne',
+        'dumbpwd' => 'To hasło jest zbyt powszechne.',
         'statuslabel_type' => 'Musisz wybrać odpowiedni typ etykiety statusu',
-        'custom_field_not_found'          => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
         'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
-        'last_audit_date.date_format'   =>  ':attribute musi być prawidłową datą w formacie YYYY-MM-DD hh:mm:ss',
-        'expiration_date.date_format'   =>  ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
-        'termination_date.date_format'  =>  ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
-        'expected_checkin.date_format'  =>  ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
-        'start_date.date_format'        =>  ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
-        'end_date.date_format'          =>  ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
-        'checkboxes'           => ':attribute zawiera nieprawidłowe opcje.',
-        'radio_buttons'        => ':attribute jest nieprawidłowy.',
+        'purchase_date.date_format' => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
+        'last_audit_date.date_format' => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD hh:mm:ss',
+        'expiration_date.date_format' => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
+        'termination_date.date_format' => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
+        'expected_checkin.date_format' => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
+        'start_date.date_format' => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
+        'end_date.date_format' => ':attribute musi być prawidłową datą w formacie YYYY-MM-DD',
+        'checkboxes' => ':attribute zawiera nieprawidłowe opcje.',
+        'radio_buttons' => ':attribute jest nieprawidłowy.',
         'invalid_value_in_field' => 'Nieprawidłowa wartość dołączona do tego pola',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -232,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

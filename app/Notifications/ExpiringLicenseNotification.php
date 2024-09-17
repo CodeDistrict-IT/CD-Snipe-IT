@@ -9,15 +9,11 @@ use Illuminate\Notifications\Notification;
 class ExpiringLicenseNotification extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
-     *
-     * @param $params
      */
     public function __construct($params, $threshold)
     {
@@ -49,8 +45,8 @@ class ExpiringLicenseNotification extends Notification
     {
         $message = (new MailMessage)->markdown('notifications.markdown.report-expiring-licenses',
             [
-                'licenses'  => $this->licenses,
-                'threshold'  => $this->threshold,
+                'licenses' => $this->licenses,
+                'threshold' => $this->threshold,
             ])
             ->subject(trans('mail.Expiring_Licenses_Report'));
 

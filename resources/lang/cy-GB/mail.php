@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Dyddian i mewn',
     'checkout_date' => 'Dyddiad Allan',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Cliciwch ar y ddolen ar y gwaelod i gadarnhau eich bod wedi derbyn yr ategolyn.',
     'click_on_the_link_asset' => 'Cliciwch ar y ddolen ar y gwaelod i gadarnhau eich bod wedi derbyn yr ased.',

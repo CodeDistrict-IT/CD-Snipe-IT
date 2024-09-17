@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Tanggal Check in',
     'checkout_date' => 'Tanggal Check out',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Silahkan klik pada link di bagian bawah untuk mengkonfirmasi bahwa Anda telah menerima aksesori.',
     'click_on_the_link_asset' => 'Silahkan klik pada tautan di bawah untuk konfirmasi anda sudah menerima aset itu.',

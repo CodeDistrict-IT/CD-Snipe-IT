@@ -7,18 +7,17 @@ use App\Helpers\Helper;
 use App\Http\Controllers\CheckInOutRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccessoryCheckoutRequest;
+use App\Http\Requests\ImageUploadRequest;
 use App\Http\Requests\StoreAccessoryRequest;
 use App\Http\Transformers\AccessoriesTransformer;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Models\Accessory;
+use App\Models\AccessoryCheckout;
 use App\Models\Company;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Http\Requests\ImageUploadRequest;
-use App\Models\AccessoryCheckout;
+use Illuminate\Support\Facades\Auth;
 
 class AccessoriesController extends Controller
 {
@@ -28,7 +27,9 @@ class AccessoriesController extends Controller
      * Display a listing of the resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -37,10 +38,9 @@ class AccessoriesController extends Controller
             $this->authorize('view', Accessory::class);
         }
 
-
         // This array is what determines which fields should be allowed to be sorted on ON the table itself, no relations
         // Relations will be handled in query scopes a little further down.
-        $allowed_columns = 
+        $allowed_columns =
             [
                 'id',
                 'name',
@@ -55,9 +55,8 @@ class AccessoriesController extends Controller
                 'qty',
             ];
 
-
         $accessories = Accessory::select('accessories.*')->with('category', 'company', 'manufacturer', 'checkouts', 'location', 'supplier')
-                                ->withCount('checkouts as checkouts_count');
+            ->withCount('checkouts as checkouts_count');
 
         if ($request->filled('search')) {
             $accessories = $accessories->TextSearch($request->input('search'));
@@ -80,11 +79,11 @@ class AccessoriesController extends Controller
         }
 
         if ($request->filled('location_id')) {
-            $accessories->where('location_id','=',$request->input('location_id'));
+            $accessories->where('location_id', '=', $request->input('location_id'));
         }
 
         if ($request->filled('notes')) {
-            $accessories->where('notes','=',$request->input('notes'));
+            $accessories->where('notes', '=', $request->input('notes'));
         }
 
         // Make sure the offset and limit are actually integers and do not exceed system limits
@@ -92,7 +91,7 @@ class AccessoriesController extends Controller
         $limit = app('api_limit_value');
 
         $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
-        $sort_override =  $request->input('sort');
+        $sort_override = $request->input('sort');
         $column_sort = in_array($sort_override, $allowed_columns) ? $sort_override : 'created_at';
 
         switch ($sort_override) {
@@ -107,28 +106,29 @@ class AccessoriesController extends Controller
                 break;
             case 'manufacturer':
                 $accessories = $accessories->OrderManufacturer($order);
-                break;    
+                break;
             case 'supplier':
                 $accessories = $accessories->OrderSupplier($order);
-                break;       
+                break;
             default:
                 $accessories = $accessories->orderBy($column_sort, $order);
                 break;
         }
- 
+
         $total = $accessories->count();
         $accessories = $accessories->skip($offset)->take($limit)->get();
 
         return (new AccessoriesTransformer)->transformAccessories($accessories, $total);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\ImageUploadRequest $request
+     * @param  \App\Http\Requests\ImageUploadRequest  $request
      * @return \Illuminate\Http\JsonResponse
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
     public function store(StoreAccessoryRequest $request)
@@ -151,7 +151,9 @@ class AccessoriesController extends Controller
      *
      * @param  int  $id
      * @return array
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
     public function show($id)
@@ -162,13 +164,14 @@ class AccessoriesController extends Controller
         return (new AccessoriesTransformer)->transformAccessory($accessory);
     }
 
-
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return array
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
     public function accessory_detail($id)
@@ -179,12 +182,13 @@ class AccessoriesController extends Controller
         return (new AccessoriesTransformer)->transformAccessory($accessory);
     }
 
-
     /**
      * Display the specified resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -210,22 +214,22 @@ class AccessoriesController extends Controller
         $accessory_checkouts = $accessory->checkouts()->skip($offset)->take($limit)->get();
 
         if ($request->filled('search')) {
-            
+
             $accessory_checkouts = $accessory->checkouts()->TextSearch($request->input('search'))
-                                         ->get();
+                ->get();
             $total = $accessory_checkouts->count();
         }
 
         return (new AccessoriesTransformer)->transformCheckedoutAccessory($accessory, $accessory_checkouts, $total);
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\ImageUploadRequest $request
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -247,7 +251,9 @@ class AccessoriesController extends Controller
      * Remove the specified resource from storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -258,14 +264,13 @@ class AccessoriesController extends Controller
         $this->authorize($accessory);
 
         if ($accessory->hasUsers() > 0) {
-            return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/accessories/message.assoc_users', ['count'=> $accessory->hasUsers()])));
+            return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/accessories/message.assoc_users', ['count' => $accessory->hasUsers()])));
         }
 
         $accessory->delete();
 
         return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/accessories/message.delete.success')));
     }
-
 
     /**
      * Save the Accessory checkout information.
@@ -275,6 +280,7 @@ class AccessoriesController extends Controller
      *
      * @param  int  $accessoryId
      * @return \Illuminate\Http\JsonResponse
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
     public function checkout(AccessoryCheckoutRequest $request, Accessory $accessory)
@@ -305,11 +311,13 @@ class AccessoriesController extends Controller
      * Check in the item so that it can be checked out again to someone else
      *
      * @uses Accessory::checkin_email() to determine if an email can and should be sent
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param Request $request
-     * @param int $accessoryUserId
-     * @param string $backto
+     *
+     * @param  int  $accessoryUserId
+     * @param  string  $backto
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @internal param int $accessoryId
      */
     public function checkin(Request $request, $accessoryUserId = null)
@@ -337,20 +345,18 @@ class AccessoriesController extends Controller
             $data['item_tag'] = '';
             $data['note'] = $logaction->note;
 
-            return response()->json(Helper::formatStandardApiResponse('success', null,  trans('admin/accessories/message.checkin.success')));
+            return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/accessories/message.checkin.success')));
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/accessories/message.checkin.error')));
 
     }
 
-
     /**
-    * Gets a paginated collection for the select2 menus
-    *
-    * @see \App\Http\Transformers\SelectlistTransformer
-    *
-    */
+     * Gets a paginated collection for the select2 menus
+     *
+     * @see \App\Http\Transformers\SelectlistTransformer
+     */
     public function selectlist(Request $request)
     {
 
@@ -367,5 +373,4 @@ class AccessoriesController extends Controller
 
         return (new SelectlistTransformer)->transformSelectlist($accessories);
     }
-
 }

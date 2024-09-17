@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -17,4 +17,4 @@ return array(
     'password' => 'Furaha sirta ah ee la bixiyay waa khalad.',
     'throttle' => 'Isku dayo soo gal oo aad u badan Fadlan isku day mar kale :seconds ilbiriqsi gudahood.',
 
-);
+];

@@ -18,10 +18,10 @@ use App\Notifications\CheckoutAccessoryNotification;
 use App\Notifications\CheckoutAssetNotification;
 use App\Notifications\CheckoutConsumableNotification;
 use App\Notifications\CheckoutLicenseSeatNotification;
-use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\Notification;
 use Exception;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class CheckoutableListener
 {
@@ -35,7 +35,7 @@ class CheckoutableListener
      */
     public function onCheckedOut($event)
     {
-        if ($this->shouldNotSendAnyNotifications($event->checkoutable)){
+        if ($this->shouldNotSendAnyNotifications($event->checkoutable)) {
             return;
         }
 
@@ -59,25 +59,24 @@ class CheckoutableListener
 
             if ($this->shouldSendWebhookNotification()) {
 
-            //slack doesn't include the url in its messaging format so this is needed to hit the endpoint
+                //slack doesn't include the url in its messaging format so this is needed to hit the endpoint
 
-              if(Setting::getSettings()->webhook_selected =='slack' || Setting::getSettings()->webhook_selected =='general') {
+                if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
 
-
-                  Notification::route('slack', Setting::getSettings()->webhook_endpoint)
-                      ->notify($this->getCheckoutNotification($event));
-              }
+                    Notification::route('slack', Setting::getSettings()->webhook_endpoint)
+                        ->notify($this->getCheckoutNotification($event));
+                }
             }
         } catch (ClientException $e) {
-            Log::debug("Exception caught during checkout notification: " . $e->getMessage());
+            Log::debug('Exception caught during checkout notification: '.$e->getMessage());
         } catch (Exception $e) {
-            Log::debug("Exception caught during checkout notification: " . $e->getMessage());
+            Log::debug('Exception caught during checkout notification: '.$e->getMessage());
         }
     }
 
     /**
      * Notify the user and post to webhook about the checked in checkoutable
-     */    
+     */
     public function onCheckedIn($event)
     {
         Log::debug('onCheckedIn in the Checkoutable listener fired');
@@ -89,13 +88,13 @@ class CheckoutableListener
         /**
          * Send the appropriate notification
          */
-        if ($event->checkedOutTo && $event->checkoutable){
+        if ($event->checkedOutTo && $event->checkoutable) {
             $acceptances = CheckoutAcceptance::where('checkoutable_id', $event->checkoutable->id)
-                                            ->where('assigned_to_id', $event->checkedOutTo->id)
-                                            ->get();
+                ->where('assigned_to_id', $event->checkedOutTo->id)
+                ->get();
 
-            foreach($acceptances as $acceptance){
-                if($acceptance->isPending()){
+            foreach ($acceptances as $acceptance) {
+                if ($acceptance->isPending()) {
                     $acceptance->delete();
                 }
             }
@@ -115,7 +114,7 @@ class CheckoutableListener
                 );
             }
             //slack doesn't include the url in its messaging format so this is needed to hit the endpoint
-            if(Setting::getSettings()->webhook_selected =='slack' || Setting::getSettings()->webhook_selected =='general') {
+            if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
 
                 if ($this->shouldSendWebhookNotification()) {
                     Notification::route('slack', Setting::getSettings()->webhook_endpoint)
@@ -124,15 +123,16 @@ class CheckoutableListener
             }
 
         } catch (ClientException $e) {
-            Log::warning("Exception caught during checkout notification: " . $e->getMessage());
+            Log::warning('Exception caught during checkout notification: '.$e->getMessage());
         } catch (Exception $e) {
-            Log::warning("Exception caught during checkin notification: " . $e->getMessage());
+            Log::warning('Exception caught during checkin notification: '.$e->getMessage());
         }
-    }      
+    }
 
     /**
      * Generates a checkout acceptance
-     * @param  Event $event
+     *
+     * @param  Event  $event
      * @return mixed
      */
     private function getCheckoutAcceptance($event)
@@ -141,7 +141,7 @@ class CheckoutableListener
         if ($checkedOutToType != "App\Models\User") {
             return null;
         }
-        if (!$event->checkoutable->requireAcceptance()) {
+        if (! $event->checkoutable->requireAcceptance()) {
             return null;
         }
 
@@ -150,13 +150,13 @@ class CheckoutableListener
         $acceptance->assignedTo()->associate($event->checkedOutTo);
         $acceptance->save();
 
-        return $acceptance;      
+        return $acceptance;
     }
 
     /**
      * Gets the entities to be notified of the passed event
-     * 
-     * @param  Event $event
+     *
+     * @param  Event  $event
      * @return Collection
      */
     private function getNotifiables($event)
@@ -174,16 +174,16 @@ class CheckoutableListener
          * Notify Admin users if the settings is activated
          */
         if ((Setting::getSettings()) && (Setting::getSettings()->admin_cc_email != '')) {
-            $notifiables->push(new AdminRecipient());
+            $notifiables->push(new AdminRecipient);
         }
 
-        return $notifiables;       
+        return $notifiables;
     }
 
     /**
      * Get the appropriate notification for the event
-     * 
-     * @param  CheckoutableCheckedIn $event 
+     *
+     * @param  CheckoutableCheckedIn  $event
      * @return Notification
      */
     private function getCheckinNotification($event)
@@ -197,7 +197,7 @@ class CheckoutableListener
                 break;
             case Asset::class:
                 $notificationClass = CheckinAssetNotification::class;
-                break;    
+                break;
             case LicenseSeat::class:
                 $notificationClass = CheckinLicenseSeatNotification::class;
                 break;
@@ -205,14 +205,14 @@ class CheckoutableListener
 
         Log::debug('Notification class: '.$notificationClass);
 
-        return new $notificationClass($event->checkoutable, $event->checkedOutTo, $event->checkedInBy, $event->note);  
+        return new $notificationClass($event->checkoutable, $event->checkedOutTo, $event->checkedInBy, $event->note);
     }
 
     /**
      * Get the appropriate notification for the event
-     * 
-     * @param  CheckoutableCheckedOut $event
-     * @param  CheckoutAcceptance|null $acceptance
+     *
+     * @param  CheckoutableCheckedOut  $event
+     * @param  CheckoutAcceptance|null  $acceptance
      * @return Notification
      */
     private function getCheckoutNotification($event, $acceptance = null)
@@ -228,12 +228,11 @@ class CheckoutableListener
                 break;
             case Consumable::class:
                 $notificationClass = CheckoutConsumableNotification::class;
-                break;    
+                break;
             case LicenseSeat::class:
                 $notificationClass = CheckoutLicenseSeatNotification::class;
                 break;
         }
-
 
         return new $notificationClass($event->checkoutable, $event->checkedOutTo, $event->checkedOutBy, $acceptance, $event->note);
     }
@@ -248,12 +247,12 @@ class CheckoutableListener
         $events->listen(
             \App\Events\CheckoutableCheckedIn::class,
             'App\Listeners\CheckoutableListener@onCheckedIn'
-        ); 
+        );
 
         $events->listen(
             \App\Events\CheckoutableCheckedOut::class,
             'App\Listeners\CheckoutableListener@onCheckedOut'
-        ); 
+        );
     }
 
     private function shouldNotSendAnyNotifications($checkoutable): bool

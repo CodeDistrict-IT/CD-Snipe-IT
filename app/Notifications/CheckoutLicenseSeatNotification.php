@@ -20,15 +20,13 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 class CheckoutLicenseSeatNotification extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
      *
-     * @param $params
+     * @param  $params
      */
     public function __construct(LicenseSeat $licenseSeat, $checkedOutTo, User $checkedOutBy, $acceptance, $note)
     {
@@ -50,16 +48,16 @@ class CheckoutLicenseSeatNotification extends Notification
     {
         $notifyBy = [];
 
-        if (Setting::getSettings()->webhook_selected == 'google'){
+        if (Setting::getSettings()->webhook_selected == 'google') {
 
             $notifyBy[] = GoogleChatChannel::class;
         }
-        if (Setting::getSettings()->webhook_selected == 'microsoft'){
+        if (Setting::getSettings()->webhook_selected == 'microsoft') {
 
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = 'slack';
         }
 
@@ -112,12 +110,13 @@ class CheckoutLicenseSeatNotification extends Notification
             ->content(':arrow_up: :floppy_disk: License Checked Out')
             ->from($botname)
             ->to($channel)
-            ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
+            ->attachment(function ($attachment) use ($item, $note, $fields) {
                 $attachment->title(htmlspecialchars_decode($item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($note);
             });
     }
+
     public function toMicrosoftTeams()
     {
         $target = $this->target;
@@ -132,11 +131,12 @@ class CheckoutLicenseSeatNotification extends Notification
             ->title(trans('mail.License_Checkout_Notification'))
             ->addStartGroupToSection('activityText')
             ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityTitle')
-            ->fact(trans('mail.License_Checkout_Notification')." by ", $admin->present()->fullName())
+            ->fact(trans('mail.License_Checkout_Notification').' by ', $admin->present()->fullName())
             ->fact(trans('mail.assigned_to'), $target->present()->fullName())
             ->fact(trans('admin/consumables/general.remaining'), $item->availCount()->count())
             ->fact(trans('mail.notes'), $note ?: '');
     }
+
     public function toGoogleChat()
     {
         $target = $this->target;
@@ -179,13 +179,13 @@ class CheckoutLicenseSeatNotification extends Notification
 
         return (new MailMessage)->markdown('notifications.markdown.checkout-license',
             [
-                'item'          => $this->item,
-                'admin'         => $this->admin,
-                'note'          => $this->note,
-                'target'        => $this->target,
-                'eula'          => $eula,
-                'req_accept'    => $req_accept,
-                'accept_url'    => $accept_url,
+                'item' => $this->item,
+                'admin' => $this->admin,
+                'note' => $this->note,
+                'target' => $this->target,
+                'eula' => $eula,
+                'req_accept' => $req_accept,
+                'accept_url' => $accept_url,
             ])
             ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Confirm_license_delivery'));

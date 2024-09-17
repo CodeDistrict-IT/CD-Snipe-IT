@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Accessory;
-use App\Models\AccessoryCheckout;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Manufacturer;
@@ -144,7 +143,7 @@ class AccessoryFactory extends Factory
         });
     }
 
-    public function checkedOutToUser(User $user = null)
+    public function checkedOutToUser(?User $user = null)
     {
         return $this->afterCreating(function (Accessory $accessory) use ($user) {
             $accessory->checkouts()->create([

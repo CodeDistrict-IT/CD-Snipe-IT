@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Датум на раздолжување',
     'checkout_date' => 'Датум на задолжување',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Ве молиме кликнете на врската на дното за да потврдите дека сте го примиле додатокот.',
     'click_on_the_link_asset' => 'Ве молиме кликнете на врската на дното за да потврдите дека сте го примиле основното средство.',

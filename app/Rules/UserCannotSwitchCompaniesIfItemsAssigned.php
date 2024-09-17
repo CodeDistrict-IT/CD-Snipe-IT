@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Rules;
+
 use App\Models\Setting;
 use App\Models\User;
 use Closure;

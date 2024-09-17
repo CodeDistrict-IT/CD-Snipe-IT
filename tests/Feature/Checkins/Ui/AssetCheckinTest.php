@@ -107,7 +107,7 @@ class AssetCheckinTest extends TestCase
         $this->actingAs(User::factory()->checkinAssets()->create())
             ->post(route('hardware.checkin.store', ['assetId' => $asset->id]), [
                 'location_id' => $location->id,
-                'update_default_location' => 0
+                'update_default_location' => 0,
             ]);
 
         $this->assertTrue($asset->refresh()->defaultLoc()->is($location));
@@ -162,7 +162,7 @@ class AssetCheckinTest extends TestCase
                 ['assetId' => Asset::factory()->assignedToUser()->create()->id]
             ), [
                 'checkin_at' => '2023-01-02',
-                'note' => 'hello'
+                'note' => 'hello',
             ]);
 
         Event::assertDispatched(function (CheckoutableCheckedIn $event) {
@@ -181,7 +181,7 @@ class AssetCheckinTest extends TestCase
             ->get(route('hardware.checkin.create', ['assetId' => $asset->id]))
             ->assertStatus(302)
             ->assertSessionHas('error')
-            ->assertRedirect(route('hardware.show',['hardware' => $asset->id]));
+            ->assertRedirect(route('hardware.show', ['hardware' => $asset->id]));
     }
 
     public function testAssetCheckinPagePostIsRedirectedIfModelIsInvalid()

@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Checkin Огноо',
     'checkout_date' => 'Тооцоо хийх өдөр',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Дагалдах хэрэгслийг хүлээн авсан гэдгээ батлахын тулд доорх холбоос дээр дарна уу.',
     'click_on_the_link_asset' => 'Хөрөнгийг хүлээн авсан гэдгээ батлахын тулд доорх холбоос дээр дарна уу.',

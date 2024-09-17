@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Ngày Checkin',
     'checkout_date' => 'Ngày checkout',
     'checkedout_from' => 'Biểu mẫu cấp phát',
-    'checkedin_from'  => 'Biểu mẫu đã kiểm tra',
+    'checkedin_from' => 'Biểu mẫu đã kiểm tra',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Vui lòng click chuột lên liên kết ở bên dưới để xác nhận Anh/Chị đã nhận phụ kiện.',
     'click_on_the_link_asset' => 'Vui lòng click chuột lên liên kết bên dưới để xác nhận Anh/Chị đã nhận tài sản.',

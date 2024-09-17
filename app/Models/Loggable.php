@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Setting;
 use App\Notifications\AuditNotification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 trait Loggable
@@ -14,7 +12,9 @@ trait Loggable
 
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
+     *
      * @since [v3.4]
+     *
      * @return \App\Models\Actionlog
      */
     public function log()
@@ -29,7 +29,9 @@ trait Loggable
 
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
+     *
      * @since [v3.4]
+     *
      * @return \App\Models\Actionlog
      */
     public function logCheckout($note, $target, $action_date = null, $originalValues = [])
@@ -72,7 +74,7 @@ trait Loggable
         }
 
         $changed = [];
-        $originalValues = array_intersect_key($originalValues, array_flip(['action_date','name','status_id','location_id','expected_checkin']));
+        $originalValues = array_intersect_key($originalValues, array_flip(['action_date', 'name', 'status_id', 'location_id', 'expected_checkin']));
 
         foreach ($originalValues as $key => $value) {
             if ($key == 'action_date' && $value != $action_date) {
@@ -84,7 +86,7 @@ trait Loggable
             }
         }
 
-        if (!empty($changed)){
+        if (! empty($changed)) {
             $log->log_meta = json_encode($changed);
         }
 
@@ -112,7 +114,9 @@ trait Loggable
 
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
+     *
      * @since [v3.4]
+     *
      * @return \App\Models\Actionlog
      */
     public function logCheckin($target, $note, $action_date = null, $originalValues = [])
@@ -120,7 +124,7 @@ trait Loggable
         $settings = Setting::getSettings();
         $log = new Actionlog;
 
-        if($target != null){
+        if ($target != null) {
             $log->target_type = get_class($target);
             $log->target_id = $target->id;
 
@@ -153,7 +157,7 @@ trait Loggable
         }
 
         $changed = [];
-        $originalValues = array_intersect_key($originalValues, array_flip(['action_date','name','status_id','location_id','rtd_location_id','expected_checkin']));
+        $originalValues = array_intersect_key($originalValues, array_flip(['action_date', 'name', 'status_id', 'location_id', 'rtd_location_id', 'expected_checkin']));
 
         foreach ($originalValues as $key => $value) {
             if ($key == 'action_date' && $value != $action_date) {
@@ -165,51 +169,53 @@ trait Loggable
             }
         }
 
-        if (!empty($changed)){
+        if (! empty($changed)) {
             $log->log_meta = json_encode($changed);
         }
 
         $log->logaction('checkin from');
 
-//        $params = [
-//            'target' => $target,
-//            'item' => $log->item,
-//            'admin' => $log->user,
-//            'note' => $note,
-//            'target_type' => $log->target_type,
-//            'settings' => $settings,
-//        ];
-//
-//
-//        $checkinClass = null;
-//
-//        if (method_exists($target, 'notify')) {
-//            try {
-//                $target->notify(new static::$checkinClass($params));
-//            } catch (\Exception $e) {
-//                Log::debug($e);
-//            }
-//
-//        }
-//
-//        // Send to the admin, if settings dictate
-//        $recipient = new \App\Models\Recipients\AdminRecipient();
-//
-//        if (($settings->admin_cc_email!='') && (static::$checkinClass!='')) {
-//            try {
-//                $recipient->notify(new static::$checkinClass($params));
-//            } catch (\Exception $e) {
-//                Log::debug($e);
-//            }
-//
-//        }
+        //        $params = [
+        //            'target' => $target,
+        //            'item' => $log->item,
+        //            'admin' => $log->user,
+        //            'note' => $note,
+        //            'target_type' => $log->target_type,
+        //            'settings' => $settings,
+        //        ];
+        //
+        //
+        //        $checkinClass = null;
+        //
+        //        if (method_exists($target, 'notify')) {
+        //            try {
+        //                $target->notify(new static::$checkinClass($params));
+        //            } catch (\Exception $e) {
+        //                Log::debug($e);
+        //            }
+        //
+        //        }
+        //
+        //        // Send to the admin, if settings dictate
+        //        $recipient = new \App\Models\Recipients\AdminRecipient();
+        //
+        //        if (($settings->admin_cc_email!='') && (static::$checkinClass!='')) {
+        //            try {
+        //                $recipient->notify(new static::$checkinClass($params));
+        //            } catch (\Exception $e) {
+        //                Log::debug($e);
+        //            }
+        //
+        //        }
 
         return $log;
     }
 
     /**
      * @author  A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return \App\Models\Actionlog
      */
     public function logAudit($note, $location_id, $filename = null)
@@ -243,7 +249,9 @@ trait Loggable
 
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
+     *
      * @since [v3.5]
+     *
      * @return \App\Models\Actionlog
      */
     public function logCreate($note = null)
@@ -271,7 +279,9 @@ trait Loggable
 
     /**
      * @author  Daniel Meltzer <dmeltzer.devel@gmail.com>
+     *
      * @since [v3.4]
+     *
      * @return \App\Models\Actionlog
      */
     public function logUpload($filename, $note)

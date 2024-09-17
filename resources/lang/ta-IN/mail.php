@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'சரி தேதி',
     'checkout_date' => 'புதுப்பிப்பு தேதி',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'நீங்கள் இணைப்பு பெற்றுள்ளீர்கள் என்பதை உறுதிப்படுத்த கீழே உள்ள இணைப்பைக் கிளிக் செய்க.',
     'click_on_the_link_asset' => 'நீங்கள் சொத்தை பெற்றுள்ளீர்கள் என்பதை உறுதிப்படுத்த கீழே உள்ள இணைப்பைக் கிளிக் செய்க.',

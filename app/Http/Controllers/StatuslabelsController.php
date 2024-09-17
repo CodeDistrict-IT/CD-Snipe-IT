@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Models\Statuslabel;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
 
 /**
  * This controller handles all actions related to Status Labels for
@@ -20,13 +20,14 @@ class StatuslabelsController extends Controller
     /**
      * Show a list of all the statuslabels.
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('view', Statuslabel::class);
+
         return view('statuslabels.index');
     }
 
-    public function show($id) : View | RedirectResponse
+    public function show($id): View|RedirectResponse
     {
         $this->authorize('view', Statuslabel::class);
         if ($statuslabel = Statuslabel::find($id)) {
@@ -38,9 +39,8 @@ class StatuslabelsController extends Controller
 
     /**
      * Statuslabel create.
-     *
      */
-    public function create() : View
+    public function create(): View
     {
         // Show the page
         $this->authorize('create', Statuslabel::class);
@@ -52,14 +52,12 @@ class StatuslabelsController extends Controller
 
     /**
      * Statuslabel create form processing.
-     *
-     * @param Request $request
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Statuslabel::class);
         // create a new model instance
-        $statusLabel = new Statuslabel();
+        $statusLabel = new Statuslabel;
 
         if ($request->missing('statuslabel_types')) {
             return redirect()->back()->withInput()->withErrors(['statuslabel_types' => trans('validation.statuslabel_type')]);
@@ -89,9 +87,9 @@ class StatuslabelsController extends Controller
     /**
      * Statuslabel update.
      *
-     * @param  int $statuslabelId
+     * @param  int  $statuslabelId
      */
-    public function edit($statuslabelId = null) : View | RedirectResponse
+    public function edit($statuslabelId = null): View|RedirectResponse
     {
         $this->authorize('update', Statuslabel::class);
         // Check if the Statuslabel exists
@@ -110,9 +108,9 @@ class StatuslabelsController extends Controller
     /**
      * Statuslabel update form processing page.
      *
-     * @param  int $statuslabelId
+     * @param  int  $statuslabelId
      */
-    public function update(Request $request, $statuslabelId = null) : RedirectResponse
+    public function update(Request $request, $statuslabelId = null): RedirectResponse
     {
         $this->authorize('update', Statuslabel::class);
         // Check if the Statuslabel exists
@@ -148,9 +146,9 @@ class StatuslabelsController extends Controller
     /**
      * Delete the given Statuslabel.
      *
-     * @param  int $statuslabelId
+     * @param  int  $statuslabelId
      */
-    public function destroy($statuslabelId) : RedirectResponse
+    public function destroy($statuslabelId): RedirectResponse
     {
         $this->authorize('delete', Statuslabel::class);
         // Check if the Statuslabel exists

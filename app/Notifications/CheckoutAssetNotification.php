@@ -6,21 +6,19 @@ use App\Helpers\Helper;
 use App\Models\Asset;
 use App\Models\Setting;
 use App\Models\User;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use NotificationChannels\GoogleChat\Card;
-use NotificationChannels\GoogleChat\Enums\Icon;
-use NotificationChannels\GoogleChat\Enums\ImageStyle;
 use NotificationChannels\GoogleChat\GoogleChatChannel;
 use NotificationChannels\GoogleChat\GoogleChatMessage;
 use NotificationChannels\GoogleChat\Section;
 use NotificationChannels\GoogleChat\Widgets\KeyValue;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
-use Illuminate\Support\Facades\Log;
+
 class CheckoutAssetNotification extends Notification
 {
     use Queueable;
@@ -28,7 +26,7 @@ class CheckoutAssetNotification extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param $params
+     * @param  $params
      */
     public function __construct(Asset $asset, $checkedOutTo, User $checkedOutBy, $acceptance, $note)
     {
@@ -72,8 +70,7 @@ class CheckoutAssetNotification extends Notification
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
 
             Log::debug('use webhook');
             $notifyBy[] = 'slack';
@@ -132,12 +129,13 @@ class CheckoutAssetNotification extends Notification
             ->content(':arrow_up: :computer: '.trans('mail.Asset_Checkout_Notification'))
             ->from($botname)
             ->to($channel)
-            ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
+            ->attachment(function ($attachment) use ($item, $note, $fields) {
                 $attachment->title(htmlspecialchars_decode($item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($note);
             });
     }
+
     public function toMicrosoftTeams()
     {
         $target = $this->target;
@@ -152,12 +150,12 @@ class CheckoutAssetNotification extends Notification
             ->addStartGroupToSection('activityText')
             ->fact(trans('mail.assigned_to'), $target->present()->name)
             ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityText')
-            ->fact(trans('mail.Asset_Checkout_Notification') . " by ", $admin->present()->fullName())
+            ->fact(trans('mail.Asset_Checkout_Notification').' by ', $admin->present()->fullName())
             ->fact(trans('mail.notes'), $note ?: '');
 
-
     }
-public function toGoogleChat()
+
+    public function toGoogleChat()
     {
         $target = $this->target;
         $item = $this->item;
@@ -207,17 +205,17 @@ public function toGoogleChat()
 
         $message = (new MailMessage)->markdown('notifications.markdown.checkout-asset',
             [
-                'item'          => $this->item,
-                'admin'         => $this->admin,
-                'status'        => $this->item->assetstatus?->name,
-                'note'          => $this->note,
-                'target'        => $this->target,
-                'fields'        => $fields,
-                'eula'          => $eula,
-                'req_accept'    => $req_accept,
-                'accept_url'    => $accept_url,
+                'item' => $this->item,
+                'admin' => $this->admin,
+                'status' => $this->item->assetstatus?->name,
+                'note' => $this->note,
+                'target' => $this->target,
+                'fields' => $fields,
+                'eula' => $eula,
+                'req_accept' => $req_accept,
+                'accept_url' => $accept_url,
                 'last_checkout' => $this->last_checkout,
-                'expected_checkin'  => $this->expected_checkin,
+                'expected_checkin' => $this->expected_checkin,
             ])
             ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Confirm_asset_delivery'));

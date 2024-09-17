@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Selecione as opções que pretende para o seu relatório de artigos.',
+    'info' => 'Selecione as opções que pretende para o seu relatório de artigos.',
     'deleted_user' => 'Utilizador apagado',
     'send_reminder' => 'Enviar Lembrete',
     'reminder_sent' => 'Lembrete enviado',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Cidade de usuário',
         'user_state' => 'Estado do Usuário',
         'user_country' => 'País do usuário',
-        'user_zip' => 'CEP do Usuário'
-    ]
+        'user_zip' => 'CEP do Usuário',
+    ],
 ];

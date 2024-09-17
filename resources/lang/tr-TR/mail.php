@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Giriş Tarihi',
     'checkout_date' => 'Çıkış Tarihi',
     'checkedout_from' => 'Teslim alınan kişi',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Çıkış yapılan',
     'click_on_the_link_accessory' => 'Lütfen aşağıdaki bağlantıya tıklayarak aksesuar talebinizi onaylayın.',
     'click_on_the_link_asset' => 'Lütfen aşağıdaki bağlantıya tıklayarak varlık talebinizi onaylayın.',

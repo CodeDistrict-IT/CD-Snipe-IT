@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Transformers\ActionlogsTransformer;
 use App\Models\Actionlog;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
@@ -14,9 +14,10 @@ class ReportsController extends Controller
      * Returns Activity Report JSON.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse|array
     {
         $this->authorize('reports.view');
 
@@ -32,15 +33,13 @@ class ReportsController extends Controller
         }
 
         if (($request->filled('item_type')) && ($request->filled('item_id'))) {
-            $actionlogs = $actionlogs->where(function($query) use ($request)
-            {
+            $actionlogs = $actionlogs->where(function ($query) use ($request) {
                 $query->where('item_id', '=', $request->input('item_id'))
-                ->where('item_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')))
-                ->orWhere(function($query) use ($request)
-                {
-                    $query->where('target_id', '=', $request->input('item_id'))
-                    ->where('target_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')));
-                });
+                    ->where('item_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')))
+                    ->orWhere(function ($query) use ($request) {
+                        $query->where('target_id', '=', $request->input('item_id'))
+                            ->where('target_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')));
+                    });
             });
         }
 
@@ -76,7 +75,6 @@ class ReportsController extends Controller
             'user_agent',
             'action_source',
         ];
-
 
         $total = $actionlogs->count();
         // Make sure the offset and limit are actually integers and do not exceed system limits

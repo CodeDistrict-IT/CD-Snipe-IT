@@ -21,8 +21,8 @@ class AssetsForSelectListTest extends TestCase
         $results = collect($response->json('results'));
 
         $this->assertEquals(2, $results->count());
-        $this->assertTrue($results->pluck('text')->contains(fn($text) => str_contains($text, '0001')));
-        $this->assertTrue($results->pluck('text')->contains(fn($text) => str_contains($text, '0002')));
+        $this->assertTrue($results->pluck('text')->contains(fn ($text) => str_contains($text, '0001')));
+        $this->assertTrue($results->pluck('text')->contains(fn ($text) => str_contains($text, '0002')));
     }
 
     public function testAssetsAreScopedToCompanyWhenMultipleCompanySupportEnabled()

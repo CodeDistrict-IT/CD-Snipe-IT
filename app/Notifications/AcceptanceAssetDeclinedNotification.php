@@ -5,9 +5,7 @@ namespace App\Notifications;
 use App\Helpers\Helper;
 use App\Models\Setting;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
 class AcceptanceAssetDeclinedNotification extends Notification
@@ -61,19 +59,18 @@ class AcceptanceAssetDeclinedNotification extends Notification
     {
         $message = (new MailMessage)->markdown('notifications.markdown.asset-acceptance',
             [
-                'item_tag'      => $this->item_tag,
-                'item_model'    => $this->item_model,
-                'item_serial'   => $this->item_serial,
-                'item_status'   => $this->item_status,
-                'note'          => $this->note,
+                'item_tag' => $this->item_tag,
+                'item_model' => $this->item_model,
+                'item_serial' => $this->item_serial,
+                'item_status' => $this->item_status,
+                'note' => $this->note,
                 'declined_date' => $this->declined_date,
-                'assigned_to'   => $this->assigned_to,
-                'company_name'  => $this->company_name,
-                'intro_text'    => trans('mail.acceptance_asset_declined'),
+                'assigned_to' => $this->assigned_to,
+                'company_name' => $this->company_name,
+                'intro_text' => trans('mail.acceptance_asset_declined'),
             ])
             ->subject(trans('mail.acceptance_asset_declined'));
 
         return $message;
     }
-
 }

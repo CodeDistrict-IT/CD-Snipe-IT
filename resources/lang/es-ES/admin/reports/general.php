@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Seleccione las opciones que desea para el informe de activos.',
+    'info' => 'Seleccione las opciones que desea para el informe de activos.',
     'deleted_user' => 'Usuario eliminado',
     'send_reminder' => 'Enviar recordatorio',
     'reminder_sent' => 'Recordatorio enviado',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Ciudad del Usuario',
         'user_state' => 'Estado del usuario',
         'user_country' => 'País de usuario',
-        'user_zip' => 'Usuario Zip'
-    ]
+        'user_zip' => 'Usuario Zip',
+    ],
 ];

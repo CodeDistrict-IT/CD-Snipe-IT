@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'url' =>  env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -99,7 +99,7 @@ return [
     |
     */
 
-    'locale' =>  env('APP_LOCALE', 'en-US'),
+    'locale' => env('APP_LOCALE', 'en-US'),
 
     /*
     |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
 
     'key' => env('APP_KEY'),
 
-    'cipher' =>  env('APP_CIPHER', 'AES-256-CBC'),
+    'cipher' => env('APP_CIPHER', 'AES-256-CBC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -203,8 +203,6 @@ return [
 
     'additional_csp_urls' => env('ADDITIONAL_CSP_URLS', ''),
 
-
-
     /*
     |--------------------------------------------------------------------------
     | Require SAML Login
@@ -219,7 +217,6 @@ return [
     */
 
     'require_saml' => env('REQUIRE_SAML', false),
-
 
     /*
     |--------------------------------------------------------------------------
@@ -243,7 +240,6 @@ return [
     */
 
     'min_php' => '8.1.2',
-
 
     /*
     |--------------------------------------------------------------------------
@@ -280,7 +276,7 @@ return [
         Illuminate\Redis\RedisServiceProvider::class,
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
-//        Illuminate\Translation\TranslationServiceProvider::class, //replaced on next line
+        //        Illuminate\Translation\TranslationServiceProvider::class, //replaced on next line
         App\Providers\SnipeTranslationServiceProvider::class, //we REPLACE the default Laravel translator with our own
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
@@ -354,7 +350,7 @@ return [
         'Mail' => Illuminate\Support\Facades\Mail::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
-        'PDF'   => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
         'Redis' => Illuminate\Support\Facades\Redis::class,
@@ -367,16 +363,15 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Form'      => Collective\Html\FormFacade::class,
-        'Html'      => Collective\Html\HtmlFacade::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
         'Google2FA' => PragmaRX\Google2FALaravel\Facade::class,
-        'Image'     => Intervention\Image\ImageServiceProvider::class,
+        'Image' => Intervention\Image\ImageServiceProvider::class,
         'Carbon' => Carbon\Carbon::class,
         'Helper' => App\Helpers\Helper::class,
         // makes it much easier to use 'Helper::blah' in blades (which is where we usually use this)
         'Icon' => App\Helpers\IconHelper::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-
 
     ],
 
@@ -391,7 +386,6 @@ return [
 
     'api_throttle_per_minute' => env('API_THROTTLE_PER_MINUTE', 120),
 
-
     /*
     |--------------------------------------------------------------------------
     | Allow Web-Based Purge
@@ -403,8 +397,7 @@ return [
 
     'allow_purge' => env('ALLOW_DATA_PURGE', false),
 
-
-   /*
+    /*
    |--------------------------------------------------------------------------
    | Allow Backup Deletion
    |--------------------------------------------------------------------------
@@ -415,8 +408,7 @@ return [
 
     'allow_backup_delete' => env('ALLOW_BACKUP_DELETE', false),
 
-
-  /*
+    /*
   |--------------------------------------------------------------------------
   | Escape Excel formulas in CSV exports
   |--------------------------------------------------------------------------
@@ -430,5 +422,5 @@ return [
   */
 
     'escape_formulas' => env('CSV_ESCAPE_FORMULAS', true),
-    
+
 ];

@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Verificați data',
     'checkout_date' => 'Data predare',
     'checkedout_from' => 'Verificat de la',
-    'checkedin_from'  => 'Verificat de la',
+    'checkedin_from' => 'Verificat de la',
     'checked_into' => 'Verificat în',
     'click_on_the_link_accessory' => 'Dați clic pe linkul din partea de jos pentru a confirma că ați primit accesoriul.',
     'click_on_the_link_asset' => 'Faceți clic pe linkul din partea de jos pentru a confirma că ați primit activul.',

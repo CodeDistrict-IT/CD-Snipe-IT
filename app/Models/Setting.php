@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use App\Helpers\Helper;
-use Illuminate\Support\Facades\Storage;
-use Watson\Validating\ValidatingTrait;
 use Illuminate\Support\Facades\Log;
-
+use Watson\Validating\ValidatingTrait;
 
 /**
  * Settings model.
@@ -24,7 +22,6 @@ class Setting extends Model
 
     /**
      * The cache property so that multiple invocations of this will only load the Settings record from disk only once
-     * @var self
      */
     public static ?self $_cache = null;
 
@@ -50,38 +47,38 @@ class Setting extends Model
      * @var array
      */
     protected $rules = [
-          'brand'                               => 'required|min:1|numeric',
-          'qr_text'                             => 'max:31|nullable',
-          'alert_email'                         => 'email_array|nullable',
-          'admin_cc_email'                      => 'email|nullable',
-          'default_currency'                    => 'required',
-          'locale'                              => 'required',
-          'labels_per_page'                     => 'numeric',
-          'labels_width'                        => 'numeric',
-          'labels_height'                       => 'numeric',
-          'labels_pmargin_left'                 => 'numeric|nullable',
-          'labels_pmargin_right'                => 'numeric|nullable',
-          'labels_pmargin_top'                  => 'numeric|nullable',
-          'labels_pmargin_bottom'               => 'numeric|nullable',
-          'labels_display_bgutter'              => 'numeric|nullable',
-          'labels_display_sgutter'              => 'numeric|nullable',
-          'labels_fontsize'                     => 'numeric|min:5',
-          'labels_pagewidth'                    => 'numeric|nullable',
-          'labels_pageheight'                   => 'numeric|nullable',
-          'login_remote_user_enabled'           => 'numeric|nullable',
-          'login_common_disabled'               => 'numeric|nullable',
-          'login_remote_user_custom_logout_url' => 'string|nullable',
-          'login_remote_user_header_name'       => 'string|nullable',
-          'thumbnail_max_h'                     => 'numeric|max:500|min:25',
-          'pwd_secure_min'                      => 'numeric|required|min:8',
-          'alert_threshold'                     => 'numeric|nullable',
-          'alert_interval'                      => 'numeric|nullable',
-          'audit_warning_days'                  => 'numeric|nullable',
-          'due_checkin_days'                      => 'numeric|nullable',
-          'audit_interval'                      => 'numeric|nullable',
-          'custom_forgot_pass_url'              => 'url|nullable',
-          'privacy_policy_link'                 => 'nullable|url',
-          'google_client_id'                    => 'nullable|ends_with:apps.googleusercontent.com'
+        'brand' => 'required|min:1|numeric',
+        'qr_text' => 'max:31|nullable',
+        'alert_email' => 'email_array|nullable',
+        'admin_cc_email' => 'email|nullable',
+        'default_currency' => 'required',
+        'locale' => 'required',
+        'labels_per_page' => 'numeric',
+        'labels_width' => 'numeric',
+        'labels_height' => 'numeric',
+        'labels_pmargin_left' => 'numeric|nullable',
+        'labels_pmargin_right' => 'numeric|nullable',
+        'labels_pmargin_top' => 'numeric|nullable',
+        'labels_pmargin_bottom' => 'numeric|nullable',
+        'labels_display_bgutter' => 'numeric|nullable',
+        'labels_display_sgutter' => 'numeric|nullable',
+        'labels_fontsize' => 'numeric|min:5',
+        'labels_pagewidth' => 'numeric|nullable',
+        'labels_pageheight' => 'numeric|nullable',
+        'login_remote_user_enabled' => 'numeric|nullable',
+        'login_common_disabled' => 'numeric|nullable',
+        'login_remote_user_custom_logout_url' => 'string|nullable',
+        'login_remote_user_header_name' => 'string|nullable',
+        'thumbnail_max_h' => 'numeric|max:500|min:25',
+        'pwd_secure_min' => 'numeric|required|min:8',
+        'alert_threshold' => 'numeric|nullable',
+        'alert_interval' => 'numeric|nullable',
+        'audit_warning_days' => 'numeric|nullable',
+        'due_checkin_days' => 'numeric|nullable',
+        'audit_interval' => 'numeric|nullable',
+        'custom_forgot_pass_url' => 'url|nullable',
+        'privacy_policy_link' => 'nullable|url',
+        'google_client_id' => 'nullable|ends_with:apps.googleusercontent.com',
     ];
 
     protected $fillable = [
@@ -108,12 +105,10 @@ class Setting extends Model
      * @author Wes Hulette <jwhulette@gmail.com>
      *
      * @since 5.0.0
-     *
-     * @return \App\Models\Setting|null
      */
     public static function getSettings(): ?self
     {
-        if (!self::$_cache) {
+        if (! self::$_cache) {
             // Need for setup as no tables exist
             try {
                 self::$_cache = self::first();
@@ -121,14 +116,13 @@ class Setting extends Model
                 return null;
             }
         }
+
         return self::$_cache;
     }
 
     /**
      * Check to see if setup process is complete.
      *  Cache is expired on Setting model saved in EventServiceProvider.
-     *
-     * @return bool
      */
     public static function setupCompleted(): bool
     {
@@ -139,6 +133,7 @@ class Setting extends Model
             return $usercount > 0 && $settingsCount > 0;
         } catch (\Throwable $th) {
             Log::debug('User table and settings table DO NOT exist or DO NOT have records');
+
             // Catch the error if the tables dont exit
             return false;
         }
@@ -146,19 +141,16 @@ class Setting extends Model
 
     /**
      * Get the current Laravel version.
-     *
-     * @return string
      */
     public function lar_ver(): string
     {
         $app = App::getFacadeApplication();
+
         return $app::VERSION;
     }
 
     /**
      * Get the default EULA text.
-     *
-     * @return string|null
      */
     public static function getDefaultEula(): ?string
     {
@@ -172,9 +164,7 @@ class Setting extends Model
     /**
      * Check wether to show in model dropdowns.
      *
-     * @param string $element
-     *
-     * @return bool
+     * @param  string  $element
      */
     public function modellistCheckedValue($element): bool
     {
@@ -224,8 +214,7 @@ class Setting extends Model
     /**
      * Converts bytes into human readable file size.
      *
-     * @param string $bytes
-     *
+     * @param  string  $bytes
      * @return string human readable file size (2,87 Мб)
      *
      * @author Mogilev Arseny
@@ -235,27 +224,27 @@ class Setting extends Model
         $result = 0;
         $bytes = floatval($bytes);
         $arBytes = [
-                0 => [
-                    'UNIT'  => 'TB',
-                    'VALUE' => pow(1024, 4),
-                ],
-                1 => [
-                    'UNIT'  => 'GB',
-                    'VALUE' => pow(1024, 3),
-                ],
-                2 => [
-                    'UNIT'  => 'MB',
-                    'VALUE' => pow(1024, 2),
-                ],
-                3 => [
-                    'UNIT'  => 'KB',
-                    'VALUE' => 1024,
-                ],
-                4 => [
-                    'UNIT'  => 'B',
-                    'VALUE' => 1,
-                ],
-            ];
+            0 => [
+                'UNIT' => 'TB',
+                'VALUE' => pow(1024, 4),
+            ],
+            1 => [
+                'UNIT' => 'GB',
+                'VALUE' => pow(1024, 3),
+            ],
+            2 => [
+                'UNIT' => 'MB',
+                'VALUE' => pow(1024, 2),
+            ],
+            3 => [
+                'UNIT' => 'KB',
+                'VALUE' => 1024,
+            ],
+            4 => [
+                'UNIT' => 'B',
+                'VALUE' => 1,
+            ],
+        ];
 
         foreach ($arBytes as $arItem) {
             if ($bytes >= $arItem['VALUE']) {
@@ -271,8 +260,6 @@ class Setting extends Model
     /**
      * The url for slack notifications.
      *  Used by Notifiable trait.
-     *
-     * @return string
      */
     public function routeNotificationForSlack(): string
     {
@@ -283,8 +270,6 @@ class Setting extends Model
 
     /**
      * Get the mail reply to address from configuration.
-     *
-     * @return string
      */
     public function routeNotificationForMail(): string
     {
@@ -295,8 +280,6 @@ class Setting extends Model
 
     /**
      * Get the password complexity rule.
-     *
-     * @return string
      */
     public static function passwordComplexityRulesSaving($action = 'update'): string
     {
@@ -326,8 +309,6 @@ class Setting extends Model
      * @author Wes Hulette <jwhulette@gmail.com>
      *
      * @since 5.0.0
-     *
-     * @return Collection
      */
     public static function getLdapSettings(): Collection
     {
@@ -362,7 +343,7 @@ class Setting extends Model
             'ldap_manager',
             'ldap_country',
             'ldap_location',
-            ])->first()->getAttributes();
+        ])->first()->getAttributes();
 
         return collect($ldapSettings);
     }
@@ -414,6 +395,4 @@ class Setting extends Model
             }
         }
     }
-
-
 }

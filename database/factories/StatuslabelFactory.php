@@ -23,7 +23,7 @@ class StatuslabelFactory extends Factory
     public function definition()
     {
         return [
-            'name'      => $this->faker->sentence(),
+            'name' => $this->faker->sentence(),
             'created_at' => $this->faker->dateTime(),
             'updated_at' => $this->faker->dateTime(),
             'user_id' => User::factory()->superuser(),
@@ -87,7 +87,7 @@ class StatuslabelFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'name'      => 'Out for Repair',
+                'name' => 'Out for Repair',
                 'default_label' => 0,
             ];
         });
@@ -97,7 +97,7 @@ class StatuslabelFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'name'      => 'Broken - Not Fixable',
+                'name' => 'Broken - Not Fixable',
                 'default_label' => 0,
             ];
         });
@@ -107,7 +107,7 @@ class StatuslabelFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'name'      => 'Lost/Stolen',
+                'name' => 'Lost/Stolen',
                 'default_label' => 0,
             ];
         });

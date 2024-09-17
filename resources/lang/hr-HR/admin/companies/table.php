@@ -1,11 +1,12 @@
 <?php
-return array(
+
+return [
     'companies' => 'Tvrtke',
-    'create'    => 'Stvorite tvrtku',
-    'email'     => 'Company Email',
-    'title'     => 'Društvo',
-    'phone'     => 'Company Phone',
-    'update'    => 'Ažuriraj tvrtku',
-    'name'      => 'Naziv tvrtke',
-    'id'        => 'iskaznica',
-);
+    'create' => 'Stvorite tvrtku',
+    'email' => 'Company Email',
+    'title' => 'Društvo',
+    'phone' => 'Company Phone',
+    'update' => 'Ažuriraj tvrtku',
+    'name' => 'Naziv tvrtke',
+    'id' => 'iskaznica',
+];

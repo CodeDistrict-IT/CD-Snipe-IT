@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Taariikhda la soo galayo',
     'checkout_date' => 'Taariikhda Bixinta',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Laga soo hubiyay',
+    'checkedin_from' => 'Laga soo hubiyay',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Fadlan dhagsii xiriirka hoose si aad u xaqiijiso inaad heshay agabka.',
     'click_on_the_link_asset' => 'Fadlan ku dhufo xiriirka hoose si aad u xaqiijiso inaad heshay hantida.',

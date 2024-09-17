@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'Hodnota pro :fieldname nemůže být null.',
+    'import_field_empty' => 'Hodnota pro :fieldname nemůže být null.',
     'in' => 'Zvolený :attribute je neplatný.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,7 +125,7 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
-    'percent'       => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
 
     'present' => 'Pole atributu musí být přítomno.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
@@ -155,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'Atribut: musí být řetězec.',
+    'string' => 'Atribut: musí být řetězec.',
     'two_column_unique_undeleted' => ':attribute musí být unikátní napříč :table1 a :table2. ',
-    'unique_undeleted'     => 'Je třeba, aby se :attribute neopakoval.',
-    'non_circular'         => ':attribute nesmí vytvořit kruhový odkaz.',
-    'not_array'            => ':attribute nemůže být pole.',
+    'unique_undeleted' => 'Je třeba, aby se :attribute neopakoval.',
+    'non_circular' => ':attribute nesmí vytvořit kruhový odkaz.',
+    'not_array' => ':attribute nemůže být pole.',
     'disallow_same_pwd_as_user_fields' => 'Heslo nemůže být stejné jako uživatelské jméno.',
-    'letters'              => 'Heslo musí obsahovat nejméně jedno písmeno.',
-    'numbers'              => 'Heslo musí obsahovat alespoň jednu číslici.',
-    'case_diff'            => 'Heslo musí použít smíšené znaky.',
-    'symbols'              => 'Heslo musí obsahovat symboly.',
+    'letters' => 'Heslo musí obsahovat nejméně jedno písmeno.',
+    'numbers' => 'Heslo musí obsahovat alespoň jednu číslici.',
+    'case_diff' => 'Heslo musí použít smíšené znaky.',
+    'symbols' => 'Heslo musí obsahovat symboly.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => ':attribute byl již vybrán.',
     'uploaded' => 'Atribut: se nepodařilo nahrát.',
@@ -186,27 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Pole atributu: atribut obsahuje znak, který není povolen.',
-        'email_array'      => 'Jedna nebo více e-mailových adres je neplatná.',
-        'hashed_pass'      => 'Vaše současné heslo je nesprávné',
-        'dumbpwd'          => 'Toto heslo je příliš běžné.',
+        'email_array' => 'Jedna nebo více e-mailových adres je neplatná.',
+        'hashed_pass' => 'Vaše současné heslo je nesprávné',
+        'dumbpwd' => 'Toto heslo je příliš běžné.',
         'statuslabel_type' => 'Musíte vybrat platný typ štítku stavu',
-        'custom_field_not_found'          => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
         'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ':attribute musí být platné datum ve formátu RRRR-MM-DD',
-        'last_audit_date.date_format'   =>  ':attribute musí být platné datum ve formátu RRRR-MM-DD hh:mm:ss',
-        'expiration_date.date_format'   =>  ':attribute musí být platné datum ve formátu RRRR-MM-DD',
-        'termination_date.date_format'  =>  ':attribute musí být platné datum ve formátu RRRR-MM-DD',
-        'expected_checkin.date_format'  =>  ':attribute musí být platné datum ve formátu RRRR-MM-DD',
-        'start_date.date_format'        =>  ':attribute musí být platné datum ve formátu RRRR-MM-DD',
-        'end_date.date_format'          =>  ':attribute musí být platné datum ve formátu RRRR-MM-DD',
-        'checkboxes'           => ':attribute obsahuje neplatné možnosti.',
-        'radio_buttons'        => ':attribute je neplatný.',
+        'purchase_date.date_format' => ':attribute musí být platné datum ve formátu RRRR-MM-DD',
+        'last_audit_date.date_format' => ':attribute musí být platné datum ve formátu RRRR-MM-DD hh:mm:ss',
+        'expiration_date.date_format' => ':attribute musí být platné datum ve formátu RRRR-MM-DD',
+        'termination_date.date_format' => ':attribute musí být platné datum ve formátu RRRR-MM-DD',
+        'expected_checkin.date_format' => ':attribute musí být platné datum ve formátu RRRR-MM-DD',
+        'start_date.date_format' => ':attribute musí být platné datum ve formátu RRRR-MM-DD',
+        'end_date.date_format' => ':attribute musí být platné datum ve formátu RRRR-MM-DD',
+        'checkboxes' => ':attribute obsahuje neplatné možnosti.',
+        'radio_buttons' => ':attribute je neplatný.',
         'invalid_value_in_field' => 'Neplatná hodnota zahrnutá v tomto poli',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -232,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

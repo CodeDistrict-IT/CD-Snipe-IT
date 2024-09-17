@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Visszavétel dátuma',
     'checkout_date' => 'Kiadási dátum',
     'checkedout_from' => 'Kiadva innen',
-    'checkedin_from'  => 'Visszavéve innen',
+    'checkedin_from' => 'Visszavéve innen',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Az alján lévő linkre kattintva ellenőrizheti, hogy megkapta-e a tartozékot.',
     'click_on_the_link_asset' => 'Kérjük, kattintson az alul lévő linkre annak megerősítéséhez, hogy megkapták az eszközt.',

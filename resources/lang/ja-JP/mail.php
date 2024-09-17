@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'チェックイン日',
     'checkout_date' => '検査日',
     'checkedout_from' => 'からチェックアウトしました',
-    'checkedin_from'  => 'チェックイン元',
+    'checkedin_from' => 'チェックイン元',
     'checked_into' => 'チェックインされました',
     'click_on_the_link_accessory' => '次のリンクをクリックして、アクセサリーを受け取ったことを確認してください。',
     'click_on_the_link_asset' => '次のリンクをクリックして、資産を受け取ったことを確認してください。',

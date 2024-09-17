@@ -11,9 +11,13 @@ class CheckoutableCheckedOut
     use Dispatchable, SerializesModels;
 
     public $checkoutable;
+
     public $checkedOutTo;
+
     public $checkedOutBy;
+
     public $note;
+
     public $originalValues;
 
     /**

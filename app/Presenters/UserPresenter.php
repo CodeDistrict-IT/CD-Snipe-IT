@@ -2,10 +2,7 @@
 
 namespace App\Presenters;
 
-use App\Helpers\Helper;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -16,6 +13,7 @@ class UserPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -120,7 +118,7 @@ class UserPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('admin/users/table.phone'),
                 'visible' => true,
-                'formatter'    => 'phoneFormatter',
+                'formatter' => 'phoneFormatter',
             ],
             [
                 'field' => 'website',
@@ -129,7 +127,7 @@ class UserPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('general.website'),
                 'visible' => false,
-                'formatter'    => 'externalLinkFormatter',
+                'formatter' => 'externalLinkFormatter',
             ],
             [
                 'field' => 'address',
@@ -417,7 +415,9 @@ class UserPresenter extends Presenter
 
     /**
      * Standard accessor.
+     *
      * @TODO Remove presenter::fullName() entirely?
+     *
      * @return string
      */
     public function name()
@@ -445,7 +445,6 @@ class UserPresenter extends Presenter
             return Storage::disk('public')->url('avatars/'.e($this->avatar));
         }
 
-
         // If the default is system default
         if (Setting::getSettings()->default_avatar == 'default.png') {
             return Storage::disk('public')->url('default.png');
@@ -461,10 +460,12 @@ class UserPresenter extends Presenter
 
             if ($this->model->gravatar != '') {
                 $gravatar = md5(strtolower(trim($this->model->gravatar)));
+
                 return '//gravatar.com/avatar/'.$gravatar;
 
             } elseif ($this->email != '') {
                 $gravatar = md5(strtolower(trim($this->email)));
+
                 return '//gravatar.com/avatar/'.$gravatar;
             }
         }
@@ -474,6 +475,7 @@ class UserPresenter extends Presenter
 
     /**
      * Formatted url for use in tables.
+     *
      * @return string
      */
     public function nameUrl()
@@ -483,6 +485,7 @@ class UserPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

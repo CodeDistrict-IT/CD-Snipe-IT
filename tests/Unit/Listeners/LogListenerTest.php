@@ -19,7 +19,7 @@ class LogListenerTest extends TestCase
         // Simply to ensure `user_id` is set in the action log
         $this->actingAs($checkedOutBy);
 
-        (new LogListener())->onCheckoutableCheckedOut(new CheckoutableCheckedOut(
+        (new LogListener)->onCheckoutableCheckedOut(new CheckoutableCheckedOut(
             $asset,
             $checkedOutTo,
             $checkedOutBy,

@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Ingecheckt datum',
     'checkout_date' => 'Uitcheck datum',
     'checkedout_from' => 'Uitgecheckt van',
-    'checkedin_from'  => 'Ingecheckt op',
+    'checkedin_from' => 'Ingecheckt op',
     'checked_into' => 'Ingecheckt bij',
     'click_on_the_link_accessory' => 'Klik op de link onderaan om te bevestigen dat u de accessoire hebt ontvangen.',
     'click_on_the_link_asset' => 'Klik op de link onderaan om te bevestigen dat u het asset hebt ontvangen.',

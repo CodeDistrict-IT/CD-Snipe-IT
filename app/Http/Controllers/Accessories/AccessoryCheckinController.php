@@ -7,11 +7,10 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Accessory;
 use App\Models\AccessoryCheckout;
-use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
 
 class AccessoryCheckinController extends Controller
 {
@@ -19,12 +18,14 @@ class AccessoryCheckinController extends Controller
      * Check the accessory back into inventory
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param Request $request
-     * @param int $accessoryUserId
-     * @param string $backto
+     *
+     * @param  Request  $request
+     * @param  int  $accessoryUserId
+     * @param  string  $backto
      */
-    public function create($accessoryUserId = null, $backto = null) : View | RedirectResponse
+    public function create($accessoryUserId = null, $backto = null): View|RedirectResponse
     {
+        dd($accessoryUserId, $backto);
         if (is_null($accessory_user = DB::table('accessories_checkout')->find($accessoryUserId))) {
             return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.not_found'));
         }
@@ -39,11 +40,13 @@ class AccessoryCheckinController extends Controller
      * Check in the item so that it can be checked out again to someone else
      *
      * @uses Accessory::checkin_email() to determine if an email can and should be sent
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param null $accessoryCheckoutId
-     * @param string $backto
+     *
+     * @param  null  $accessoryCheckoutId
+     * @param  string  $backto
      */
-    public function store(Request $request, $accessoryCheckoutId = null, $backto = null) : RedirectResponse
+    public function store(Request $request, $accessoryCheckoutId = null, $backto = null): RedirectResponse
     {
         if (is_null($accessory_checkout = AccessoryCheckout::find($accessoryCheckoutId))) {
             return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.does_not_exist'));
@@ -67,6 +70,7 @@ class AccessoryCheckinController extends Controller
 
             return redirect()->to(Helper::getRedirectOption($request, $accessory->id, 'Accessories'))->with('success', trans('admin/accessories/message.checkin.success'));
         }
+
         // Redirect to the accessory management page with error
         return redirect()->route('accessories.index')->with('error', trans('admin/accessories/message.checkin.error'));
     }

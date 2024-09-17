@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Paėmimo data',
     'checkout_date' => 'Išdavimo data',
     'checkedout_from' => 'Išduota iš',
-    'checkedin_from'  => 'Paimta iš',
+    'checkedin_from' => 'Paimta iš',
     'checked_into' => 'Paimta į',
     'click_on_the_link_accessory' => 'Spustelėkite nuorodą apačioje, kad patvirtintumėte, jog gavote priedą.',
     'click_on_the_link_asset' => 'Spustelėkite nuorodą apačioje, kad patvirtintumėte, jog gavote turtą.',

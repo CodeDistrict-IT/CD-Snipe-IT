@@ -16,6 +16,4 @@ class LicenseCheckinTest extends TestCase
             ]))
             ->assertForbidden();
     }
-
-
 }

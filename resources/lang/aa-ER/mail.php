@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'crwdns12720:0crwdne12720:0',
     'checkout_date' => 'crwdns12722:0crwdne12722:0',
     'checkedout_from' => 'crwdns12066:0crwdne12066:0',
-    'checkedin_from'  => 'crwdns12082:0crwdne12082:0',
+    'checkedin_from' => 'crwdns12082:0crwdne12082:0',
     'checked_into' => 'crwdns12068:0crwdne12068:0',
     'click_on_the_link_accessory' => 'crwdns1720:0crwdne1720:0',
     'click_on_the_link_asset' => 'crwdns1721:0crwdne1721:0',

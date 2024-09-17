@@ -12,6 +12,7 @@ trait CompanyableTrait
      * applied to the currently logged in (or logging in) user in addition to the user model for viewing lists of users.
      *
      * @see \App\Models\Company\Company::scopeCompanyables()
+     *
      * @return void
      */
     public static function bootCompanyableTrait()

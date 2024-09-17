@@ -9,6 +9,7 @@ class CompanyPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -36,7 +37,7 @@ class CompanyPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('admin/users/table.phone'),
                 'visible' => false,
-                'formatter'    => 'phoneFormatter',
+                'formatter' => 'phoneFormatter',
             ], [
                 'field' => 'fax',
                 'searchable' => true,
@@ -44,7 +45,7 @@ class CompanyPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('admin/suppliers/table.fax'),
                 'visible' => false,
-                'formatter'    => 'phoneFormatter',
+                'formatter' => 'phoneFormatter',
             ], [
                 'field' => 'email',
                 'searchable' => true,
@@ -52,7 +53,7 @@ class CompanyPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('admin/suppliers/table.email'),
                 'visible' => true,
-				'formatter' => 'emailFormatter',
+                'formatter' => 'emailFormatter',
             ], [
                 'field' => 'image',
                 'searchable' => false,
@@ -135,6 +136,7 @@ class CompanyPresenter extends Presenter
 
     /**
      * Link to this companies name
+     *
      * @return string
      */
     public function nameUrl()
@@ -144,6 +146,7 @@ class CompanyPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

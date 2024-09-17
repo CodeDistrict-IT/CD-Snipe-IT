@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers\Users;
 
-use App\Helpers\StorageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Actionlog;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserFilesController extends Controller
 {
     /**
      * Return JSON response with a list of user details for the getIndex() view.
      *
-     * @param UploadFileRequest $request
-     * @param int $userId
+     * @param  int  $userId
      * @return string JSON
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      *@author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.6]
      */
     public function store(UploadFileRequest $request, $userId = null)
@@ -43,13 +43,13 @@ class UserFilesController extends Controller
                 $file_name = $request->handleFile('private_uploads/users/', 'user-'.$user->id, $file);
 
                 //Log the uploaded file to the log
-                $logAction = new Actionlog();
+                $logAction = new Actionlog;
                 $logAction->item_id = $user->id;
                 $logAction->item_type = User::class;
                 $logAction->user_id = Auth::id();
                 $logAction->note = $request->input('notes');
                 $logAction->target_id = null;
-                $logAction->created_at = date("Y-m-d H:i:s");
+                $logAction->created_at = date('Y-m-d H:i:s');
                 $logAction->filename = $file_name;
                 $logAction->action_type = 'uploaded';
 
@@ -58,11 +58,12 @@ class UserFilesController extends Controller
                 }
                 $logActions[] = $logAction;
             }
+
             // dd($logActions);
             return redirect()->back()->with('success', trans('admin/users/message.upload.success'));
         }
-        return redirect()->back()->with('error', trans('admin/users/message.upload.nofiles'));
 
+        return redirect()->back()->with('error', trans('admin/users/message.upload.nofiles'));
 
     }
 
@@ -70,10 +71,13 @@ class UserFilesController extends Controller
      * Delete file
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.6]
-     * @param  int $userId
-     * @param  int $fileId
+     *
+     * @param  int  $userId
+     * @param  int  $fileId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($userId = null, $fileId = null)
@@ -83,13 +87,13 @@ class UserFilesController extends Controller
             $this->authorize('delete', $user);
             $rel_path = 'private_uploads/users';
 
-
             if ($log = Actionlog::find($fileId)) {
                 $filename = $log->filename;
                 $log->delete();
-                
+
                 if (Storage::exists($rel_path.'/'.$filename)) {
                     Storage::delete($rel_path.'/'.$filename);
+
                     return redirect()->back()->with('success', trans('admin/users/message.deletefile.success'));
                 }
 
@@ -107,10 +111,13 @@ class UserFilesController extends Controller
      * Display/download the uploaded file
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.6]
-     * @param  int $userId
-     * @param  int $fileId
+     *
+     * @param  int  $userId
+     * @param  int  $fileId
      * @return mixed
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show($userId = null, $fileId = null)
@@ -134,17 +141,17 @@ class UserFilesController extends Controller
                     $headers = [
                         'Content-Disposition' => 'inline',
                     ];
+
                     return Storage::download('private_uploads/users/'.$log->filename, $log->filename, $headers);
                 }
 
                 return Storage::download('private_uploads/users/'.$log->filename);
             }
 
-            return redirect()->route('users.index')->with('error',  trans('admin/users/message.log_record_not_found'));
+            return redirect()->route('users.index')->with('error', trans('admin/users/message.log_record_not_found'));
         }
 
         // Redirect to the user management page if the user doesn't exist
-        return redirect()->route('users.index')->with('error',  trans('admin/users/message.user_not_found', ['id' => $userId]));
+        return redirect()->route('users.index')->with('error', trans('admin/users/message.user_not_found', ['id' => $userId]));
     }
-
 }

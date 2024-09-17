@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Dáta Checkin',
     'checkout_date' => 'Dáta Seiceáil',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Cliceáil ar an nasc ag bun an leathanaigh chun a dheimhniú go bhfuair tú an cúlpháirtí.',
     'click_on_the_link_asset' => 'Cliceáil ar an nasc ag bun an leathanaigh chun a dheimhniú go bhfuair tú an tsócmhainn.',

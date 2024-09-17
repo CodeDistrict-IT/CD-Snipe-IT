@@ -4,12 +4,12 @@ namespace App\Http\Transformers;
 
 use App\Helpers\Helper;
 use App\Models\Group;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Gate;
 
 class GroupsTransformer
 {
-    public function transformGroups (Collection $groups, $total = null)
+    public function transformGroups(Collection $groups, $total = null)
     {
         $array = [];
         foreach ($groups as $group) {

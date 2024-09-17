@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Datum čekanja',
     'checkout_date' => 'Datum kupnje',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Kliknite vezu pri dnu da biste potvrdili da ste primili dodatnu opremu.',
     'click_on_the_link_asset' => 'Kliknite vezu pri dnu kako biste potvrdili da ste primili sredstvo.',

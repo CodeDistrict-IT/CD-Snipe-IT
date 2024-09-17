@@ -9,6 +9,7 @@ class CategoryPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -71,12 +72,12 @@ class CategoryPresenter extends Presenter
                 'visible' => true,
                 'formatter' => 'trueFalseFormatter',
             ], [
-                "field" => "use_default_eula",
-                "searchable" => false,
-                "sortable" => true,
-                "title" => trans('admin/categories/general.use_default_eula_column'),
+                'field' => 'use_default_eula',
+                'searchable' => false,
+                'sortable' => true,
+                'title' => trans('admin/categories/general.use_default_eula_column'),
                 'visible' => true,
-                "formatter" => 'trueFalseFormatter',
+                'formatter' => 'trueFalseFormatter',
             ], [
                 'field' => 'created_at',
                 'searchable' => true,
@@ -97,7 +98,7 @@ class CategoryPresenter extends Presenter
                 'sortable' => false,
                 'switchable' => false,
                 'title' => trans('table.actions'),
-		'formatter' => 'categoriesActionsFormatter',
+                'formatter' => 'categoriesActionsFormatter',
             ],
         ];
 
@@ -106,6 +107,7 @@ class CategoryPresenter extends Presenter
 
     /**
      * Link to this categories name
+     *
      * @return string
      */
     public function nameUrl()
@@ -115,6 +117,7 @@ class CategoryPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

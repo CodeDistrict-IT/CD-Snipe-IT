@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use App\Models\Accessory;
 use App\Models\Asset;
 use App\Models\AssetMaintenance;
@@ -13,6 +12,7 @@ use App\Models\License;
 use App\Models\LicenseSeat;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class CompanyScopingTest extends TestCase

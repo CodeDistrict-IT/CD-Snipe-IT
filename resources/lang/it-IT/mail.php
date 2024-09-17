@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Data di entrata',
     'checkout_date' => 'Data di estrazione',
     'checkedout_from' => 'Assegnato a',
-    'checkedin_from'  => 'Accesso effettuato da',
+    'checkedin_from' => 'Accesso effettuato da',
     'checked_into' => 'Assegnato nel',
     'click_on_the_link_accessory' => 'Fare clic sul collegamento in basso per confermare di aver ricevuto l\'accessorio.',
     'click_on_the_link_asset' => 'Per favore clicca sul link in basso per confermare di aver ricevuto il bene.',

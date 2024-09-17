@@ -32,24 +32,22 @@ class AccessoryCheckoutTest extends TestCase
         $this->actingAsForApi(User::factory()->checkoutAccessories()->create())
             ->postJson(route('api.accessories.checkout', Accessory::factory()->withoutItemsRemaining()->create()), [
                 'assigned_user' => User::factory()->create()->id,
-                'checkout_to_type' => 'user'
+                'checkout_to_type' => 'user',
             ])
             ->assertOk()
             ->assertStatusMessageIs('error')
             ->assertJson(
                 [
-                'status' => 'error',
-                'messages' =>
-                    [
-                        'checkout_qty' =>
-                            [
-                                trans_choice('admin/accessories/message.checkout.checkout_qty.lte', 0,
-                                    [
-                                        'number_currently_remaining' => 0,
-                                        'checkout_qty' => 1,
-                                        'number_remaining_after_checkout' => 0
-                                    ])
-                            ],
+                    'status' => 'error',
+                    'messages' => [
+                        'checkout_qty' => [
+                            trans_choice('admin/accessories/message.checkout.checkout_qty.lte', 0,
+                                [
+                                    'number_currently_remaining' => 0,
+                                    'checkout_qty' => 1,
+                                    'number_remaining_after_checkout' => 0,
+                                ]),
+                        ],
 
                     ],
                     'payload' => null,
@@ -67,12 +65,12 @@ class AccessoryCheckoutTest extends TestCase
         $this->actingAsForApi($admin)
             ->postJson(route('api.accessories.checkout', $accessory), [
                 'assigned_user' => $user->id,
-                'checkout_to_type' => 'user'
+                'checkout_to_type' => 'user',
             ])
             ->assertOk()
             ->assertStatusMessageIs('success')
             ->assertStatus(200)
-            ->assertJson(['messages' =>  trans('admin/accessories/message.checkout.success')])
+            ->assertJson(['messages' => trans('admin/accessories/message.checkout.success')])
             ->json();
 
         $this->assertTrue($accessory->checkouts()->where('assigned_type', User::class)->where('assigned_to', $user->id)->count() > 0);
@@ -86,7 +84,7 @@ class AccessoryCheckoutTest extends TestCase
                 'item_id' => $accessory->id,
                 'item_type' => Accessory::class,
                 'user_id' => $admin->id,
-            ])->count(),'Log entry either does not exist or there are more than expected'
+            ])->count(), 'Log entry either does not exist or there are more than expected'
         );
     }
 
@@ -105,7 +103,7 @@ class AccessoryCheckoutTest extends TestCase
             ->assertOk()
             ->assertStatusMessageIs('success')
             ->assertStatus(200)
-            ->assertJson(['messages' =>  trans('admin/accessories/message.checkout.success')])
+            ->assertJson(['messages' => trans('admin/accessories/message.checkout.success')])
             ->json();
 
         $this->assertTrue($accessory->checkouts()->where('assigned_type', User::class)->where('assigned_to', $user->id)->count() > 0);
@@ -140,7 +138,7 @@ class AccessoryCheckoutTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-            $this->assertFalse($accessory->checkouts()->where('assigned_type', User::class)->where('assigned_to', $user->id)->count() > 0);
+        $this->assertFalse($accessory->checkouts()->where('assigned_type', User::class)->where('assigned_to', $user->id)->count() > 0);
     }
 
     public function testUserSentNotificationUponCheckout()

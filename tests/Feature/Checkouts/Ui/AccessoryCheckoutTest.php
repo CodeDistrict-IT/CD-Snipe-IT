@@ -78,7 +78,7 @@ class AccessoryCheckoutTest extends TestCase
 
     public function testAccessoryCanBeCheckedOutWithQuantity()
     {
-        $accessory = Accessory::factory()->create(['qty'=>5]);
+        $accessory = Accessory::factory()->create(['qty' => 5]);
         $user = User::factory()->create();
 
         $this->actingAs(User::factory()->checkoutAccessories()->create())
@@ -104,7 +104,7 @@ class AccessoryCheckoutTest extends TestCase
 
     public function testAccessoryCanBeCheckedOutToLocationWithQuantity()
     {
-        $accessory = Accessory::factory()->create(['qty'=>5]);
+        $accessory = Accessory::factory()->create(['qty' => 5]);
         $location = Location::factory()->create();
 
         $this->actingAs(User::factory()->checkoutAccessories()->create())
@@ -130,7 +130,7 @@ class AccessoryCheckoutTest extends TestCase
 
     public function testAccessoryCanBeCheckedOutToAssetWithQuantity()
     {
-        $accessory = Accessory::factory()->create(['qty'=>5]);
+        $accessory = Accessory::factory()->create(['qty' => 5]);
         $asset = Asset::factory()->create();
 
         $this->actingAs(User::factory()->checkoutAccessories()->create())
@@ -222,7 +222,7 @@ class AccessoryCheckoutTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('accessories.index'))
-            ->post(route('accessories.checkout.store' , $accessory), [
+            ->post(route('accessories.checkout.store', $accessory), [
                 'assigned_user' => User::factory()->create()->id,
                 'checkout_to_type' => 'user',
                 'redirect_option' => 'item',
@@ -240,7 +240,7 @@ class AccessoryCheckoutTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('accessories.index'))
-            ->post(route('accessories.checkout.store' , $accessory), [
+            ->post(route('accessories.checkout.store', $accessory), [
                 'assigned_user' => $user->id,
                 'checkout_to_type' => 'user',
                 'redirect_option' => 'target',

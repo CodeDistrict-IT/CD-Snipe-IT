@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => '请选择你要报备资产的选项。',
+    'info' => '请选择你要报备资产的选项。',
     'deleted_user' => '已删除用户',
     'send_reminder' => '发送提醒',
     'reminder_sent' => '提醒信息已发送',
@@ -12,6 +12,6 @@ return [
         'user_city' => '用户城市',
         'user_state' => '用户州',
         'user_country' => '用户国家',
-        'user_zip' => '用户邮编'
-    ]
+        'user_zip' => '用户邮编',
+    ],
 ];

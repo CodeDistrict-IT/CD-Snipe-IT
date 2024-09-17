@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'วันที่เช็คอิน',
     'checkout_date' => 'ชำระเงินวันที่',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'โปรดคลิกที่ลิงค์ด้านล่างเพื่อยืนยันว่าคุณได้รับอุปกรณ์เสริมแล้ว',
     'click_on_the_link_asset' => 'โปรดคลิกลิงก์ที่ด้านล่างเพื่อยืนยันว่าคุณได้รับเนื้อหาแล้ว',

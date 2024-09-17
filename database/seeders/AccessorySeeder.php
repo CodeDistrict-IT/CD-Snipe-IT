@@ -56,7 +56,6 @@ class AccessorySeeder extends Seeder
             'user_id' => $admin->id,
         ]);
 
-
         $src = public_path('/img/demo/accessories/');
         $dst = 'accessories'.'/';
         $del_files = Storage::files($dst);

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Helpers\StorageHelper;
-use Illuminate\Support\Facades\Storage;
 use App\Helpers\Helper;
+use App\Helpers\StorageHelper;
 use App\Http\Controllers\Controller;
-use App\Models\AssetModel;
-use App\Models\Actionlog;
 use App\Http\Requests\UploadFileRequest;
+use App\Models\Actionlog;
+use App\Models\AssetModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * This class controls file related actions related
@@ -22,6 +21,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
  * Based on the Assets/AssetFilesController by A. Gianotto <snipe@snipe.net>
  *
  * @version    v1.0
+ *
  * @author [T. Scarsbrook] [<snipe@scarzybrook.co.uk>]
  */
 class AssetModelFilesController extends Controller
@@ -29,12 +29,13 @@ class AssetModelFilesController extends Controller
     /**
      * Accepts a POST to upload a file to the server.
      *
-     * @param \App\Http\Requests\UploadFileRequest $request
-     * @param int $assetModelId
+     * @param  int  $assetModelId
+     *
      * @since [v7.0.12]
+     *
      * @author [r-xyz]
      */
-    public function store(UploadFileRequest $request, $assetModelId = null) : JsonResponse
+    public function store(UploadFileRequest $request, $assetModelId = null): JsonResponse
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetModelId)) {
@@ -44,7 +45,7 @@ class AssetModelFilesController extends Controller
         // Make sure we are allowed to update this asset
         $this->authorize('update', $assetModel);
 
-            if ($request->hasFile('file')) {
+        if ($request->hasFile('file')) {
             // If the file storage directory doesn't exist; create it
             if (! Storage::exists('private_uploads/assetmodels')) {
                 Storage::makeDirectory('private_uploads/assetmodels', 775);
@@ -52,8 +53,8 @@ class AssetModelFilesController extends Controller
 
             // Loop over the attached files and add them to the asset
             foreach ($request->file('file') as $file) {
-                $file_name = $request->handleFile('private_uploads/assetmodels/','model-'.$assetModel->id, $file);
-                
+                $file_name = $request->handleFile('private_uploads/assetmodels/', 'model-'.$assetModel->id, $file);
+
                 $assetModel->logUpload($file_name, e($request->get('notes')));
             }
 
@@ -68,33 +69,36 @@ class AssetModelFilesController extends Controller
     /**
      * List the files for an asset.
      *
-     * @param  int $assetModelId
+     * @param  int  $assetModelId
+     *
      * @since [v7.0.12]
+     *
      * @author [r-xyz]
      */
-    public function list($assetModelId = null) : JsonResponse
+    public function list($assetModelId = null): JsonResponse
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetModelId)) {
             return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/models/message.does_not_exist')), 404);
         }
-        
+
         // the asset is valid
         if (isset($assetModel->id)) {
             $this->authorize('view', $assetModel);
 
             // Check that there are some uploads on this asset that can be listed
             if ($assetModel->uploads->count() > 0) {
-                $files = array();
+                $files = [];
                 foreach ($assetModel->uploads as $upload) {
                     array_push($files, $upload);
                 }
+
                 // Give the list of files back to the user
                 return response()->json(Helper::formatStandardApiResponse('success', $files, trans('admin/models/message.upload.success')));
             }
 
             // There are no files.
-            return response()->json(Helper::formatStandardApiResponse('success', array(), trans('admin/models/message.upload.success')));
+            return response()->json(Helper::formatStandardApiResponse('success', [], trans('admin/models/message.upload.success')));
         }
 
         // Send back an error message
@@ -104,14 +108,17 @@ class AssetModelFilesController extends Controller
     /**
      * Check for permissions and display the file.
      *
-     * @param  int $assetModelId
-     * @param  int $fileId
+     * @param  int  $assetModelId
+     * @param  int  $fileId
      * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @since [v7.0.12]
+     *
      * @author [r-xyz]
      */
-    public function show($assetModelId = null, $fileId = null) : JsonResponse | StreamedResponse | Storage | StorageHelper | BinaryFileResponse
+    public function show($assetModelId = null, $fileId = null): JsonResponse|StreamedResponse|Storage|StorageHelper|BinaryFileResponse
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetModelId)) {
@@ -159,12 +166,14 @@ class AssetModelFilesController extends Controller
     /**
      * Delete the associated file
      *
-     * @param  int $assetModelId
-     * @param  int $fileId
+     * @param  int  $assetModelId
+     * @param  int  $fileId
+     *
      * @since [v7.0.12]
+     *
      * @author [r-xyz]
      */
-    public function destroy($assetModelId = null, $fileId = null) : JsonResponse
+    public function destroy($assetModelId = null, $fileId = null): JsonResponse
     {
         // Start by checking if the asset being acted upon exists
         if (! $assetModel = AssetModel::find($assetModelId)) {

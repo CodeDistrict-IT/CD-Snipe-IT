@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -17,4 +17,4 @@ return array(
     'password' => 'Sağlanan parola yanlış.',
     'throttle' => 'Çok fazla giriş denemesi. Lütfen :second saniye içinde tekrar deneyin.',
 
-);
+];

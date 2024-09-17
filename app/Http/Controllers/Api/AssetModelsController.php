@@ -10,16 +10,17 @@ use App\Http\Transformers\AssetsTransformer;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Models\Asset;
 use App\Models\AssetModel;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * This class controls all actions related to asset models for
  * the Snipe-IT Asset Management application.
  *
  * @version    v4.0
+ *
  * @author [A. Gianotto] [<snipe@snipe.net>]
  */
 class AssetModelsController extends Controller
@@ -28,9 +29,10 @@ class AssetModelsController extends Controller
      * Display a listing of the resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse|array
     {
         $this->authorize('view', AssetModel::class);
         $allowed_columns =
@@ -66,11 +68,11 @@ class AssetModelsController extends Controller
             'fieldset_id',
             'models.deleted_at',
             'models.updated_at',
-         ])
+        ])
             ->with('category', 'depreciation', 'manufacturer', 'fieldset.fields.defaultValues')
             ->withCount('assets as assets_count');
 
-        if ($request->input('status')=='deleted') {
+        if ($request->input('status') == 'deleted') {
             $assetmodels->onlyTrashed();
         }
 
@@ -114,15 +116,14 @@ class AssetModelsController extends Controller
         return (new AssetModelsTransformer)->transformAssetModels($assetmodels, $total);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\StoreAssetModelRequest  $request
      */
-    public function store(StoreAssetModelRequest $request) : JsonResponse
+    public function store(StoreAssetModelRequest $request): JsonResponse
     {
         $this->authorize('create', AssetModel::class);
         $assetmodel = new AssetModel;
@@ -132,8 +133,8 @@ class AssetModelsController extends Controller
         if ($assetmodel->save()) {
             return response()->json(Helper::formatStandardApiResponse('success', $assetmodel, trans('admin/models/message.create.success')));
         }
-        return response()->json(Helper::formatStandardApiResponse('error', null, $assetmodel->getErrors()));
 
+        return response()->json(Helper::formatStandardApiResponse('error', null, $assetmodel->getErrors()));
 
     }
 
@@ -141,10 +142,12 @@ class AssetModelsController extends Controller
      * Display the specified resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function show($id) :  array
+    public function show($id): array
     {
         $this->authorize('view', AssetModel::class);
         $assetmodel = AssetModel::withCount('assets as assets_count')->findOrFail($id);
@@ -156,10 +159,12 @@ class AssetModelsController extends Controller
      * Display the specified resource's assets
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function assets($id) : array
+    public function assets($id): array
     {
         $this->authorize('view', AssetModel::class);
         $assets = Asset::where('model_id', '=', $id)->get();
@@ -167,23 +172,24 @@ class AssetModelsController extends Controller
         return (new AssetsTransformer)->transformAssets($assets, $assets->count());
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  \App\Http\Requests\ImageUploadRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreAssetModelRequest $request, $id) : JsonResponse
+    public function update(StoreAssetModelRequest $request, $id): JsonResponse
     {
         $this->authorize('update', AssetModel::class);
         $assetmodel = AssetModel::findOrFail($id);
         $assetmodel->fill($request->all());
         $assetmodel = $request->handleImages($assetmodel);
-        
+
         /**
          * Allow custom_fieldset_id to override and populate fieldset_id.
          * This is stupid, but required for legacy API support.
@@ -196,7 +202,6 @@ class AssetModelsController extends Controller
             $assetmodel->fieldset_id = $request->get('custom_fieldset_id');
         }
 
-
         if ($assetmodel->save()) {
             return response()->json(Helper::formatStandardApiResponse('success', $assetmodel, trans('admin/models/message.update.success')));
         }
@@ -208,10 +213,12 @@ class AssetModelsController extends Controller
      * Remove the specified resource from storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', AssetModel::class);
         $assetmodel = AssetModel::findOrFail($id);
@@ -238,10 +245,11 @@ class AssetModelsController extends Controller
      * Gets a paginated collection for the select2 menus
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
 
         $this->authorize('view.selectlists');

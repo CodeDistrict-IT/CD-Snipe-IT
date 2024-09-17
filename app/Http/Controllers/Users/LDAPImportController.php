@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Artisan; // Note that this is awful close to 'Use
 
 class LDAPImportController extends Controller
 {
-     /**
+    /**
      * Return view for LDAP import.
      *
      * @author Aladin Alaily
@@ -55,7 +55,7 @@ class LDAPImportController extends Controller
         // Collect and parse JSON summary.
         $ldap_results_json = Artisan::output();
         $ldap_results = json_decode($ldap_results_json, true);
-        if (!$ldap_results) {
+        if (! $ldap_results) {
             return redirect()->back()->withInput()->with('error', trans('general.no_results'));
         }
 

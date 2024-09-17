@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Дата возврата',
     'checkout_date' => 'Дата привязки',
     'checkedout_from' => 'Отключено от',
-    'checkedin_from'  => 'Возврат из',
+    'checkedin_from' => 'Возврат из',
     'checked_into' => 'Выдано',
     'click_on_the_link_accessory' => 'Пожалуйста, перейдите по ссылке внизу, чтобы подтвердить получение аксессуара.',
     'click_on_the_link_asset' => 'Пожалуйста, перейдите по ссылке внизу, чтобы подтвердить получение актива.',

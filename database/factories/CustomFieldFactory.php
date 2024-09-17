@@ -100,7 +100,7 @@ class CustomFieldFactory extends Factory
                 'name' => 'Test Checkbox',
                 'help_text' => 'This is a sample checkbox.',
                 'field_values' => "One\r\nTwo\r\nThree",
-                'element'   => 'checkbox',
+                'element' => 'checkbox',
             ];
         });
     }
@@ -112,9 +112,8 @@ class CustomFieldFactory extends Factory
                 'name' => 'Test Radio',
                 'help_text' => 'This is a sample radio.',
                 'field_values' => "One\r\nTwo\r\nThree",
-                'element'   => 'radio',
+                'element' => 'radio',
             ];
         });
     }
-
 }

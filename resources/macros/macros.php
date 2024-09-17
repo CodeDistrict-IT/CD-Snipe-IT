@@ -9,7 +9,7 @@
  */
 Form::macro('locales', function ($name = 'locale', $selected = null, $class = null, $id = null) {
 
-    $idclause = (!is_null($id)) ? $id : '';
+    $idclause = (! is_null($id)) ? $id : '';
 
     $select = '<select name="'.$name.'" class="'.$class.'" style="width:100%"'.$idclause.' aria-label="'.$name.'" data-placeholder="'.trans('localizations.select_language').'">';
     $select .= '<option value=""  role="option">'.trans('localizations.select_language').'</option>';
@@ -30,7 +30,7 @@ Form::macro('locales', function ($name = 'locale', $selected = null, $class = nu
  */
 Form::macro('countries', function ($name = 'country', $selected = null, $class = null, $id = null) {
 
-    $idclause = (!is_null($id)) ? $id : '';
+    $idclause = (! is_null($id)) ? $id : '';
 
     // Pull the autoglossonym array from the localizations translation file
     $countries_array = trans('localizations.countries');
@@ -41,7 +41,7 @@ Form::macro('countries', function ($name = 'country', $selected = null, $class =
     foreach ($countries_array as $abbr => $country) {
 
         // We have to handle it this way to handle deprecication warnings since you can't strtoupper on null
-        if ($abbr!='') {
+        if ($abbr != '') {
             $abbr = strtoupper($abbr);
         }
 
@@ -51,8 +51,8 @@ Form::macro('countries', function ($name = 'country', $selected = null, $class =
     }
 
     // If the country value doesn't exist in the array, add it as a new option and select it so we don't drop that data
-    if (!in_array($selected, $countries_array)) {
-        $select .= '<option value="' . $selected . '" selected="selected" role="option" aria-selected="true">' . $selected .' *</option> ';
+    if (! in_array($selected, $countries_array)) {
+        $select .= '<option value="'.$selected.'" selected="selected" role="option" aria-selected="true">'.$selected.' *</option> ';
     }
 
     $select .= '</select>';
@@ -93,7 +93,7 @@ Form::macro('time_display_format', function ($name = 'time_display_format', $sel
         'H:i',
     ];
 
-    $datetime = date("y-m-d").' 14:00:00';
+    $datetime = date('y-m-d').' 14:00:00';
     foreach ($formats as $format) {
         $time_display_formats[$format] = Carbon::parse($datetime)->format($format);
     }
@@ -124,7 +124,6 @@ Form::macro('digit_separator', function ($name = 'digit_separator', $selected = 
 
     return $select;
 });
-
 
 Form::macro('name_display_format', function ($name = 'name_display_format', $selected = null, $class = null) {
     $formats = [

@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 class UpdateAssetRequest extends ImageUploadRequest
 {
     use MayContainCustomFields;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -33,11 +34,11 @@ class UpdateAssetRequest extends ImageUploadRequest
             (new Asset)->getRules(),
             // this is to overwrite rulesets that include required, and rewrite unique_undeleted
             [
-                'model_id'  => ['integer', 'exists:models,id,deleted_at,NULL', 'not_array'],
+                'model_id' => ['integer', 'exists:models,id,deleted_at,NULL', 'not_array'],
                 'status_id' => ['integer', 'exists:status_labels,id'],
                 'asset_tag' => [
                     'min:1', 'max:255', 'not_array',
-                    Rule::unique('assets', 'asset_tag')->ignore($this->asset)->withoutTrashed()
+                    Rule::unique('assets', 'asset_tag')->ignore($this->asset)->withoutTrashed(),
                 ],
             ],
         );

@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'Bu değer için :alan adı boş olamaz.',
+    'import_field_empty' => 'Bu değer için :alan adı boş olamaz.',
     'in' => ':attribute geçersiz.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,7 +125,7 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
-    'percent'       => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
 
     'present' => ': Attribute alanı bulunmalıdır.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
@@ -155,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => ': Özniteliği bir dize olmalıdır.',
+    'string' => ': Özniteliği bir dize olmalıdır.',
     'two_column_unique_undeleted' => ':attribute :table1 ve :table2 genelinde benzersiz olmalıdır. ',
-    'unique_undeleted'     => ':attribute benzersiz olmalıdır.',
-    'non_circular'         => ':attribute döngüsel bir başvuru oluşturmamalıdır.',
-    'not_array'            => ':attribute bir dizi olamaz.',
+    'unique_undeleted' => ':attribute benzersiz olmalıdır.',
+    'non_circular' => ':attribute döngüsel bir başvuru oluşturmamalıdır.',
+    'not_array' => ':attribute bir dizi olamaz.',
     'disallow_same_pwd_as_user_fields' => 'Şifre kullanıcı adı ile aynı olamaz.',
-    'letters'              => 'Şifre en az bir harf içermelidir.',
-    'numbers'              => 'Şifre en az bir rakam içermelidir.',
-    'case_diff'            => 'Şifre hem büyük hem küçük harf içermelidir.',
-    'symbols'              => 'Şifre sembol içermelidir.',
+    'letters' => 'Şifre en az bir harf içermelidir.',
+    'numbers' => 'Şifre en az bir rakam içermelidir.',
+    'case_diff' => 'Şifre hem büyük hem küçük harf içermelidir.',
+    'symbols' => 'Şifre sembol içermelidir.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => ':attribute zaten alınmış.',
     'uploaded' => ': Özniteliği yüklenemedi.',
@@ -186,27 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => ': Attribute alanı, izin verilmeyen bir karakter içeriyor.',
-        'email_array'      => 'Bir veya daha fazla e-posta adresi geçersiz.',
-        'hashed_pass'      => 'Geçerli şifre yanlış',
-        'dumbpwd'          => 'Bu şifre çok yaygındır.',
+        'email_array' => 'Bir veya daha fazla e-posta adresi geçersiz.',
+        'hashed_pass' => 'Geçerli şifre yanlış',
+        'dumbpwd' => 'Bu şifre çok yaygındır.',
         'statuslabel_type' => 'Geçerli bir durum etiketi türü seçmelisiniz',
-        'custom_field_not_found'          => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
         'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ':attribute YYYY-MM-DD tarih formatında olmalıdır',
-        'last_audit_date.date_format'   =>  ':attribute YYYY-MM-DD hh:mm:ss tarih formatında olmalıdır',
-        'expiration_date.date_format'   =>  ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
-        'termination_date.date_format'  =>  ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
-        'expected_checkin.date_format'  =>  ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
-        'start_date.date_format'        =>  ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
-        'end_date.date_format'          =>  ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
-        'checkboxes'           => ':attribute contains invalid options.',
-        'radio_buttons'        => ':attribute is invalid.',
+        'purchase_date.date_format' => ':attribute YYYY-MM-DD tarih formatında olmalıdır',
+        'last_audit_date.date_format' => ':attribute YYYY-MM-DD hh:mm:ss tarih formatında olmalıdır',
+        'expiration_date.date_format' => ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
+        'termination_date.date_format' => ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
+        'expected_checkin.date_format' => ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
+        'start_date.date_format' => ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
+        'end_date.date_format' => ':attribute YYYY-MM-DD şeklinde geçerli bir tarih formatında olmalıdır',
+        'checkboxes' => ':attribute contains invalid options.',
+        'radio_buttons' => ':attribute is invalid.',
         'invalid_value_in_field' => 'Invalid value included in this field',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -232,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

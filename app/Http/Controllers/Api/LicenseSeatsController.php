@@ -17,10 +17,9 @@ class LicenseSeatsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $licenseId
      */
-    public function index(Request $request, $licenseId) : JsonResponse | array
+    public function index(Request $request, $licenseId): JsonResponse|array
     {
 
         if ($license = License::find($licenseId)) {
@@ -42,7 +41,7 @@ class LicenseSeatsController extends Controller
             // Make sure the offset and limit are actually integers and do not exceed system limits
             $offset = ($request->input('offset') > $seats->count()) ? $seats->count() : app('api_offset_value');
 
-            if ($offset >= $total ){
+            if ($offset >= $total) {
                 $offset = 0;
             }
 
@@ -64,7 +63,7 @@ class LicenseSeatsController extends Controller
      * @param  int  $licenseId
      * @param  int  $seatId
      */
-    public function show($licenseId, $seatId) : JsonResponse | array
+    public function show($licenseId, $seatId): JsonResponse|array
     {
 
         $this->authorize('view', License::class);
@@ -84,21 +83,19 @@ class LicenseSeatsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $licenseId
      * @param  int  $seatId
      */
-    public function update(Request $request, $licenseId, $seatId) : JsonResponse | array
+    public function update(Request $request, $licenseId, $seatId): JsonResponse|array
     {
         $this->authorize('checkout', License::class);
-
 
         if (! $licenseSeat = LicenseSeat::find($seatId)) {
             return response()->json(Helper::formatStandardApiResponse('error', null, 'Seat not found'));
         }
 
         $license = $licenseSeat->license()->first();
-        if (!$license || $license->id != intval($licenseId)) {
+        if (! $license || $license->id != intval($licenseId)) {
             return response()->json(Helper::formatStandardApiResponse('error', null, 'Seat does not belong to the specified license'));
         }
 
@@ -129,7 +126,7 @@ class LicenseSeatsController extends Controller
             $target = $is_checkin ? $oldAsset : Asset::find($licenseSeat->asset_id);
         }
 
-        if (is_null($target)){
+        if (is_null($target)) {
             return response()->json(Helper::formatStandardApiResponse('error', null, 'Target not found'));
         }
 

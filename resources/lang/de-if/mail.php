@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Rücknahmedatum',
     'checkout_date' => 'Herausgabedatum',
     'checkedout_from' => 'Herausgegeben von',
-    'checkedin_from'  => 'Eingecheckt von',
+    'checkedin_from' => 'Eingecheckt von',
     'checked_into' => 'Zurückgenommen in',
     'click_on_the_link_accessory' => 'Bitte klicke auf den Link weiter unten, um den Erhalt des Zubehörs zu bestätigen.',
     'click_on_the_link_asset' => 'Bitte klicke auf den Link weiter unten, um den Erhalt des Gegenstands zu bestätigen.',

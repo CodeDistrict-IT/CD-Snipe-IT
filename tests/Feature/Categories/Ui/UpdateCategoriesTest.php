@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Categories\Ui;
 
-use App\Models\Category;
 use App\Models\Asset;
+use App\Models\Category;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -14,7 +14,7 @@ class UpdateCategoriesTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->post(route('categories.store'), [
                 'name' => 'Test Category',
-                'category_type' => 'asset'
+                'category_type' => 'asset',
             ])
             ->assertStatus(403)
             ->assertForbidden();
@@ -25,7 +25,7 @@ class UpdateCategoriesTest extends TestCase
         $this->actingAs(User::factory()->superuser()->create())
             ->post(route('categories.store'), [
                 'name' => 'Test Category',
-                'category_type' => 'asset'
+                'category_type' => 'asset',
             ])
             ->assertStatus(302)
             ->assertSessionHasNoErrors()
@@ -92,5 +92,4 @@ class UpdateCategoriesTest extends TestCase
         $this->assertFalse(Category::where('name', 'Test Category Edited')->exists());
 
     }
-
 }

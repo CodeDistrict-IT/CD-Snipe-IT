@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -13,9 +13,9 @@ return array(
     |
     */
 
-    "password" => "Лозинките мора да содржат најмалку шест знаци и да одговараат на потврдата.",
-    "user"     => "Корисничкото име или адресата за е-пошта е неточна",
-    "token"    => 'This password reset token is invalid or expired, or does not match the username provided.',
-    'sent'	   => 'If a matching user with a valid email address exists in our system, a password recovery email has been sent.',
+    'password' => 'Лозинките мора да содржат најмалку шест знаци и да одговараат на потврдата.',
+    'user' => 'Корисничкото име или адресата за е-пошта е неточна',
+    'token' => 'This password reset token is invalid or expired, or does not match the username provided.',
+    'sent' => 'If a matching user with a valid email address exists in our system, a password recovery email has been sent.',
 
-);
+];

@@ -42,7 +42,7 @@ return [
     'checkin_date' => 'Rangi Titiro',
     'checkout_date' => 'Rā Rārangi',
     'checkedout_from' => 'Checked out from',
-    'checkedin_from'  => 'Checked in from',
+    'checkedin_from' => 'Checked in from',
     'checked_into' => 'Checked into',
     'click_on_the_link_accessory' => 'Tena koahia te hono i raro ki te whakauru kua whiwhi koe i te taputapu.',
     'click_on_the_link_asset' => 'Koahia te hono i raro ki te whakauru kua riro ia koe te taonga.',

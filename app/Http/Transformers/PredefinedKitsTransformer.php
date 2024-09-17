@@ -4,13 +4,14 @@ namespace App\Http\Transformers;
 
 use App\Models\PredefinedKit;
 use App\Models\SnipeModel;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * transforms collection of models to array with simple typres
  *
  * @author [D. Minaev] [<dmitriy.minaev.v@gmail.com>]
+ *
  * @return array
  */
 class PredefinedKitsTransformer
@@ -47,6 +48,7 @@ class PredefinedKitsTransformer
 
     /**
      * transform collection of any elemets attached to kit
+     *
      * @return array
      */
     public function transformElements(Collection $elements, $total)

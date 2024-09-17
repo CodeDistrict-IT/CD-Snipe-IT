@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Components;
 
 use App\Events\CheckoutableCheckedOut;
-use App\Events\ComponentCheckedOut;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
 use App\Models\Component;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 
 class ComponentCheckoutController extends Controller
@@ -20,10 +17,13 @@ class ComponentCheckoutController extends Controller
      * Returns a view that allows the checkout of a component to an asset.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentCheckoutController::store() method that stores the data.
      * @since [v3.0]
-     * @param int $id
+     *
+     * @param  int  $id
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create($id)
@@ -37,7 +37,7 @@ class ComponentCheckoutController extends Controller
             if ($component->category) {
 
                 // Make sure there is at least one available to checkout
-                if ($component->numRemaining() <= 0){
+                if ($component->numRemaining() <= 0) {
                     return redirect()->route('components.index')
                         ->with('error', trans('admin/components/message.checkout.unavailable'));
                 }
@@ -60,17 +60,19 @@ class ComponentCheckoutController extends Controller
      * Validate and store checkout data.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentCheckoutController::create() method that returns the form.
      * @since [v3.0]
-     * @param Request $request
-     * @param int $componentId
+     *
+     * @param  int  $componentId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(Request $request, $componentId)
     {
         // Check if the component exists
-        if (!$component = Component::find($componentId)) {
+        if (! $component = Component::find($componentId)) {
             // Redirect to the component management page with error
             return redirect()->route('components.index')->with('error', trans('admin/components/message.not_found'));
         }
@@ -85,8 +87,8 @@ class ComponentCheckoutController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'asset_id'          => 'required|exists:assets,id',
-            'assigned_qty'      => "required|numeric|min:1|digits_between:1,$max_to_checkout",
+            'asset_id' => 'required|exists:assets,id',
+            'assigned_qty' => "required|numeric|min:1|digits_between:1,$max_to_checkout",
         ]);
 
         if ($validator->fails()) {

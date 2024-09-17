@@ -66,7 +66,8 @@ class ConsumableCheckoutTest extends TestCase
     }
 
     public function testActionLogCreatedUponCheckout()
-    {$consumable = Consumable::factory()->create();
+    {
+        $consumable = Consumable::factory()->create();
         $actor = User::factory()->checkoutConsumables()->create();
         $user = User::factory()->create();
 

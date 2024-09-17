@@ -6,13 +6,14 @@ use App\Models\CustomField;
 use App\Models\Department;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * This service provider handles a few custom validation rules.
  *
  * PHP version 5.5.9
+ *
  * @version    v3.0
  */
 class ValidationServiceProvider extends ServiceProvider
@@ -21,7 +22,9 @@ class ValidationServiceProvider extends ServiceProvider
      * Custom email array validation
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return void
      */
     public function boot()
@@ -36,16 +39,15 @@ class ValidationServiceProvider extends ServiceProvider
                 $email_to_validate['alert_email'][] = $email;
             }
 
-            $rules = ['alert_email.*'=>'email'];
+            $rules = ['alert_email.*' => 'email'];
             $messages = [
-                'alert_email.*'=>trans('validation.email_array'),
+                'alert_email.*' => trans('validation.email_array'),
             ];
 
             $validator = Validator::make($email_to_validate, $rules, $messages);
 
             return $validator->passes();
         });
-
 
         /**
          * Unique only if undeleted.
@@ -66,7 +68,7 @@ class ValidationServiceProvider extends ServiceProvider
             if (count($parameters)) {
 
                 // This is a bit of a shim, but serial doesn't have any other rules around it other than that it's nullable
-                if (($parameters[0]=='assets') && ($attribute == 'serial') && (Setting::getSettings()->unique_serial != '1')) {
+                if (($parameters[0] == 'assets') && ($attribute == 'serial') && (Setting::getSettings()->unique_serial != '1')) {
                     return true;
                 }
 
@@ -79,7 +81,7 @@ class ValidationServiceProvider extends ServiceProvider
                 return $count < 1;
             }
         });
-        
+
         /**
          * Unique if undeleted for two columns
          *
@@ -91,18 +93,17 @@ class ValidationServiceProvider extends ServiceProvider
          * $parameters[2] - the name of the second field we're looking at
          * $parameters[3] - the value that the request is passing for the second table we're
          *                  checking for uniqueness across
-         *
          */
         Validator::extend('two_column_unique_undeleted', function ($attribute, $value, $parameters, $validator) {
 
             if (count($parameters)) {
-                
+
                 $count = DB::table($parameters[0])
                     ->select('id')
                     ->where($attribute, '=', $value)
                     ->where('id', '!=', $parameters[1]);
 
-                if ($parameters[3]!='') {
+                if ($parameters[3] != '') {
                     $count = $count->where($parameters[2], $parameters[3]);
                 }
 
@@ -112,7 +113,6 @@ class ValidationServiceProvider extends ServiceProvider
                 return $count < 1;
             }
         });
-
 
         /**
          * This is the validator replace static method that allows us to pass the $parameters of the table names
@@ -125,15 +125,15 @@ class ValidationServiceProvider extends ServiceProvider
          * The $parameters passed coincide with the ones the two_column_unique_undeleted custom validator above
          * uses, so $parameter[0] is the first table and so $parameter[2] is the second table.
          */
-        Validator::replacer('two_column_unique_undeleted', function($message, $attribute, $rule, $parameters) {
+        Validator::replacer('two_column_unique_undeleted', function ($message, $attribute, $rule, $parameters) {
             $message = str_replace(':table1', $parameters[0], $message);
             $message = str_replace(':table2', $parameters[2], $message);
 
             // Change underscores to spaces for a friendlier display
             $message = str_replace('_', ' ', $message);
+
             return $message;
         });
-
 
         // Prevent circular references
         //
@@ -289,7 +289,7 @@ class ValidationServiceProvider extends ServiceProvider
                 array_key_exists('company_id', $data) && $data['company_id'] !== null
             ) {
                 //for updating existing departments
-                if(array_key_exists('id', $data) && $data['id'] !== null){
+                if (array_key_exists('id', $data) && $data['id'] !== null) {
                     $count = Department::where('name', $data['name'])
                         ->where('location_id', $data['location_id'])
                         ->where('company_id', $data['company_id'])
@@ -299,45 +299,43 @@ class ValidationServiceProvider extends ServiceProvider
                         ->count('name');
 
                     return $count < 1;
-                }else // for entering in new departments
-                {
-                $count = Department::where('name', $data['name'])
-                    ->where('location_id', $data['location_id'])
-                    ->where('company_id', $data['company_id'])
-                    ->whereNotNull('company_id')
-                    ->whereNotNull('location_id')
-                    ->count('name');
+                } else { // for entering in new departments
+                    $count = Department::where('name', $data['name'])
+                        ->where('location_id', $data['location_id'])
+                        ->where('company_id', $data['company_id'])
+                        ->whereNotNull('company_id')
+                        ->whereNotNull('location_id')
+                        ->count('name');
 
-                return $count < 1;
-            }
-        }
-            else {
+                    return $count < 1;
+                }
+            } else {
                 return true;
-        }
+            }
         });
 
         Validator::extend('not_array', function ($attribute, $value, $parameters, $validator) {
-            return !is_array($value);
+            return ! is_array($value);
         });
 
         // This is only used in Models/CustomFieldset.php - it does automatic validation for checkboxes by making sure
         // that the submitted values actually exist in the options.
-        Validator::extend('checkboxes', function ($attribute, $value, $parameters, $validator){
+        Validator::extend('checkboxes', function ($attribute, $value, $parameters, $validator) {
             $field = CustomField::where('db_column', $attribute)->first();
             $options = $field->formatFieldValuesAsArray();
 
-            if(is_array($value)) {
+            if (is_array($value)) {
                 $invalid = array_diff($value, $options);
-                if(count($invalid) > 0) {
+                if (count($invalid) > 0) {
                     return false;
                 }
             }
 
             // for legacy, allows users to submit a comma separated string of options
-            elseif(!is_array($value)) {
+            elseif (! is_array($value)) {
                 $exploded = array_map('trim', explode(',', $value));
                 $invalid = array_diff($exploded, $options);
-                if(count($invalid) > 0) {
+                if (count($invalid) > 0) {
                     return false;
                 }
             }
@@ -359,7 +357,5 @@ class ValidationServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
-    }
+    public function register() {}
 }

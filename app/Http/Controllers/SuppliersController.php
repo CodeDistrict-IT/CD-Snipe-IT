@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ImageUploadRequest;
 use App\Models\Supplier;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * This controller handles all actions related to Suppliers for
@@ -20,30 +20,30 @@ class SuppliersController extends Controller
      * Show a list of all suppliers
      *
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('view', Supplier::class);
+
         return view('suppliers/index');
     }
 
     /**
      * Supplier create.
-     *
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Supplier::class);
+
         return view('suppliers/edit')->with('item', new Supplier);
     }
 
     /**
      * Supplier create form processing.
-     *
-     * @param ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('create', Supplier::class);
         // Create a new supplier
@@ -75,9 +75,9 @@ class SuppliersController extends Controller
     /**
      * Supplier update.
      *
-     * @param  int $supplierId
+     * @param  int  $supplierId
      */
-    public function edit($supplierId = null) : View | RedirectResponse
+    public function edit($supplierId = null): View|RedirectResponse
     {
         $this->authorize('update', Supplier::class);
         // Check if the supplier exists
@@ -93,9 +93,9 @@ class SuppliersController extends Controller
     /**
      * Supplier update form processing page.
      *
-     * @param  int $supplierId
+     * @param  int  $supplierId
      */
-    public function update($supplierId, ImageUploadRequest $request) : RedirectResponse
+    public function update($supplierId, ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('update', Supplier::class);
 
@@ -129,9 +129,9 @@ class SuppliersController extends Controller
     /**
      * Delete the given supplier.
      *
-     * @param  int $supplierId
+     * @param  int  $supplierId
      */
-    public function destroy($supplierId) : RedirectResponse
+    public function destroy($supplierId): RedirectResponse
     {
         $this->authorize('delete', Supplier::class);
         if (is_null($supplier = Supplier::with('asset_maintenances', 'assets', 'licenses')->withCount('asset_maintenances as asset_maintenances_count', 'assets as assets_count', 'licenses as licenses_count')->find($supplierId))) {
@@ -160,10 +160,11 @@ class SuppliersController extends Controller
     /**
      *  Get the asset information to present to the supplier view page
      *
-     * @param null $supplierId
+     * @param  null  $supplierId
+     *
      * @internal param int $assetId
      */
-    public function show($supplierId = null) : View | RedirectResponse
+    public function show($supplierId = null): View|RedirectResponse
     {
         $this->authorize('view', Supplier::class);
         $supplier = Supplier::find($supplierId);

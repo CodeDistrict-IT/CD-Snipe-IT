@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'Поле :attribute должно быть допустимым шестнадцатеричным цветом.',
     'image' => 'Поле :attribute должно быть изображением.',
-    'import_field_empty'    => 'Значение :fieldname не может быть пустым.',
+    'import_field_empty' => 'Значение :fieldname не может быть пустым.',
     'in' => 'Выбранный :attribute неправильный.',
     'in_array' => 'Поле :attribute должно существовать в :other.',
     'integer' => 'Поле :attribute должно быть целым числом.',
@@ -125,7 +125,7 @@ return [
         'symbols' => 'Поле :attribute должно содержать хотя бы один символ.',
         'uncompromised' => 'Данный :attribute появился при утечке данных. Пожалуйста, выберите другой :attribute.',
     ],
-    'percent'       => 'Минимальная амортизация должна быть в пределах от 0 до 100, если тип амортизации — процентный.',
+    'percent' => 'Минимальная амортизация должна быть в пределах от 0 до 100, если тип амортизации — процентный.',
 
     'present' => 'Поле атрибута: должно присутствовать.',
     'present_if' => 'Поле :attribute должно присутствовать, когда :other равно :value.',
@@ -155,16 +155,16 @@ return [
         'string' => 'Поле :attribute должно содержать :size символов.',
     ],
     'starts_with' => 'Поле :attribute должно начинаться с одного из следующих значений: :values.',
-    'string'               => 'Атрибут: должен быть строкой.',
+    'string' => 'Атрибут: должен быть строкой.',
     'two_column_unique_undeleted' => 'Поле :attribute должно быть уникальным для :table1 и :table2. ',
-    'unique_undeleted'     => 'Свойство :attribute должно быть уникальным.',
-    'non_circular'         => ':attribute не должен создавать циклическую ссылку.',
-    'not_array'            => ':attribute не может быть массивом.',
+    'unique_undeleted' => 'Свойство :attribute должно быть уникальным.',
+    'non_circular' => ':attribute не должен создавать циклическую ссылку.',
+    'not_array' => ':attribute не может быть массивом.',
     'disallow_same_pwd_as_user_fields' => 'Пароль не может совпадать с именем пользователя.',
-    'letters'              => 'Пароль должен содержать хотя бы одну букву.',
-    'numbers'              => 'Пароль должен содержать хотя бы одну цифру.',
-    'case_diff'            => 'Пароль должен использовать смешанный регистр.',
-    'symbols'              => 'Пароль должен содержать символы.',
+    'letters' => 'Пароль должен содержать хотя бы одну букву.',
+    'numbers' => 'Пароль должен содержать хотя бы одну цифру.',
+    'case_diff' => 'Пароль должен использовать смешанный регистр.',
+    'symbols' => 'Пароль должен содержать символы.',
     'timezone' => 'Поле :attribute должно содержать действительный часовой пояс.',
     'unique' => ':attribute уже занят.',
     'uploaded' => 'Атрибут: не удалось загрузить.',
@@ -186,27 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Поле атрибута: содержит символ, который не разрешен.',
-        'email_array'      => 'Один или несколько адресов электронной почты недействительны.',
-        'hashed_pass'      => 'Ваш текущий пароль неверен',
-        'dumbpwd'          => 'Этот пароль слишком распространен.',
+        'email_array' => 'Один или несколько адресов электронной почты недействительны.',
+        'hashed_pass' => 'Ваш текущий пароль неверен',
+        'dumbpwd' => 'Этот пароль слишком распространен.',
         'statuslabel_type' => 'Вы должны выбрать допустимый тип метки статуса',
-        'custom_field_not_found'          => 'Похоже, это поле не существует. Пожалуйста, проверьте еще раз имена ваших пользовательских полей.',
+        'custom_field_not_found' => 'Похоже, это поле не существует. Пожалуйста, проверьте еще раз имена ваших пользовательских полей.',
         'custom_field_not_found_on_model' => 'Это поле существует, но недоступно в наборе полей этой модели актива.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
-        'last_audit_date.date_format'   =>  ':attribute должен быть допустимой датой в формате YYYY-MM-DD hh:mm:ss',
-        'expiration_date.date_format'   =>  ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
-        'termination_date.date_format'  =>  ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
-        'expected_checkin.date_format'  =>  ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
-        'start_date.date_format'        =>  ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
-        'end_date.date_format'          =>  ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
-        'checkboxes'           => ':attribute содержит недопустимые параметры.',
-        'radio_buttons'        => ':attribute не верно.',
+        'purchase_date.date_format' => ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
+        'last_audit_date.date_format' => ':attribute должен быть допустимой датой в формате YYYY-MM-DD hh:mm:ss',
+        'expiration_date.date_format' => ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
+        'termination_date.date_format' => ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
+        'expected_checkin.date_format' => ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
+        'start_date.date_format' => ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
+        'end_date.date_format' => ':attribute должен быть допустимой датой в формате YYYY-MM-DD',
+        'checkboxes' => ':attribute содержит недопустимые параметры.',
+        'radio_buttons' => ':attribute не верно.',
         'invalid_value_in_field' => 'Недопустимое значение в этом поле',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -232,6 +232,5 @@ return [
         'required' => 'Это поле является обязательным',
         'email' => 'Пожалуйста, введите действительный адрес электронной почты',
     ],
-
 
 ];

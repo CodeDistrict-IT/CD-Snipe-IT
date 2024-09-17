@@ -24,7 +24,7 @@ class UsersForSelectListTest extends TestCase
                 'page',
                 'page_count',
             ])
-            ->assertJson(fn(AssertableJson $json) => $json->has('results', 3)->etc());
+            ->assertJson(fn (AssertableJson $json) => $json->has('results', 3)->etc());
     }
 
     public function testUsersCanBeSearchedByFirstAndLastName()
@@ -37,7 +37,7 @@ class UsersForSelectListTest extends TestCase
         $results = collect($response->json('results'));
 
         $this->assertEquals(1, $results->count());
-        $this->assertTrue($results->pluck('text')->contains(fn($text) => str_contains($text, 'Luke')));
+        $this->assertTrue($results->pluck('text')->contains(fn ($text) => str_contains($text, 'Luke')));
     }
 
     public function testUsersScopedToCompanyWhenMultipleFullCompanySupportEnabled()
@@ -61,10 +61,10 @@ class UsersForSelectListTest extends TestCase
 
         $this->assertEquals(3, $results->count());
         $this->assertTrue(
-            $results->pluck('text')->contains(fn($text) => str_contains($text, 'Luke'))
+            $results->pluck('text')->contains(fn ($text) => str_contains($text, 'Luke'))
         );
         $this->assertFalse(
-            $results->pluck('text')->contains(fn($text) => str_contains($text, 'Darth'))
+            $results->pluck('text')->contains(fn ($text) => str_contains($text, 'Darth'))
         );
     }
 
@@ -88,8 +88,8 @@ class UsersForSelectListTest extends TestCase
         $results = collect($response->json('results'));
 
         $this->assertEquals(3, $results->count());
-        $this->assertTrue($results->pluck('text')->contains(fn($text) => str_contains($text, 'Luke')));
-        $this->assertTrue($results->pluck('text')->contains(fn($text) => str_contains($text, 'Anakin')));
+        $this->assertTrue($results->pluck('text')->contains(fn ($text) => str_contains($text, 'Luke')));
+        $this->assertTrue($results->pluck('text')->contains(fn ($text) => str_contains($text, 'Anakin')));
 
         $response = $this->getJson(route('api.users.selectlist', ['search' => 'v']))->assertOk();
         $this->assertEquals(0, collect($response->json('results'))->count());

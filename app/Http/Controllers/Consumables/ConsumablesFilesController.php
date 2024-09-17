@@ -7,27 +7,29 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Actionlog;
 use App\Models\Consumable;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Consumable\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 class ConsumablesFilesController extends Controller
 {
     /**
      * Validates and stores files associated with a consumable.
      *
-     * @param UploadFileRequest $request
-     * @param int $consumableId
+     * @param  int  $consumableId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      *@author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @todo Switch to using the AssetFileRequest form request validator.
      */
     public function store(UploadFileRequest $request, $consumableId = null)
     {
         if (config('app.lock_passwords')) {
-            return redirect()->route('consumables.show', ['consumable'=>$consumableId])->with('error', trans('general.feature_disabled'));
+            return redirect()->route('consumables.show', ['consumable' => $consumableId])->with('error', trans('general.feature_disabled'));
         }
 
         $consumable = Consumable::find($consumableId);
@@ -41,12 +43,11 @@ class ConsumablesFilesController extends Controller
                 }
 
                 foreach ($request->file('file') as $file) {
-                    $file_name = $request->handleFile('private_uploads/consumables/','consumable-'.$consumable->id, $file);
+                    $file_name = $request->handleFile('private_uploads/consumables/', 'consumable-'.$consumable->id, $file);
 
                     //Log the upload to the log
                     $consumable->logUpload($file_name, e($request->input('notes')));
                 }
-
 
                 return redirect()->route('consumables.show', $consumable->id)->with('success', trans('general.file_upload_success'));
 
@@ -54,6 +55,7 @@ class ConsumablesFilesController extends Controller
 
             return redirect()->route('consumables.show', $consumable->id)->with('error', trans('general.no_files_uploaded'));
         }
+
         // Prepare the error message
         return redirect()->route('consumables.index')
             ->with('error', trans('general.file_does_not_exist'));
@@ -63,10 +65,13 @@ class ConsumablesFilesController extends Controller
      * Deletes the selected consumable file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param int $consumableId
-     * @param int $fileId
+     *
+     * @param  int  $consumableId
+     * @param  int  $fileId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($consumableId = null, $fileId = null)
@@ -101,10 +106,13 @@ class ConsumablesFilesController extends Controller
      * Allows the selected file to be viewed.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.4]
-     * @param int $consumableId
-     * @param int $fileId
+     *
+     * @param  int  $consumableId
+     * @param  int  $fileId
      * @return \Symfony\Consumable\HttpFoundation\Response
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show($consumableId = null, $fileId = null)
@@ -136,9 +144,9 @@ class ConsumablesFilesController extends Controller
                     $headers = [
                         'Content-Disposition' => 'inline',
                     ];
+
                     return Storage::download($file, $log->filename, $headers);
                 }
-
 
                 // We have to override the URL stuff here, since local defaults in Laravel's Flysystem
                 // won't work, as they're not accessible via the web
