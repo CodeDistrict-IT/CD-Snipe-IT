@@ -1,9 +1,10 @@
 <?php
+
 namespace Tests\Unit;
 
-use App\Models\Category;
-use App\Models\AssetModel;
 use App\Models\Asset;
+use App\Models\AssetModel;
+use App\Models\Category;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
@@ -15,9 +16,9 @@ class CategoryTest extends TestCase
         $this->assertFalse($a->isValid());
 
         $fields = [
-             'name' => 'name',
-             'category_type' => 'category type',
-         ];
+            'name' => 'name',
+            'category_type' => 'category type',
+        ];
         $errors = $a->getErrors();
         foreach ($fields as $field => $fieldTitle) {
             $this->assertEquals($errors->get($field)[0], "The $fieldTitle field is required.");
@@ -26,30 +27,27 @@ class CategoryTest extends TestCase
 
     public function testACategoryCanHaveAssets()
     {
-       $category = Category::factory()->assetDesktopCategory()->create();
+        $category = Category::factory()->assetDesktopCategory()->create();
 
-       // Generate 5 models via factory
-       $models =  AssetModel::factory()
-            ->mbp13Model()
+        // Generate 5 models via factory
+        $models = AssetModel::factory()
             ->count(5)
             ->create(
                 [
-                    'category_id' => $category->id
-                ]
-        );
-
-        
-
-        // Loop through the models and create 2 assets in each model
-       $models->each(function ($model) {
-            //dd($model);
-            $asset = Asset::factory()
-            ->count(2)
-            ->create(
-                [
-                    'model_id' => $model->id,
+                    'category_id' => $category->id,
                 ]
             );
+
+        // Loop through the models and create 2 assets in each model
+        $models->each(function ($model) {
+            //dd($model);
+            $asset = Asset::factory()
+                ->count(2)
+                ->create(
+                    [
+                        'model_id' => $model->id,
+                    ]
+                );
             //dd($asset);
         });
 

@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'O valor para :fieldname não pode ser nulo.',
+    'import_field_empty' => 'O valor para :fieldname não pode ser nulo.',
     'in' => 'O :attribute selecionado é inválido.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,6 +125,8 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+
     'present' => 'O campo: atributo deve estar presente.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
     'present_unless' => 'The :attribute field must be present unless :other is :value.',
@@ -153,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'O atributo deve ser uma string.',
+    'string' => 'O atributo deve ser uma string.',
     'two_column_unique_undeleted' => 'O :attribute deve ser único entre :table1 e :table2. ',
-    'unique_undeleted'     => 'O :atribute deve ser único.',
-    'non_circular'         => 'O :attribute não deve criar uma referência circular.',
-    'not_array'            => ':attribute não pode ser um array.',
+    'unique_undeleted' => 'O :atribute deve ser único.',
+    'non_circular' => 'O :attribute não deve criar uma referência circular.',
+    'not_array' => ':attribute não pode ser um array.',
     'disallow_same_pwd_as_user_fields' => 'A senha não pode ser igual ao nome de utilizador.',
-    'letters'              => 'A senha deve conter no mínimo uma letra.',
-    'numbers'              => 'A senha deve conter no mínimo um símbolo.',
-    'case_diff'            => 'A senha deve usar maiúsculas e minúsculas.',
-    'symbols'              => 'A senha deve conter símbolos.',
+    'letters' => 'A senha deve conter no mínimo uma letra.',
+    'numbers' => 'A senha deve conter no mínimo um símbolo.',
+    'case_diff' => 'A senha deve usar maiúsculas e minúsculas.',
+    'symbols' => 'A senha deve conter símbolos.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => 'Este :attribute já existe.',
     'uploaded' => 'O atributo: não foi possível carregar.',
@@ -184,25 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'O campo: atributo contém um caractere que não é permitido.',
-        'email_array'      => 'Um ou mais endereços de e-mail são inválidos.',
-        'hashed_pass'      => 'Sua senha atual está incorreta',
-        'dumbpwd'          => 'Essa senha é muito comum.',
+        'email_array' => 'Um ou mais endereços de e-mail são inválidos.',
+        'hashed_pass' => 'Sua senha atual está incorreta',
+        'dumbpwd' => 'Essa senha é muito comum.',
         'statuslabel_type' => 'Você deve selecionar um tipo de etiqueta de status válido',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
-        'last_audit_date.date_format'   =>  'O :attribute deve ser uma data válida em formato YYYY-MM-DD hh:mm:ss',
-        'expiration_date.date_format'   =>  'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
-        'termination_date.date_format'  =>  'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
-        'expected_checkin.date_format'  =>  'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
-        'start_date.date_format'        =>  'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
-        'end_date.date_format'          =>  'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
-        'checkboxes'           => ':attribute contém opções inválidas.',
-        'radio_buttons'        => ':attribute é inválido.',
+        'purchase_date.date_format' => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
+        'last_audit_date.date_format' => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD hh:mm:ss',
+        'expiration_date.date_format' => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
+        'termination_date.date_format' => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
+        'expected_checkin.date_format' => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
+        'start_date.date_format' => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
+        'end_date.date_format' => 'O :attribute deve ser uma data válida em formato YYYY-MM-DD',
+        'checkboxes' => ':attribute contém opções inválidas.',
+        'radio_buttons' => ':attribute é inválido.',
         'invalid_value_in_field' => 'Valor inválido incluído neste campo',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -228,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

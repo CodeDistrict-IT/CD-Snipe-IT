@@ -5,18 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\CheckoutRequest;
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
-use Laravel\Passport\TokenRepository;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Support\Facades\Gate;
 use App\Models\CustomField;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\TokenRepository;
 
 class ProfileController extends Controller
 {
-
     /**
      * The token repository implementation.
      *
@@ -27,8 +26,6 @@ class ProfileController extends Controller
     /**
      * Create a controller instance.
      *
-     * @param  \Laravel\Passport\TokenRepository  $tokenRepository
-     * @param  \Illuminate\Contracts\Validation\Factory  $validation
      * @return void
      */
     public function __construct(TokenRepository $tokenRepository, ValidationFactory $validation)
@@ -41,20 +38,21 @@ class ProfileController extends Controller
      * Display a listing of requested assets.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.3.0]
      */
-    public function requestedAssets() :  array
+    public function requestedAssets(): array
     {
         $checkoutRequests = CheckoutRequest::where('user_id', '=', auth()->id())->get();
 
-        $results = array();
-        $show_field = array();
-        $showable_fields = array();
+        $results = [];
+        $show_field = [];
+        $showable_fields = [];
         $results['total'] = $checkoutRequests->count();
 
         $all_custom_fields = CustomField::all(); //used as a 'cache' of custom fields throughout this page load
         foreach ($all_custom_fields as $field) {
-            if (($field->field_encrypted=='0') && ($field->show_in_requestable_list=='1')) {
+            if (($field->field_encrypted == '0') && ($field->show_in_requestable_list == '1')) {
                 $showable_fields[] = $field->db_column_name();
             }
         }
@@ -74,30 +72,29 @@ class ProfileController extends Controller
                 ];
 
                 foreach ($showable_fields as $showable_field_name) {
-                    $show_field['custom_fields.'.$showable_field_name] =  $checkoutRequest->itemRequested()->{$showable_field_name};
+                    $show_field['custom_fields.'.$showable_field_name] = $checkoutRequest->itemRequested()->{$showable_field_name};
                 }
 
                 // Merge the plain asset data and the custom fields data
                 $results['rows'][] = array_merge($assets, $show_field);
             }
 
-
         }
 
         return $results;
     }
 
-
     /**
      * Delete an API token
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.0.5]
      */
-    public function createApiToken(Request $request) : JsonResponse
+    public function createApiToken(Request $request): JsonResponse
     {
 
-        if (!Gate::allows('self.api')) {
+        if (! Gate::allows('self.api')) {
             abort(403);
         }
 
@@ -106,27 +103,29 @@ class ProfileController extends Controller
         if ($accessToken = auth()->user()->createToken($accessTokenName)->accessToken) {
 
             // Get the ID so we can return that with the payload
-            $token = DB::table('oauth_access_tokens')->where('user_id', '=', auth()->id())->where('name','=',$accessTokenName)->orderBy('created_at', 'desc')->first();
+            $token = DB::table('oauth_access_tokens')->where('user_id', '=', auth()->id())->where('name', '=', $accessTokenName)->orderBy('created_at', 'desc')->first();
             $accessTokenData['id'] = $token->id;
             $accessTokenData['token'] = $accessToken;
             $accessTokenData['name'] = $accessTokenName;
+
             return response()->json(Helper::formatStandardApiResponse('success', $accessTokenData, trans('account/general.personal_api_keys_success', ['key' => $accessTokenName])));
         }
+
         return response()->json(Helper::formatStandardApiResponse('error', null, 'Token could not be created.'));
 
     }
-
 
     /**
      * Delete an API token
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.0.5]
      */
-    public function deleteApiToken($tokenId) : Response
+    public function deleteApiToken($tokenId): Response
     {
 
-        if (!Gate::allows('self.api')) {
+        if (! Gate::allows('self.api')) {
             abort(403);
         }
 
@@ -144,20 +143,20 @@ class ProfileController extends Controller
 
     }
 
-
     /**
      * Show user's API tokens
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.0.5]
      */
-    public function showApiTokens() : JsonResponse
+    public function showApiTokens(): JsonResponse
     {
 
-        if (!Gate::allows('self.api')) {
+        if (! Gate::allows('self.api')) {
             abort(403);
         }
-        
+
         $tokens = $this->tokenRepository->forUser(auth()->user()->getAuthIdentifier());
         $token_values = $tokens->load('client')->filter(function ($token) {
             return $token->client->personal_access_client && ! $token->revoked;
@@ -166,7 +165,4 @@ class ProfileController extends Controller
         return response()->json(Helper::formatStandardApiResponse('success', $token_values, null));
 
     }
-
-
-
 }

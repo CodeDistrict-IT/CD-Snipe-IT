@@ -4,12 +4,10 @@ namespace Tests\Feature\Categories\Api;
 
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class IndexCategoriesTest extends TestCase
 {
-
     public function testViewingCategoryIndexRequiresPermission()
     {
         $this->actingAsForApi(User::factory()->create())
@@ -42,7 +40,6 @@ class IndexCategoriesTest extends TestCase
 
     }
 
-
     public function testCategoryIndexReturnsExpectedCategories()
     {
         $this->markTestIncomplete('Not sure why the category factory is generating one more than expected here.');
@@ -66,5 +63,4 @@ class IndexCategoriesTest extends TestCase
             ]);
 
     }
-
 }

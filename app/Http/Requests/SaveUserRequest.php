@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\Setting;
-use Illuminate\Contracts\Validation\Validator;
+use App\Rules\UserCannotSwitchCompaniesIfItemsAssigned;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SaveUserRequest extends FormRequest
 {
@@ -34,6 +33,7 @@ class SaveUserRequest extends FormRequest
         $rules = [
             'department_id' => 'nullable|exists:departments,id',
             'manager_id' => 'nullable|exists:users,id',
+            'company_id' => ['nullable', 'exists:companies,id'],
         ];
 
         switch ($this->method()) {
@@ -47,16 +47,18 @@ class SaveUserRequest extends FormRequest
                 }
                 break;
 
-            // Save all fields
+                // Save all fields
             case 'PUT':
                 $rules['first_name'] = 'required|string|min:1';
                 $rules['username'] = 'required_unless:ldap_import,1|string|min:1';
                 $rules['password'] = Setting::passwordComplexityRulesSaving('update').'|confirmed';
+                $rules['company_id'] = [new UserCannotSwitchCompaniesIfItemsAssigned];
                 break;
 
-            // Save only what's passed
+                // Save only what's passed
             case 'PATCH':
                 $rules['password'] = Setting::passwordComplexityRulesSaving('update');
+                $rules['company_id'] = [new UserCannotSwitchCompaniesIfItemsAssigned];
                 break;
 
             default:

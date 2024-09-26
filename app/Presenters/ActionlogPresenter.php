@@ -13,6 +13,7 @@ class ActionlogPresenter extends Presenter
             if (empty($user->deleted_at)) {
                 return $user->present()->nameUrl();
             }
+
             // The user was deleted
             return '<del>'.$user->getFullNameAttribute().'</del> (deleted)';
         }
@@ -29,6 +30,7 @@ class ActionlogPresenter extends Presenter
             if (empty($item->deleted_at)) {
                 return $this->model->item->present()->nameUrl();
             }
+
             // The item was deleted
             return '<del>'.$item->name.'</del> (deleted)';
         }
@@ -42,59 +44,59 @@ class ActionlogPresenter extends Presenter
         // User related icons
         if ($this->itemType() == 'user') {
 
-            if ($this->actionType()=='2fa reset') {
+            if ($this->actionType() == '2fa reset') {
                 return 'fa-solid fa-mobile-screen';
             }
 
-            if ($this->actionType()=='create new') {
+            if ($this->actionType() == 'create new') {
                 return 'fa-solid fa-user-plus';
             }
 
-            if ($this->actionType()=='merged') {
+            if ($this->actionType() == 'merged') {
                 return 'fa-solid fa-people-arrows';
             }
 
-            if ($this->actionType()=='delete') {
+            if ($this->actionType() == 'delete') {
                 return 'fa-solid fa-user-minus';
             }
 
-            if ($this->actionType()=='delete') {
+            if ($this->actionType() == 'delete') {
                 return 'fa-solid fa-user-minus';
             }
 
-            if ($this->actionType()=='update') {
+            if ($this->actionType() == 'update') {
                 return 'fa-solid fa-user-pen';
             }
 
-             return 'fa-solid fa-user';
+            return 'fa-solid fa-user';
         }
 
         // Everything else
-        if ($this->actionType()=='create new') {
+        if ($this->actionType() == 'create new') {
             return 'fa-solid fa-plus';
         }
 
-        if ($this->actionType()=='delete') {
+        if ($this->actionType() == 'delete') {
             return 'fa-solid fa-trash';
         }
 
-        if ($this->actionType()=='update') {
+        if ($this->actionType() == 'update') {
             return 'fa-solid fa-pen';
         }
 
-        if ($this->actionType()=='restore') {
+        if ($this->actionType() == 'restore') {
             return 'fa-solid fa-trash-arrow-up';
         }
 
-        if ($this->actionType()=='upload') {
+        if ($this->actionType() == 'upload') {
             return 'fas fa-paperclip';
         }
 
-        if ($this->actionType()=='checkout') {
+        if ($this->actionType() == 'checkout') {
             return 'fa-solid fa-rotate-left';
         }
 
-        if ($this->actionType()=='checkin from') {
+        if ($this->actionType() == 'checkin from') {
             return 'fa-solid fa-rotate-right';
         }
 

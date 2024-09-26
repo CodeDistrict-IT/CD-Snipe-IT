@@ -9,22 +9,23 @@ use App\Models\AssetModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
-use \Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AssetModelsFilesController extends Controller
 {
     /**
      * Upload a file to the server.
      *
-     * @param UploadFileRequest $request
-     * @param int $modelId
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  int  $modelId
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      *@since [v1.0]
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
-    public function store(UploadFileRequest $request, $modelId = null) : RedirectResponse
+    public function store(UploadFileRequest $request, $modelId = null): RedirectResponse
     {
         if (! $model = AssetModel::find($modelId)) {
             return redirect()->route('models.index')->with('error', trans('admin/hardware/message.does_not_exist'));
@@ -39,7 +40,7 @@ class AssetModelsFilesController extends Controller
 
             foreach ($request->file('file') as $file) {
 
-                $file_name = $request->handleFile('private_uploads/assetmodels/','model-'.$model->id,$file);
+                $file_name = $request->handleFile('private_uploads/assetmodels/', 'model-'.$model->id, $file);
 
                 $model->logUpload($file_name, $request->get('notes'));
             }
@@ -54,11 +55,13 @@ class AssetModelsFilesController extends Controller
      * Check for permissions and display the file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param  int $modelId
-     * @param  int $fileId
+     *
+     * @param  int  $modelId
+     * @param  int  $fileId
+     *
      * @since [v1.0]
      */
-    public function show($modelId = null, $fileId = null) : StreamedResponse | Response | RedirectResponse | BinaryFileResponse
+    public function show($modelId = null, $fileId = null): StreamedResponse|Response|RedirectResponse|BinaryFileResponse
     {
         $model = AssetModel::find($modelId);
         // the asset is valid
@@ -99,11 +102,13 @@ class AssetModelsFilesController extends Controller
      * Delete the associated file
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param  int $modelId
-     * @param  int $fileId
+     *
+     * @param  int  $modelId
+     * @param  int  $fileId
+     *
      * @since [v1.0]
      */
-    public function destroy($modelId = null, $fileId = null) : RedirectResponse
+    public function destroy($modelId = null, $fileId = null): RedirectResponse
     {
         $model = AssetModel::find($modelId);
         $this->authorize('update', $model);

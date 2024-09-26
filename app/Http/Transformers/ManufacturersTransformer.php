@@ -4,8 +4,8 @@ namespace App\Http\Transformers;
 
 use App\Helpers\Helper;
 use App\Models\Manufacturer;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class ManufacturersTransformer
@@ -20,14 +20,14 @@ class ManufacturersTransformer
         return (new DatatablesTransformer)->transformDatatables($array, $total);
     }
 
-    public function transformManufacturer(Manufacturer $manufacturer = null)
+    public function transformManufacturer(?Manufacturer $manufacturer = null)
     {
         if ($manufacturer) {
             $array = [
                 'id' => (int) $manufacturer->id,
                 'name' => e($manufacturer->name),
                 'url' => e($manufacturer->url),
-                'image' =>   ($manufacturer->image) ? Storage::disk('public')->url('manufacturers/'.e($manufacturer->image)) : null,
+                'image' => ($manufacturer->image) ? Storage::disk('public')->url('manufacturers/'.e($manufacturer->image)) : null,
                 'support_url' => e($manufacturer->support_url),
                 'warranty_lookup_url' => e($manufacturer->warranty_lookup_url),
                 'support_phone' => e($manufacturer->support_phone),

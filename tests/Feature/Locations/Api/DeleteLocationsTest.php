@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class DeleteLocationsTest extends TestCase
 {
-
     public function testErrorReturnedViaApiIfLocationDoesNotExist()
     {
         $this->actingAsForApi(User::factory()->superuser()->create())
@@ -89,5 +88,4 @@ class DeleteLocationsTest extends TestCase
             ->assertStatusMessageIs('error')
             ->json();
     }
-
 }

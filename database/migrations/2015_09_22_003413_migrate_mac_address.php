@@ -22,13 +22,13 @@ class MigrateMacAddress extends Migration
         $macid = DB::table('custom_fields')->insertGetId([
             'name' => 'MAC Address',
             'format' => \App\Models\CustomField::PREDEFINED_FORMATS['MAC'],
-            'element'=>'text', ]);
+            'element' => 'text', ]);
         if (! $macid) {
             throw new Exception("Can't save MAC Custom field: $macid");
         }
 
         $f2->fields()->attach($macid, ['required' => false, 'order' => 1]);
-        \App\Models\AssetModel::where(['show_mac_address' => true])->update(['fieldset_id'=>$f2->id]);
+        \App\Models\AssetModel::where(['show_mac_address' => true])->update(['fieldset_id' => $f2->id]);
 
         Schema::table('assets', function (Blueprint $table) {
             $table->renameColumn('mac_address', '_snipeit_mac_address');

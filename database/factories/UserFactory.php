@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use \Auth;
 
 class UserFactory extends Factory
 {
@@ -46,7 +45,6 @@ class UserFactory extends Factory
             ];
         });
     }
-
 
     public function firstAdmin()
     {
@@ -241,6 +239,11 @@ class UserFactory extends Factory
         return $this->appendPermission(['components.view' => '1']);
     }
 
+    public function createCompanies()
+    {
+        return $this->appendPermission(['companies.create' => '1']);
+    }
+
     public function createComponents()
     {
         return $this->appendPermission(['components.create' => '1']);
@@ -294,6 +297,11 @@ class UserFactory extends Factory
     public function canViewReports()
     {
         return $this->appendPermission(['reports.view' => '1']);
+    }
+
+    public function canImport()
+    {
+        return $this->appendPermission(['import' => '1']);
     }
 
     private function appendPermission(array $permission)

@@ -1,11 +1,9 @@
 <?php
 
+use App\Helpers\Helper;
+use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-use \App\Helpers\Helper;
-use \App\Models\Setting;
-use \App\Models\User;
 
 class FixLanguageDirs extends Migration
 {

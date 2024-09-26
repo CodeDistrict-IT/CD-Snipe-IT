@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'Das Feld :attribute muss eine gültige hexadezimale Farbe sein.',
     'image' => 'Das Feld :attribute muss ein Bild sein.',
-    'import_field_empty'    => ':fieldname darf nicht leer sein.',
+    'import_field_empty' => ':fieldname darf nicht leer sein.',
     'in' => 'Auswahl :attribute ist ungültig.',
     'in_array' => 'Das Feld :attribute muss in :other existieren.',
     'integer' => 'Das Feld :attribute muss eine Ganzzahl sein.',
@@ -125,6 +125,8 @@ return [
         'symbols' => 'Das Feld :attribute muss mindestens ein Symbol enthalten.',
         'uncompromised' => 'Das angegebene :attribute ist in einem Datenleck aufgetaucht. Bitte wählen Sie ein anderes :attribute.',
     ],
+    'percent' => 'Bei einer prozentualen Abschreibung muss der Mindestabschreibungswert zwischen 0 und 100 liegen.',
+
     'present' => ':attribute muss vorhanden sein.',
     'present_if' => 'Das Feld :attribute muss vorhanden sein, wenn :other :value ist.',
     'present_unless' => 'Das Feld :attribute muss vorhanden sein, es sei denn, :other ist :value.',
@@ -153,16 +155,16 @@ return [
         'string' => 'Das Feld :attribute muss :size Zeichen enthalten.',
     ],
     'starts_with' => 'Das Feld :attribute muss mit einem der folgenden Werte beginnen: :values.',
-    'string'               => 'Das Attribut muss eine Zeichenfolge sein.',
+    'string' => 'Das Attribut muss eine Zeichenfolge sein.',
     'two_column_unique_undeleted' => ':attribute muss in :table1 und :table2 einzigartig sein. ',
-    'unique_undeleted'     => 'Die Variable :attribute muss eindeutig sein.',
-    'non_circular'         => 'Das :attribute darf keinen Zirkelbezug ergeben.',
-    'not_array'            => ':attribute darf kein Array sein.',
+    'unique_undeleted' => 'Die Variable :attribute muss eindeutig sein.',
+    'non_circular' => 'Das :attribute darf keinen Zirkelbezug ergeben.',
+    'not_array' => ':attribute darf kein Array sein.',
     'disallow_same_pwd_as_user_fields' => 'Das Passwort muss sich vom Nutzernamen unterscheiden.',
-    'letters'              => 'Das Passwort muss mindestens einen Buchstaben beinhalten.',
-    'numbers'              => 'Das Passwort muss mindestens eine Zahl beinhalten.',
-    'case_diff'            => 'Das Passwort muss Groß- und Kleinschreibung beinhalten.',
-    'symbols'              => 'Das Passwort muss Sonderzeichen beinhalten.',
+    'letters' => 'Das Passwort muss mindestens einen Buchstaben beinhalten.',
+    'numbers' => 'Das Passwort muss mindestens eine Zahl beinhalten.',
+    'case_diff' => 'Das Passwort muss Groß- und Kleinschreibung beinhalten.',
+    'symbols' => 'Das Passwort muss Sonderzeichen beinhalten.',
     'timezone' => 'Das Feld :attribute muss eine gültige Zeitzone sein.',
     'unique' => ':attribute ist bereits vergeben.',
     'uploaded' => ':attribute konnte nicht hochgeladen werden.',
@@ -184,25 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Das :attribute Feld enthält ein nicht erlaubtes Zeichen.',
-        'email_array'      => 'Eine oder mehrere Email Adressen sind ungültig.',
-        'hashed_pass'      => 'Ihr derzeitiges Passwort ist nicht korrekt',
-        'dumbpwd'          => 'Das Passwort ist zu gebräuchlich.',
+        'email_array' => 'Eine oder mehrere Email Adressen sind ungültig.',
+        'hashed_pass' => 'Ihr derzeitiges Passwort ist nicht korrekt',
+        'dumbpwd' => 'Das Passwort ist zu gebräuchlich.',
         'statuslabel_type' => 'Du musst einen gültigen Statuslabel-Typ auswählen',
+        'custom_field_not_found' => 'Dieses Feld scheint nicht zu existieren. Bitte überprüfe deine benutzerdefinierten Feldnamen noch einmal.',
+        'custom_field_not_found_on_model' => 'Dieses Feld scheint vorhanden zu sein, ist aber im Feldsatz dieses Asset-Modells nicht verfügbar.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
-        'last_audit_date.date_format'   =>  ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT hh:mm:ss sein',
-        'expiration_date.date_format'   =>  ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
-        'termination_date.date_format'  =>  ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
-        'expected_checkin.date_format'  =>  ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
-        'start_date.date_format'        =>  ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
-        'end_date.date_format'          =>  ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
-        'checkboxes'           => ':attribute enthält ungültige Optionen.',
-        'radio_buttons'        => ':attribute ist ungültig.',
+        'purchase_date.date_format' => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
+        'last_audit_date.date_format' => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT hh:mm:ss sein',
+        'expiration_date.date_format' => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
+        'termination_date.date_format' => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
+        'expected_checkin.date_format' => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
+        'start_date.date_format' => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
+        'end_date.date_format' => ':attribute muss ein gültiges Datum im Format JJJJ-MM-TT sein',
+        'checkboxes' => ':attribute enthält ungültige Optionen.',
+        'radio_buttons' => ':attribute ist ungültig.',
         'invalid_value_in_field' => 'Ungültiger Wert in diesem Feld enthalten',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -228,6 +232,5 @@ return [
         'required' => 'Dieses Feld ist erforderlich',
         'email' => 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
     ],
-
 
 ];

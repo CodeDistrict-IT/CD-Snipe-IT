@@ -11,12 +11,15 @@ use Watson\Validating\ValidatingTrait;
  * Model for predefined kits.
  *
  * @author [D. Minaev.] [<dmitriy.minaev.v@gmail.com>]
+ *
  * @version    v1.0
  */
 class PredefinedKit extends SnipeModel
 {
     protected $presenter = \App\Presenters\PredefinedKitPresenter::class;
+
     use Presentable;
+
     protected $table = 'kits';
 
     /**
@@ -37,8 +40,9 @@ class PredefinedKit extends SnipeModel
     /**
      * this rules use in edit an attached asset model form
      * see PredefinedKit::_makeRuleHelper function for details
-     * @param int $model_id
-     * @param bool $new = true if append a new element to kit
+     *
+     * @param  int  $model_id
+     * @param  bool  $new  = true if append a new element to kit
      */
     public function makeModelRules($model_id, $new = false)
     {
@@ -48,8 +52,9 @@ class PredefinedKit extends SnipeModel
     /**
      * this rules use in edit an attached license form
      * see PredefinedKit::_makeRuleHelper function for details
-     * @param int $license_id
-     * @param bool $new = true if append a new element to kit
+     *
+     * @param  int  $license_id
+     * @param  bool  $new  = true if append a new element to kit
      */
     public function makeLicenseRules($license_id, $new = false)
     {
@@ -59,8 +64,9 @@ class PredefinedKit extends SnipeModel
     /**
      * this rules use in edit an attached accessory form
      * see PredefinedKit::_makeRuleHelper function for details
-     * @param int $accessoriy_id
-     * @param bool $new = true if append a new element to kit
+     *
+     * @param  int  $accessoriy_id
+     * @param  bool  $new  = true if append a new element to kit
      */
     public function makeAccessoryRules($accessory_id, $new = false)
     {
@@ -70,8 +76,9 @@ class PredefinedKit extends SnipeModel
     /**
      * this rules use in edit an attached consumable form
      * see PredefinedKit::_makeRuleHelper function for details
-     * @param int $consumable_id
-     * @param bool $new = true if append a new element to kit
+     *
+     * @param  int  $consumable_id
+     * @param  bool  $new  = true if append a new element to kit
      */
     public function makeConsumableRules($consumable_id, $new = false)
     {
@@ -84,11 +91,12 @@ class PredefinedKit extends SnipeModel
      * uniqueness of the record in table for this kit
      * existence of record in table
      * and simple types check
-     * @param string $table element table name
-     * @param string $pivot_table kit+element table name
-     * @param string $pivot_elem_key element key name inside pivot table
-     * @param int $element_id
-     * @param bool $new = true if append a new element to kit
+     *
+     * @param  string  $table  element table name
+     * @param  string  $pivot_table  kit+element table name
+     * @param  string  $pivot_elem_key  element key name inside pivot table
+     * @param  int  $element_id
+     * @param  bool  $new  = true if append a new element to kit
      * @return array
      */
     protected function _makeRuleHelper($table, $pivot_table, $pivot_elem_key, $element_id, $new)
@@ -135,6 +143,7 @@ class PredefinedKit extends SnipeModel
 
     /**
      * Establishes the kits -> models relationship
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function models()
@@ -149,6 +158,7 @@ class PredefinedKit extends SnipeModel
 
     /**
      * Establishes the kits -> licenses relationship
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function licenses()
@@ -158,6 +168,7 @@ class PredefinedKit extends SnipeModel
 
     /**
      * Establishes the kits -> licenses relationship
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function consumables()
@@ -167,6 +178,7 @@ class PredefinedKit extends SnipeModel
 
     /**
      * Establishes the kits -> licenses relationship
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function accessories()

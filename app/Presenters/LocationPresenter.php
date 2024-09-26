@@ -9,6 +9,7 @@ class LocationPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -60,7 +61,7 @@ class LocationPresenter extends Presenter
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/message.current_location'),
+                'title' => trans('admin/locations/message.current_location'),
                 'visible' => true,
             ],
 
@@ -69,7 +70,7 @@ class LocationPresenter extends Presenter
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/hardware/form.default_location'),
+                'title' => trans('admin/hardware/form.default_location'),
                 'visible' => false,
             ],
 
@@ -78,7 +79,7 @@ class LocationPresenter extends Presenter
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/message.assigned_assets'),
+                'title' => trans('admin/locations/message.assigned_assets'),
                 'visible' => true,
             ],
 
@@ -87,7 +88,7 @@ class LocationPresenter extends Presenter
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('general.people'),
+                'title' => trans('general.people'),
                 'visible' => true,
             ],
             [
@@ -95,7 +96,7 @@ class LocationPresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('general.currency'),
+                'title' => trans('general.currency'),
                 'visible' => true,
             ],
             [
@@ -103,7 +104,7 @@ class LocationPresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/table.address'),
+                'title' => trans('admin/locations/table.address'),
                 'visible' => true,
             ],
             [
@@ -111,7 +112,7 @@ class LocationPresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/table.address2'),
+                'title' => trans('admin/locations/table.address2'),
                 'visible' => false,
             ],
             [
@@ -119,7 +120,7 @@ class LocationPresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/table.city'),
+                'title' => trans('admin/locations/table.city'),
                 'visible' => true,
             ],
             [
@@ -127,7 +128,7 @@ class LocationPresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/table.state'),
+                'title' => trans('admin/locations/table.state'),
                 'visible' => true,
             ],
             [
@@ -135,7 +136,7 @@ class LocationPresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/table.zip'),
+                'title' => trans('admin/locations/table.zip'),
                 'visible' => false,
             ],
             [
@@ -143,7 +144,7 @@ class LocationPresenter extends Presenter
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/table.country'),
+                'title' => trans('admin/locations/table.country'),
                 'visible' => false,
             ],
             [
@@ -153,7 +154,7 @@ class LocationPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('admin/users/table.phone'),
                 'visible' => false,
-                'formatter'    => 'phoneFormatter',
+                'formatter' => 'phoneFormatter',
             ],
             [
                 'field' => 'fax',
@@ -162,14 +163,14 @@ class LocationPresenter extends Presenter
                 'switchable' => true,
                 'title' => trans('admin/suppliers/table.fax'),
                 'visible' => false,
-                'formatter'    => 'phoneFormatter',
+                'formatter' => 'phoneFormatter',
             ],
             [
                 'field' => 'ldap_ou',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/locations/table.ldap_ou'),
+                'title' => trans('admin/locations/table.ldap_ou'),
                 'visible' => false,
             ],
             [
@@ -177,7 +178,7 @@ class LocationPresenter extends Presenter
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' =>  trans('admin/users/table.manager'),
+                'title' => trans('admin/users/table.manager'),
                 'visible' => false,
                 'formatter' => 'usersLinkObjFormatter',
             ],
@@ -208,6 +209,7 @@ class LocationPresenter extends Presenter
 
     /**
      * Link to this locations name
+     *
      * @return string
      */
     public function nameUrl()
@@ -217,6 +219,7 @@ class LocationPresenter extends Presenter
 
     /**
      * Getter for Polymorphism.
+     *
      * @return mixed
      */
     public function name()
@@ -226,6 +229,7 @@ class LocationPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()
@@ -235,7 +239,7 @@ class LocationPresenter extends Presenter
 
     public function glyph()
     {
-        return '<i class="fas fa-map-marker-alt" aria-hidden="true"></i>';
+        return '<x-icon type="locations" />';
     }
 
     public function fullName()

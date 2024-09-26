@@ -7,29 +7,30 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadFileRequest;
 use App\Models\Actionlog;
 use App\Models\Component;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ComponentsFilesController extends Controller
 {
     /**
      * Validates and stores files associated with a component.
      *
-     * @param UploadFileRequest $request
-     * @param int $componentId
+     * @param  int  $componentId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      *@author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @todo Switch to using the AssetFileRequest form request validator.
      */
     public function store(UploadFileRequest $request, $componentId = null)
     {
 
         if (config('app.lock_passwords')) {
-            return redirect()->route('components.show', ['component'=>$componentId])->with('error', trans('general.feature_disabled'));
+            return redirect()->route('components.show', ['component' => $componentId])->with('error', trans('general.feature_disabled'));
         }
 
         $component = Component::find($componentId);
@@ -43,12 +44,11 @@ class ComponentsFilesController extends Controller
                 }
 
                 foreach ($request->file('file') as $file) {
-                    $file_name = $request->handleFile('private_uploads/components/','component-'.$component->id, $file);
+                    $file_name = $request->handleFile('private_uploads/components/', 'component-'.$component->id, $file);
 
                     //Log the upload to the log
                     $component->logUpload($file_name, e($request->input('notes')));
                 }
-
 
                 return redirect()->route('components.show', $component->id)->with('success', trans('general.file_upload_success'));
 
@@ -56,6 +56,7 @@ class ComponentsFilesController extends Controller
 
             return redirect()->route('components.show', $component->id)->with('error', trans('general.no_files_uploaded'));
         }
+
         // Prepare the error message
         return redirect()->route('components.index')
             ->with('error', trans('general.file_does_not_exist'));
@@ -65,10 +66,13 @@ class ComponentsFilesController extends Controller
      * Deletes the selected component file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param int $componentId
-     * @param int $fileId
+     *
+     * @param  int  $componentId
+     * @param  int  $fileId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($componentId = null, $fileId = null)
@@ -103,10 +107,13 @@ class ComponentsFilesController extends Controller
      * Allows the selected file to be viewed.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.4]
-     * @param int $componentId
-     * @param int $fileId
+     *
+     * @param  int  $componentId
+     * @param  int  $fileId
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show($componentId = null, $fileId = null)
@@ -139,12 +146,13 @@ class ComponentsFilesController extends Controller
                     $headers = [
                         'Content-Disposition' => 'inline',
                     ];
+
                     return Storage::download($file, $log->filename, $headers);
                 }
 
                 if (config('filesystems.default') == 'local') { // TODO - is there any way to fix this at the StorageHelper layer?
                     return StorageHelper::downloader($file);
-                } 
+                }
             }
         }
 

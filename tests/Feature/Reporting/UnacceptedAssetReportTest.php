@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Reporting;
 
-use App\Models\Asset;
-use App\Models\Company;
 use App\Models\User;
 use Illuminate\Testing\TestResponse;
 use League\Csv\Reader;
@@ -43,7 +41,6 @@ class UnacceptedAssetReportTest extends TestCase
         );
     }
 
-
     public function testPermissionRequiredToViewUnacceptedAssetReport()
     {
         $this->actingAs(User::factory()->create())
@@ -57,5 +54,4 @@ class UnacceptedAssetReportTest extends TestCase
             ->get(route('reports/unaccepted_assets'))
             ->assertOk();
     }
-    
 }

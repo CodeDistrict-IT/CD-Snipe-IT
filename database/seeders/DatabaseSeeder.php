@@ -45,7 +45,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ConsumableSeeder::class);
         $this->call(ActionlogSeeder::class);
 
-
         Artisan::call('snipeit:sync-asset-locations', ['--output' => 'all']);
         $output = Artisan::output();
         Log::info($output);

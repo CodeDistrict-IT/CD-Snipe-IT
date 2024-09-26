@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Selezionare le opzioni desiderate per il vostro report di beni.',
+    'info' => 'Selezionare le opzioni desiderate per il vostro report di beni.',
     'deleted_user' => 'Utente eliminato',
     'send_reminder' => 'Invia promemoria',
     'reminder_sent' => 'Promemoria spedito',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Città Utente',
         'user_state' => 'Provincia Utente',
         'user_country' => 'Nazione Utente',
-        'user_zip' => 'CAP Utente'
-    ]
+        'user_zip' => 'CAP Utente',
+    ],
 ];

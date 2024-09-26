@@ -18,7 +18,7 @@ class Group extends SnipeModel
 
     protected $fillable = [
         'name',
-        'permissions'
+        'permissions',
     ];
 
     /**
@@ -29,8 +29,9 @@ class Group extends SnipeModel
      * @var bool
      */
     protected $injectUniqueIdentifier = true;
-    use ValidatingTrait;
+
     use Searchable;
+    use ValidatingTrait;
 
     /**
      * The attributes that should be included when searching the model.
@@ -50,7 +51,9 @@ class Group extends SnipeModel
      * Establishes the groups -> users relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function users()
@@ -62,7 +65,9 @@ class Group extends SnipeModel
      * Get the user that created the group
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v6.3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function admin()
@@ -74,7 +79,9 @@ class Group extends SnipeModel
      * Decode JSON permissions into array
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return array
      */
     public function decodePermissions()

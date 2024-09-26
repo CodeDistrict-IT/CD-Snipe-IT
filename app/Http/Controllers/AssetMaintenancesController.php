@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Asset;
 use App\Models\AssetMaintenance;
 use App\Models\Company;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use \Illuminate\Contracts\View\View;
-use \Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * This controller handles all actions related to Asset Maintenance for
@@ -20,32 +20,40 @@ use \Illuminate\Http\RedirectResponse;
 class AssetMaintenancesController extends Controller
 {
     /**
-    * Checks for permissions for this action.
-    *
-    * @todo This should be replaced with middleware and/or policies
-    * @author  Vincent Sposato <vincent.sposato@gmail.com>
-    * @version v1.0
-    * @since [v1.8]
-    */
+     * Checks for permissions for this action.
+     *
+     * @todo This should be replaced with middleware and/or policies
+     *
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
+     * @version v1.0
+     *
+     * @since [v1.8]
+     */
     private static function getInsufficientPermissionsRedirect(): RedirectResponse
     {
         return redirect()->route('maintenances.index')
-          ->with('error', trans('general.insufficient_permissions'));
+            ->with('error', trans('general.insufficient_permissions'));
     }
 
     /**
-    *  Returns a view that invokes the ajax tables which actually contains
-    * the content for the asset maintenances listing, which is generated in getDatatable.
-    *
-    * @todo This should be replaced with middleware and/or policies
-    * @see AssetMaintenancesController::getDatatable() method that generates the JSON response
-    * @author  Vincent Sposato <vincent.sposato@gmail.com>
-    * @version v1.0
-    * @since [v1.8]
-    */
-    public function index() : View
+     *  Returns a view that invokes the ajax tables which actually contains
+     * the content for the asset maintenances listing, which is generated in getDatatable.
+     *
+     * @todo This should be replaced with middleware and/or policies
+     *
+     * @see AssetMaintenancesController::getDatatable() method that generates the JSON response
+     *
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
+     * @version v1.0
+     *
+     * @since [v1.8]
+     */
+    public function index(): View
     {
         $this->authorize('view', Asset::class);
+
         return view('asset_maintenances/index');
     }
 
@@ -53,12 +61,16 @@ class AssetMaintenancesController extends Controller
      *  Returns a form view to create a new asset maintenance.
      *
      * @see AssetMaintenancesController::postCreate() method that stores the data
+     *
      * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
      * @version v1.0
+     *
      * @since [v1.8]
+     *
      * @return mixed
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('update', Asset::class);
         $asset = null;
@@ -70,29 +82,32 @@ class AssetMaintenancesController extends Controller
 
         // Prepare Asset Maintenance Type List
         $assetMaintenanceType = [
-                                    '' => 'Select an asset maintenance type',
-                                ] + AssetMaintenance::getImprovementOptions();
+            '' => 'Select an asset maintenance type',
+        ] + AssetMaintenance::getImprovementOptions();
         // Mark the selected asset, if it came in
 
         return view('asset_maintenances/edit')
-                   ->with('asset', $asset)
-                   ->with('assetMaintenanceType', $assetMaintenanceType)
-                   ->with('item', new AssetMaintenance);
+            ->with('asset', $asset)
+            ->with('assetMaintenanceType', $assetMaintenanceType)
+            ->with('item', new AssetMaintenance);
     }
 
     /**
-    *  Validates and stores the new asset maintenance
-    *
-    * @see AssetMaintenancesController::getCreate() method for the form
-    * @author  Vincent Sposato <vincent.sposato@gmail.com>
-    * @version v1.0
-    * @since [v1.8]
-    */
-    public function store(Request $request) : RedirectResponse
+     *  Validates and stores the new asset maintenance
+     *
+     * @see AssetMaintenancesController::getCreate() method for the form
+     *
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
+     * @version v1.0
+     *
+     * @since [v1.8]
+     */
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('update', Asset::class);
         // create a new model instance
-        $assetMaintenance = new AssetMaintenance();
+        $assetMaintenance = new AssetMaintenance;
         $assetMaintenance->supplier_id = $request->input('supplier_id');
         $assetMaintenance->is_warranty = $request->input('is_warranty');
         $assetMaintenance->cost = $request->input('cost');
@@ -124,22 +139,26 @@ class AssetMaintenancesController extends Controller
         if ($assetMaintenance->save()) {
             // Redirect to the new asset maintenance page
             return redirect()->route('maintenances.index')
-                           ->with('success', trans('admin/asset_maintenances/message.create.success'));
+                ->with('success', trans('admin/asset_maintenances/message.create.success'));
         }
 
         return redirect()->back()->withInput()->withErrors($assetMaintenance->getErrors());
     }
 
     /**
-    *  Returns a form view to edit a selected asset maintenance.
-    *
-    * @see AssetMaintenancesController::postEdit() method that stores the data
-    * @author  Vincent Sposato <vincent.sposato@gmail.com>
-    * @param int $assetMaintenanceId
-    * @version v1.0
-    * @since [v1.8]
-    */
-    public function edit($assetMaintenanceId = null) : View | RedirectResponse
+     *  Returns a form view to edit a selected asset maintenance.
+     *
+     * @see AssetMaintenancesController::postEdit() method that stores the data
+     *
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
+     * @param  int  $assetMaintenanceId
+     *
+     * @version v1.0
+     *
+     * @since [v1.8]
+     */
+    public function edit($assetMaintenanceId = null): View|RedirectResponse
     {
         $this->authorize('update', Asset::class);
         // Check if the asset maintenance exists
@@ -148,7 +167,7 @@ class AssetMaintenancesController extends Controller
         if (is_null($assetMaintenance = AssetMaintenance::find($assetMaintenanceId))) {
             // Redirect to the asset maintenance management page
             return redirect()->route('maintenances.index')->with('error', trans('admin/asset_maintenances/message.not_found'));
-        } elseif ((!$assetMaintenance->asset) || ($assetMaintenance->asset->deleted_at!='')) {
+        } elseif ((! $assetMaintenance->asset) || ($assetMaintenance->asset->deleted_at != '')) {
             // Redirect to the asset maintenance management page
             return redirect()->route('maintenances.index')->with('error', 'asset does not exist');
         } elseif (! Company::isCurrentUserHasAccess($assetMaintenance->asset)) {
@@ -159,38 +178,41 @@ class AssetMaintenancesController extends Controller
         $assetMaintenanceType = ['' => 'Select an improvement type'] + AssetMaintenance::getImprovementOptions();
 
         return view('asset_maintenances/edit')
-                   ->with('selectedAsset', null)
-                   ->with('assetMaintenanceType', $assetMaintenanceType)
-                   ->with('item', $assetMaintenance);
+            ->with('selectedAsset', null)
+            ->with('assetMaintenanceType', $assetMaintenanceType)
+            ->with('item', $assetMaintenance);
     }
 
     /**
      *  Validates and stores an update to an asset maintenance
      *
      * @see AssetMaintenancesController::postEdit() method that stores the data
+     *
      * @author  Vincent Sposato <vincent.sposato@gmail.com>
-     * @param Request $request
-     * @param int $assetMaintenanceId
+     *
+     * @param  int  $assetMaintenanceId
+     *
      * @version v1.0
+     *
      * @since [v1.8]
      */
-    public function update(Request $request, $assetMaintenanceId = null) : View | RedirectResponse
+    public function update(Request $request, $assetMaintenanceId = null): View|RedirectResponse
     {
         $this->authorize('update', Asset::class);
         // Check if the asset maintenance exists
         if (is_null($assetMaintenance = AssetMaintenance::find($assetMaintenanceId))) {
             // Redirect to the asset maintenance management page
             return redirect()->route('maintenances.index')->with('error', trans('admin/asset_maintenances/message.not_found'));
-        } elseif ((!$assetMaintenance->asset) || ($assetMaintenance->asset->deleted_at!='')) {
-                // Redirect to the asset maintenance management page
-                return redirect()->route('maintenances.index')->with('error', 'asset does not exist');
+        } elseif ((! $assetMaintenance->asset) || ($assetMaintenance->asset->deleted_at != '')) {
+            // Redirect to the asset maintenance management page
+            return redirect()->route('maintenances.index')->with('error', 'asset does not exist');
         } elseif (! Company::isCurrentUserHasAccess($assetMaintenance->asset)) {
             return static::getInsufficientPermissionsRedirect();
         }
 
         $assetMaintenance->supplier_id = $request->input('supplier_id');
         $assetMaintenance->is_warranty = $request->input('is_warranty');
-        $assetMaintenance->cost =  $request->input('cost');
+        $assetMaintenance->cost = $request->input('cost');
         $assetMaintenance->notes = $request->input('notes');
 
         $asset = Asset::find(request('asset_id'));
@@ -224,33 +246,36 @@ class AssetMaintenancesController extends Controller
             $assetMaintenance->asset_maintenance_time = $completionDate->diffInDays($startDate);
         }
 
-      // Was the asset maintenance created?
+        // Was the asset maintenance created?
         if ($assetMaintenance->save()) {
 
             // Redirect to the new asset maintenance page
             return redirect()->route('maintenances.index')
-                         ->with('success', trans('admin/asset_maintenances/message.edit.success'));
+                ->with('success', trans('admin/asset_maintenances/message.edit.success'));
         }
 
         return redirect()->back()->withInput()->withErrors($assetMaintenance->getErrors());
     }
 
     /**
-    *  Delete an asset maintenance
-    *
-    * @author  Vincent Sposato <vincent.sposato@gmail.com>
-    * @param int $assetMaintenanceId
-    * @version v1.0
-    * @since [v1.8]
-    */
-    public function destroy($assetMaintenanceId) : RedirectResponse
+     *  Delete an asset maintenance
+     *
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
+     * @param  int  $assetMaintenanceId
+     *
+     * @version v1.0
+     *
+     * @since [v1.8]
+     */
+    public function destroy($assetMaintenanceId): RedirectResponse
     {
         $this->authorize('update', Asset::class);
         // Check if the asset maintenance exists
         if (is_null($assetMaintenance = AssetMaintenance::find($assetMaintenanceId))) {
             // Redirect to the asset maintenance management page
             return redirect()->route('maintenances.index')
-                           ->with('error', trans('admin/asset_maintenances/message.not_found'));
+                ->with('error', trans('admin/asset_maintenances/message.not_found'));
         } elseif (! Company::isCurrentUserHasAccess($assetMaintenance->asset)) {
             return static::getInsufficientPermissionsRedirect();
         }
@@ -260,18 +285,21 @@ class AssetMaintenancesController extends Controller
 
         // Redirect to the asset_maintenance management page
         return redirect()->route('maintenances.index')
-                       ->with('success', trans('admin/asset_maintenances/message.delete.success'));
+            ->with('success', trans('admin/asset_maintenances/message.delete.success'));
     }
 
     /**
-    *  View an asset maintenance
-    *
-    * @author  Vincent Sposato <vincent.sposato@gmail.com>
-    * @param int $assetMaintenanceId
-    * @version v1.0
-    * @since [v1.8]
-    */
-    public function show($assetMaintenanceId) : View | RedirectResponse
+     *  View an asset maintenance
+     *
+     * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
+     * @param  int  $assetMaintenanceId
+     *
+     * @version v1.0
+     *
+     * @since [v1.8]
+     */
+    public function show($assetMaintenanceId): View|RedirectResponse
     {
         $this->authorize('view', Asset::class);
 
@@ -279,7 +307,7 @@ class AssetMaintenancesController extends Controller
         if (is_null($assetMaintenance = AssetMaintenance::find($assetMaintenanceId))) {
             // Redirect to the asset maintenance management page
             return redirect()->route('maintenances.index')
-                           ->with('error', trans('admin/asset_maintenances/message.not_found'));
+                ->with('error', trans('admin/asset_maintenances/message.not_found'));
         } elseif (! Company::isCurrentUserHasAccess($assetMaintenance->asset)) {
             return static::getInsufficientPermissionsRedirect();
         }

@@ -7,21 +7,18 @@ use App\Helpers\StorageHelper;
 use App\Http\Requests\ImageUploadRequest;
 use App\Http\Requests\SettingsSamlRequest;
 use App\Http\Requests\SetupUserRequest;
+use App\Models\Asset;
 use App\Models\CustomField;
 use App\Models\Group;
 use App\Models\Setting;
-use App\Models\Asset;
 use App\Models\User;
 use App\Notifications\FirstAdminNotification;
 use App\Notifications\MailTest;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\JsonResponse;
-use \Illuminate\Contracts\View\View;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -29,8 +26,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
@@ -51,7 +51,7 @@ class SettingsController extends Controller
      *
      * @return \Illuminate\Contracts\View\View | \Illuminate\Http\Response
      */
-    public function getSetupIndex() : View
+    public function getSetupIndex(): View
     {
         $start_settings['php_version_min'] = false;
 
@@ -70,22 +70,22 @@ class SettingsController extends Controller
             $start_settings['db_error'] = $e->getMessage();
         }
 
-        $start_settings['url_config'] = trim(config('app.url'), '/'). '/setup';
-        $start_settings['real_url']  = request()->url();
+        $start_settings['url_config'] = trim(config('app.url'), '/').'/setup';
+        $start_settings['real_url'] = request()->url();
         $start_settings['url_valid'] = $start_settings['url_config'] === $start_settings['real_url'];
         $start_settings['php_version_min'] = true;
 
         // Curl the .env file to make sure it's not accessible via a browser
         $start_settings['env_exposed'] = $this->dotEnvFileIsExposed();
 
-        if (App::Environment('production') && (true == config('app.debug'))) {
+        if (App::Environment('production') && (config('app.debug') == true)) {
             $start_settings['debug_exposed'] = true;
         } else {
             $start_settings['debug_exposed'] = false;
         }
 
         $environment = app()->environment();
-        if ('production' != $environment) {
+        if ($environment != 'production') {
             $start_settings['env'] = $environment;
             $start_settings['prod'] = false;
         } else {
@@ -123,9 +123,9 @@ class SettingsController extends Controller
      * Determine if the .env file accessible via a browser.
      *
      * @return bool This method will return true when exceptions (such as curl exception) is thrown.
-     * Check the log files to see more details about the exception.
+     *              Check the log files to see more details about the exception.
      */
-    protected function dotEnvFileIsExposed() : bool
+    protected function dotEnvFileIsExposed(): bool
     {
         try {
             return Http::withoutVerifying()->timeout(10)
@@ -134,6 +134,7 @@ class SettingsController extends Controller
                 ->successful();
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
+
             return true;
         }
     }
@@ -143,11 +144,11 @@ class SettingsController extends Controller
      */
     protected function storagePathIsWritable(): bool
     {
-        return File::isWritable(storage_path())                  &&
-            File::isWritable(storage_path('framework'))          &&
-            File::isWritable(storage_path('framework/cache'))    &&
+        return File::isWritable(storage_path()) &&
+            File::isWritable(storage_path('framework')) &&
+            File::isWritable(storage_path('framework/cache')) &&
             File::isWritable(storage_path('framework/sessions')) &&
-            File::isWritable(storage_path('framework/views'))    &&
+            File::isWritable(storage_path('framework/views')) &&
             File::isWritable(storage_path('logs'));
     }
 
@@ -155,13 +156,13 @@ class SettingsController extends Controller
      * Save the first admin user from Setup.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v3.0]
      *
+     * @since [v3.0]
      */
-    public function postSaveFirstAdmin(SetupUserRequest $request) : RedirectResponse
+    public function postSaveFirstAdmin(SetupUserRequest $request): RedirectResponse
     {
 
-        $user = new User();
+        $user = new User;
         $user->first_name = $data['first_name'] = $request->input('first_name');
         $user->last_name = $request->input('last_name');
         $user->email = $data['email'] = $request->input('email');
@@ -172,7 +173,7 @@ class SettingsController extends Controller
         $user->password = bcrypt($request->input('password'));
         $data['password'] = $request->input('password');
 
-        $settings = new Setting();
+        $settings = new Setting;
         $settings->full_multiple_companies_support = $request->input('full_multiple_companies_support', 0);
         $settings->site_name = $request->input('site_name');
         $settings->alert_email = $request->input('email');
@@ -216,7 +217,7 @@ class SettingsController extends Controller
      *
      * @since [v3.0]
      */
-    public function getSetupUser() : View
+    public function getSetupUser(): View
     {
         return view('setup/user')
             ->with('step', 3)
@@ -230,7 +231,7 @@ class SettingsController extends Controller
      *
      * @since [v3.0]
      */
-    public function getSetupDone() : View
+    public function getSetupDone(): View
     {
         return view('setup/done')
             ->with('step', 4)
@@ -245,7 +246,7 @@ class SettingsController extends Controller
      *
      * @since [v3.0]
      */
-    public function getSetupMigrate() : View
+    public function getSetupMigrate(): View
     {
         Artisan::call('migrate', ['--force' => true]);
         if ((! file_exists(storage_path().'/oauth-private.key')) || (! file_exists(storage_path().'/oauth-public.key'))) {
@@ -266,7 +267,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function index() : View
+    public function index(): View
     {
         $settings = Setting::getSettings();
 
@@ -280,8 +281,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getEdit() : View
-
+    public function getEdit(): View
     {
         $setting = Setting::getSettings();
 
@@ -295,7 +295,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getSettings() : View
+    public function getSettings(): View
     {
         $setting = Setting::getSettings();
 
@@ -309,8 +309,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function postSettings(Request $request) : RedirectResponse
-
+    public function postSettings(Request $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -324,6 +323,7 @@ class SettingsController extends Controller
 
         $setting->full_multiple_companies_support = $request->input('full_multiple_companies_support', '0');
         $setting->unique_serial = $request->input('unique_serial', '0');
+        $setting->shortcuts_enabled = $request->input('shortcuts_enabled', '0');
         $setting->show_images_in_email = $request->input('show_images_in_email', '0');
         $setting->show_archived_in_list = $request->input('show_archived_in_list', '0');
         $setting->dashboard_message = $request->input('dashboard_message');
@@ -357,7 +357,6 @@ class SettingsController extends Controller
         return redirect()->back()->withInput()->withErrors($setting->getErrors());
     }
 
-
     /**
      * Return a form to allow a super admin to update settings.
      *
@@ -365,7 +364,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getBranding() : View
+    public function getBranding(): View
     {
         $setting = Setting::getSettings();
 
@@ -379,7 +378,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function postBranding(ImageUploadRequest $request) : RedirectResponse
+    public function postBranding(ImageUploadRequest $request): RedirectResponse
     {
         // Something has gone horribly wrong - no settings record exists!
         if (is_null($setting = Setting::getSettings())) {
@@ -400,7 +399,7 @@ class SettingsController extends Controller
         // Only allow the site name, images, and CSS to be changed if lock_passwords is false
         // Because public demos make people act like dicks
 
-        if (!config('app.lock_passwords')) {
+        if (! config('app.lock_passwords')) {
 
             if ($request->has('site_name')) {
                 $request->validate(['site_name' => 'required']);
@@ -425,7 +424,7 @@ class SettingsController extends Controller
                 $setting->email_logo = null;
             }
 
-             // Label logo upload
+            // Label logo upload
             $setting = $request->handleImages($setting, 600, 'label_logo', '', 'label_logo');
 
             if ($request->input('clear_label_logo') == '1') {
@@ -435,22 +434,22 @@ class SettingsController extends Controller
 
             // Favicon upload
             $setting = $request->handleImages($setting, 100, 'favicon', '', 'favicon');
-            if ('1' == $request->input('clear_favicon')) {
+            if ($request->input('clear_favicon') == '1') {
                 $setting = $request->deleteExistingImage($setting, '', 'favicon');
                 $setting->favicon = null;
             }
 
             // Default avatar upload
             $setting = $request->handleImages($setting, 500, 'default_avatar', 'avatars', 'default_avatar');
-            if ($request->input('clear_default_avatar') == '1')  {
+            if ($request->input('clear_default_avatar') == '1') {
                 // Don't delete the file, just update the field if this is the default
-                if ($setting->default_avatar!='default.png') {
+                if ($setting->default_avatar != 'default.png') {
                     $setting = $request->deleteExistingImage($setting, 'avatars', 'default_avatar');
                 }
                 $setting->default_avatar = null;
             }
 
-            if ($request->input('restore_default_avatar') == '1')  {
+            if ($request->input('restore_default_avatar') == '1') {
                 $setting->default_avatar = 'default.png';
             }
         }
@@ -463,7 +462,6 @@ class SettingsController extends Controller
         return redirect()->back()->withInput()->withErrors($setting->getErrors());
     }
 
-
     /**
      * Return a form to allow a super admin to update settings.
      *
@@ -471,7 +469,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getSecurity() : View
+    public function getSecurity(): View
     {
         $setting = Setting::getSettings();
 
@@ -485,7 +483,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function postSecurity(Request $request) : RedirectResponse
+    public function postSecurity(Request $request): RedirectResponse
     {
         $this->validate($request, [
             'pwd_secure_complexity' => 'array',
@@ -496,15 +494,15 @@ class SettingsController extends Controller
                     'numbers',
                     'symbols',
                     'case_diff',
-                ])
-            ]
+                ]),
+            ],
         ]);
 
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
         }
         if (! config('app.lock_passwords')) {
-            if ('' == $request->input('two_factor_enabled')) {
+            if ($request->input('two_factor_enabled') == '') {
                 $setting->two_factor_enabled = null;
             } else {
                 $setting->two_factor_enabled = $request->input('two_factor_enabled');
@@ -520,7 +518,6 @@ class SettingsController extends Controller
         $setting->pwd_secure_uncommon = (int) $request->input('pwd_secure_uncommon');
         $setting->pwd_secure_min = (int) $request->input('pwd_secure_min');
         $setting->pwd_secure_complexity = '';
-
 
         if ($request->filled('pwd_secure_complexity')) {
             $setting->pwd_secure_complexity = implode('|', $request->input('pwd_secure_complexity'));
@@ -541,7 +538,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getLocalization() : View
+    public function getLocalization(): View
     {
         $setting = Setting::getSettings();
 
@@ -555,7 +552,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function postLocalization(Request $request) : RedirectResponse
+    public function postLocalization(Request $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -585,7 +582,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getAlerts() : View
+    public function getAlerts(): View
     {
         $setting = Setting::getSettings();
 
@@ -596,9 +593,10 @@ class SettingsController extends Controller
      * Return a form to allow a super admin to update settings.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
      */
-    public function postAlerts(Request $request) : RedirectResponse
+    public function postAlerts(Request $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -608,7 +606,7 @@ class SettingsController extends Controller
         if ($request->input('audit_interval') != $setting->audit_interval) {
 
             // This could be a negative number if the user is trying to set the audit interval to a lower number than it was before
-            $audit_diff_months = ((int)$request->input('audit_interval') - (int)($setting->audit_interval));
+            $audit_diff_months = ((int) $request->input('audit_interval') - (int) ($setting->audit_interval));
 
             // Batch update the dates. We have to use this method to avoid time limit exceeded errors on very large datasets,
             // but it DOES mean this change doesn't get logged in the action logs, since it skips the observer.
@@ -617,10 +615,9 @@ class SettingsController extends Controller
                 ->whereNull('deleted_at')
                 ->update(
                     ['next_audit_date' => DB::raw('DATE_ADD(next_audit_date, INTERVAL '.$audit_diff_months.' MONTH)')]
-            );
+                );
 
-            Log::debug($affected .' assets affected by audit interval update');
-
+            Log::debug($affected.' assets affected by audit interval update');
 
         }
 
@@ -636,6 +633,7 @@ class SettingsController extends Controller
         $setting->alert_threshold = $request->input('alert_threshold');
         $setting->audit_interval = $request->input('audit_interval');
         $setting->audit_warning_days = $request->input('audit_warning_days');
+        $setting->due_checkin_days = $request->input('due_checkin_days');
         $setting->show_alerts_in_menu = $request->input('show_alerts_in_menu', '0');
 
         if ($setting->save()) {
@@ -653,7 +651,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getSlack() : View
+    public function getSlack(): View
     {
         $setting = Setting::getSettings();
 
@@ -667,7 +665,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getAssetTags() : View
+    public function getAssetTags(): View
     {
         $setting = Setting::getSettings();
 
@@ -681,7 +679,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function postAssetTags(Request $request) : RedirectResponse
+    public function postAssetTags(Request $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -707,7 +705,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function getBarcodes() : View
+    public function getBarcodes(): View
     {
         $setting = Setting::getSettings();
         $is_gd_installed = extension_loaded('gd');
@@ -722,7 +720,7 @@ class SettingsController extends Controller
      *
      * @since [v1.0]
      */
-    public function postBarcodes(Request $request) : RedirectResponse
+    public function postBarcodes(Request $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -749,7 +747,7 @@ class SettingsController extends Controller
      *
      * @since [v4.0]
      */
-    public function getPhpInfo() : View | RedirectResponse
+    public function getPhpInfo(): View|RedirectResponse
     {
         if (config('app.debug') === true) {
             return view('settings.phpinfo');
@@ -763,9 +761,10 @@ class SettingsController extends Controller
      * Return a form to allow a super admin to update settings.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function getLabels() : View
+    public function getLabels(): View
     {
         return view('settings.labels')
             ->with('setting', Setting::getSettings())
@@ -776,9 +775,10 @@ class SettingsController extends Controller
      * Saves settings from form.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function postLabels(Request $request) : RedirectResponse
+    public function postLabels(Request $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -805,8 +805,6 @@ class SettingsController extends Controller
         $setting->labels_pageheight = $request->input('labels_pageheight');
         $setting->labels_display_company_name = $request->input('labels_display_company_name', '0');
         $setting->labels_display_company_name = $request->input('labels_display_company_name', '0');
-
-
 
         if ($request->filled('labels_display_name')) {
             $setting->labels_display_name = 1;
@@ -853,11 +851,10 @@ class SettingsController extends Controller
      *
      * @since [v4.0]
      */
-    public function getLdapSettings() : View
+    public function getLdapSettings(): View
     {
         $setting = Setting::getSettings();
         $groups = Group::pluck('name', 'id');
-
 
         /**
          * This validator is only temporary (famous last words.) - @snipe
@@ -872,9 +869,7 @@ class SettingsController extends Controller
             'ldap_username_field' => 'not_in:sAMAccountName',
             'ldap_auth_filter_query' => 'not_in:uid=samaccountname|required_if:ldap_enabled,1',
             'ldap_filter' => 'nullable|regex:"^[^(]"|required_if:ldap_enabled,1',
-        ],  $messages);
-
-
+        ], $messages);
 
         return view('settings.ldap', compact('setting', 'groups'))->withErrors($validator);
     }
@@ -883,9 +878,10 @@ class SettingsController extends Controller
      * Saves settings from form.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function postLdapSettings(Request $request) : RedirectResponse
+    public function postLdapSettings(Request $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -922,12 +918,13 @@ class SettingsController extends Controller
             $setting->ldap_country = $request->input('ldap_country');
             $setting->ldap_location = $request->input('ldap_location');
             $setting->ldap_dept = $request->input('ldap_dept');
-            $setting->ldap_client_tls_cert   = $request->input('ldap_client_tls_cert');
-            $setting->ldap_client_tls_key    = $request->input('ldap_client_tls_key');
+            $setting->ldap_client_tls_cert = $request->input('ldap_client_tls_cert');
+            $setting->ldap_client_tls_key = $request->input('ldap_client_tls_key');
         }
 
         if ($setting->save()) {
             $setting->update_client_side_cert_files();
+
             return redirect()->route('settings.ldap.index')
                 ->with('success', trans('admin/settings/message.update.success'));
         }
@@ -939,11 +936,13 @@ class SettingsController extends Controller
      * Return a form to allow a super admin to update settings.
      *
      * @author Johnson Yi <jyi.dev@outlook.com>
+     *
      * @since v5.0.0
      */
-    public function getSamlSettings() : View
+    public function getSamlSettings(): View
     {
         $setting = Setting::getSettings();
+
         return view('settings.saml', compact('setting'));
     }
 
@@ -951,9 +950,10 @@ class SettingsController extends Controller
      * Saves settings from form.
      *
      * @author Johnson Yi <jyi.dev@outlook.com>
+     *
      * @since v5.0.0
      */
-    public function postSamlSettings(SettingsSamlRequest $request) : RedirectResponse
+    public function postSamlSettings(SettingsSamlRequest $request): RedirectResponse
     {
         if (is_null($setting = Setting::getSettings())) {
             return redirect()->to('admin')->with('error', trans('admin/settings/message.update.error'));
@@ -986,22 +986,24 @@ class SettingsController extends Controller
     /**
      * Do we need this? Can we not just call getSettings() directly?
      */
-    public static function getPDFBranding() : Setting
+    public static function getPDFBranding(): Setting
     {
         $pdf_branding = Setting::getSettings();
+
         return $pdf_branding;
     }
-
 
     /**
      * Show Google login settings form
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.1.1]
      */
-    public function getGoogleLoginSettings() : View
+    public function getGoogleLoginSettings(): View
     {
         $setting = Setting::getSettings();
+
         return view('settings.google', compact('setting'));
     }
 
@@ -1009,11 +1011,12 @@ class SettingsController extends Controller
      * ShSaveow Google login settings form
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.1.1]
      */
-    public function postGoogleLoginSettings(Request $request) : RedirectResponse
+    public function postGoogleLoginSettings(Request $request): RedirectResponse
     {
-        if (!config('app.lock_passwords')) {
+        if (! config('app.lock_passwords')) {
             $setting = Setting::getSettings();
 
             $setting->google_login = $request->input('google_login', 0);
@@ -1031,7 +1034,6 @@ class SettingsController extends Controller
         return redirect()->back()->with('error', trans('general.feature_disabled'));
     }
 
-
     /**
      * Show the listing of backups.
      *
@@ -1039,7 +1041,7 @@ class SettingsController extends Controller
      *
      * @since [v1.8]
      */
-    public function getBackups() : View
+    public function getBackups(): View
     {
         $settings = Setting::getSettings();
         $path = 'app/backups';
@@ -1075,9 +1077,10 @@ class SettingsController extends Controller
      * Process the backup.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.8]
      */
-    public function postBackups() : RedirectResponse
+    public function postBackups(): RedirectResponse
     {
         if (! config('app.lock_passwords')) {
             Artisan::call('snipeit:backup', ['--filename' => 'manual-backup-'.date('Y-m-d-H-i-s')]);
@@ -1106,9 +1109,10 @@ class SettingsController extends Controller
      * Download the backup file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.8]
      */
-    public function downloadFile($filename = null) : RedirectResponse | BinaryFileResponse
+    public function downloadFile($filename = null): RedirectResponse|BinaryFileResponse
     {
         $path = 'app/backups';
 
@@ -1129,19 +1133,21 @@ class SettingsController extends Controller
      * Delete the backup file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.8]
      */
-    public function deleteFile($filename = null) : RedirectResponse
+    public function deleteFile($filename = null): RedirectResponse
     {
-        if (config('app.allow_backup_delete')=='true') {
+        if (config('app.allow_backup_delete') == 'true') {
 
-            if (!config('app.lock_passwords')) {
+            if (! config('app.lock_passwords')) {
                 $path = 'app/backups';
 
-                if (Storage::exists($path . '/' . $filename)) {
+                if (Storage::exists($path.'/'.$filename)) {
 
                     try {
-                        Storage::delete($path . '/' . $filename);
+                        Storage::delete($path.'/'.$filename);
+
                         return redirect()->route('settings.backups.index')->with('success', trans('admin/settings/message.backup.file_deleted'));
                     } catch (\Exception $e) {
                         Log::debug($e);
@@ -1156,22 +1162,22 @@ class SettingsController extends Controller
 
         // Hell to the no
         Log::warning('User ID '.auth()->id().' is attempting to delete backup file '.$filename.' and is not authorized to.');
+
         return redirect()->route('settings.backups.index')->with('error', trans('general.backup_delete_not_allowed'));
     }
-
 
     /**
      * Uploads a backup file
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.0]
      */
-
-    public function postUploadBackup(Request $request) : RedirectResponse
+    public function postUploadBackup(Request $request): RedirectResponse
     {
 
         if (! config('app.lock_passwords')) {
-            if (!$request->hasFile('file')) {
+            if (! $request->hasFile('file')) {
                 return redirect()->route('settings.backups.index')->with('error', 'No file uploaded');
             } else {
 
@@ -1182,11 +1188,11 @@ class SettingsController extends Controller
 
                 if ($validator->passes()) {
 
-                        $upload_filename = 'uploaded-'.date('U').'-'.Str::slug(pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_FILENAME)).'.zip';
+                    $upload_filename = 'uploaded-'.date('U').'-'.Str::slug(pathinfo($request->file('file')->getClientOriginalName(), PATHINFO_FILENAME)).'.zip';
 
-                        Storage::putFileAs('app/backups', $request->file('file'), $upload_filename);
+                    Storage::putFileAs('app/backups', $request->file('file'), $upload_filename);
 
-                        return redirect()->route('settings.backups.index')->with('success', 'File uploaded');
+                    return redirect()->route('settings.backups.index')->with('success', 'File uploaded');
                 }
 
                 return redirect()->route('settings.backups.index')->withErrors($validator);
@@ -1200,9 +1206,10 @@ class SettingsController extends Controller
      * Restore the backup file.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.0]
      */
-    public function postRestore($filename = null) : RedirectResponse
+    public function postRestore(Request $request, $filename = null): RedirectResponse
     {
 
         if (! config('app.lock_passwords')) {
@@ -1215,20 +1222,35 @@ class SettingsController extends Controller
 
                 // TODO: run a backup
 
-
                 Artisan::call('db:wipe', [
                     '--force' => true,
                 ]);
 
-                Log::debug('Attempting to restore from: '. storage_path($path).'/'.$filename);
+                Log::debug('Attempting to restore from: '.storage_path($path).'/'.$filename);
+
+                $restore_params = [
+                    '--force' => true,
+                    '--no-progress' => true,
+                    'filename' => storage_path($path).'/'.$filename,
+                ];
+
+                if ($request->input('clean')) {
+                    Log::debug("Attempting 'clean' - first, guessing prefix...");
+                    Artisan::call('snipeit:restore', [
+                        '--sanitize-guess-prefix' => true,
+                        'filename' => storage_path($path).'/'.$filename,
+                    ]);
+                    $guess_prefix_output = Artisan::output();
+                    Log::debug("Sanitize output is: $guess_prefix_output");
+                    [$prefix, $_output] = explode("\n", $guess_prefix_output);
+                    Log::debug("prefix is: '$prefix'");
+                    $restore_params['--sanitize-with-prefix'] = $prefix;
+                }
 
                 // run the restore command
                 Artisan::call('snipeit:restore',
-                [
-                    '--force' => true,
-                    '--no-progress' => true,
-                    'filename' => storage_path($path).'/'.$filename
-                ]);
+                    $restore_params
+                );
 
                 // If it's greater than 300, it probably worked
                 $output = Artisan::output();
@@ -1241,12 +1263,12 @@ class SettingsController extends Controller
 
                 $find_user = DB::table('users')->where('username', $user->username)->exists();
 
-                if (!$find_user){
-                    Log::warning('Attempting to restore user: ' . $user->username);
+                if (! $find_user) {
+                    Log::warning('Attempting to restore user: '.$user->username);
                     $new_user = $user->replicate();
                     $new_user->push();
                 } else {
-                    Log::debug('User: ' . $user->username .' already exists.');
+                    Log::debug('User: '.$user->username.' already exists.');
                 }
 
                 Log::debug('Logging all users out..');
@@ -1271,12 +1293,12 @@ class SettingsController extends Controller
      *
      * @since [v4.0]
      */
-    public function getPurge() : View | RedirectResponse
+    public function getPurge(): View|RedirectResponse
     {
 
         Log::warning('User '.auth()->user()->username.' (ID: '.auth()->id().') is attempting a PURGE');
 
-        if (config('app.allow_purge')=='true') {
+        if (config('app.allow_purge') == 'true') {
             return view('settings.purge-form');
         }
 
@@ -1287,20 +1309,21 @@ class SettingsController extends Controller
      * Purges soft-deletes.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
      */
-    public function postPurge(Request $request) : RedirectResponse
+    public function postPurge(Request $request): RedirectResponse
     {
         Log::warning('User '.auth()->user()->username.' (ID'.auth()->id().') is attempting a PURGE');
 
-        if (config('app.allow_purge')=='true') {
+        if (config('app.allow_purge') == 'true') {
             Log::debug('Purging is not allowed via the .env');
 
-            if (!config('app.lock_passwords')) {
+            if (! config('app.lock_passwords')) {
 
-                if ($request->input('confirm_purge')=='DELETE') {
+                if ($request->input('confirm_purge') == 'DELETE') {
 
-                    Log::warning('User ID ' . auth()->id() . ' initiated a PURGE!');
+                    Log::warning('User ID '.auth()->id().' initiated a PURGE!');
                     // Run a backup immediately before processing
                     Artisan::call('backup:run');
                     Artisan::call('snipeit:purge', ['--force' => 'true', '--no-interaction' => true]);
@@ -1320,7 +1343,6 @@ class SettingsController extends Controller
 
         Log::error('User '.auth()->user()->username.' (ID'.auth()->id().') is attempting to purge deleted data and is not authorized to.');
 
-
         // Nope.
         return redirect()->route('settings.index')
             ->with('error', trans('general.purge_not_allowed'));
@@ -1333,9 +1355,10 @@ class SettingsController extends Controller
      * in the routes file if you want to be able to cache the routes.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function api() : View
+    public function api(): View
     {
         return view('settings.api');
     }
@@ -1344,15 +1367,16 @@ class SettingsController extends Controller
      * Test the email configuration.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
      */
-    public function ajaxTestEmail() : JsonResponse
+    public function ajaxTestEmail(): JsonResponse
     {
         try {
-            (new User())->forceFill([
-                'name'  => config('mail.from.name'),
+            (new User)->forceFill([
+                'name' => config('mail.from.name'),
                 'email' => config('mail.from.address'),
-            ])->notify(new MailTest());
+            ])->notify(new MailTest);
 
             return response()->json(Helper::formatStandardApiResponse('success', null, trans('mail_sent.mail_sent')));
         } catch (\Exception $e) {
@@ -1360,14 +1384,12 @@ class SettingsController extends Controller
         }
     }
 
-
-
     /**
      * Get login attempts view
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
-    public function getLoginAttempts() : View
+    public function getLoginAttempts(): View
     {
         return view('settings.logins');
     }

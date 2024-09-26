@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Testing\TestResponse;
 use PDOException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ShowSetUpPageTest extends TestCase
@@ -61,6 +62,7 @@ class ShowSetUpPageTest extends TestCase
 
         if ($shouldSee) {
             self::$latestResponse->assertSee($errorMessage, false)->assertDontSee($successMessage, false);
+
             return;
         }
 
@@ -92,6 +94,7 @@ class ShowSetUpPageTest extends TestCase
 
         if ($shouldSee) {
             self::$latestResponse->assertSee($errorMessage, false)->assertDontSee($successMessage, false);
+
             return;
         }
 
@@ -159,13 +162,12 @@ class ShowSetUpPageTest extends TestCase
         Http::assertSent(function (Request $request) {
             $this->assertEquals('GET', $request->method());
             $this->assertEquals(URL::to('.env'), $request->url());
+
             return true;
         });
     }
 
-    /**
-     * @dataProvider willShowErrorWhenDotEnvFileIsAccessibleViaHttpData
-     */
+    #[DataProvider('willShowErrorWhenDotEnvFileIsAccessibleViaHttpData')]
     public function testWillShowErrorWhenDotEnvFileIsAccessibleViaHttp(int $statusCode): void
     {
         $this->preventStrayRequest = false;
@@ -176,6 +178,7 @@ class ShowSetUpPageTest extends TestCase
 
         Http::assertSent(function (Request $request, Response $response) use ($statusCode) {
             $this->assertEquals($statusCode, $response->status());
+
             return true;
         });
 
@@ -248,6 +251,7 @@ class ShowSetUpPageTest extends TestCase
 
         if ($shouldSee) {
             self::$latestResponse->assertSee($errorMessage)->assertDontSee($successMessage);
+
             return;
         }
 
@@ -288,10 +292,11 @@ class ShowSetUpPageTest extends TestCase
 
         if ($shouldSee) {
             self::$latestResponse->assertSee($errorMessage, false)->assertDontSee($successMessage, false);
+
             return;
         }
 
-        self::$latestResponse->assertSee($successMessage, false)->assertDontSee($errorMessage,false);
+        self::$latestResponse->assertSee($successMessage, false)->assertDontSee($errorMessage, false);
     }
 
     public function testWillNotSeeDirectoryPermissionErrorWhenStoragePathIsWritable(): void
@@ -306,7 +311,7 @@ class ShowSetUpPageTest extends TestCase
     public function testInvalidTLSCertsOkWhenCheckingForEnvFile()
     {
         //set the weird bad SSL cert place - https://self-signed.badssl.com
-        $this->markTestIncomplete("Not yet sure how to write this test, it requires messing with .env ...");
-        $this->assertTrue((new SettingsController())->dotEnvFileIsExposed());
+        $this->markTestIncomplete('Not yet sure how to write this test, it requires messing with .env ...');
+        $this->assertTrue((new SettingsController)->dotEnvFileIsExposed());
     }
 }

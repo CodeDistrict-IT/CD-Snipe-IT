@@ -1,35 +1,35 @@
 <?php
 
 return [
-    'about_assets_title'           => 'درباره دارایی ها',
-    'about_assets_text'            => 'دارایی ها مواردی هستند که توسط شماره سریال یا برچسب دارایی دنبال می شوند. آنها تمایل دارند که مقادیر ارزش بیشتری داشته باشند که در آن شناسایی یک مورد خاص موردنیاز باشد.',
-    'archived'  				=> 'بایگانی شد',
-    'asset'  					=> 'دارایی',
-    'bulk_checkout'             => 'خروج دارایی ها',
-    'bulk_checkin'              => 'دارایی های ثبت نام
+    'about_assets_title' => 'درباره دارایی ها',
+    'about_assets_text' => 'دارایی ها مواردی هستند که توسط شماره سریال یا برچسب دارایی دنبال می شوند. آنها تمایل دارند که مقادیر ارزش بیشتری داشته باشند که در آن شناسایی یک مورد خاص موردنیاز باشد.',
+    'archived' => 'بایگانی شد',
+    'asset' => 'دارایی',
+    'bulk_checkout' => 'خروج دارایی ها',
+    'bulk_checkin' => 'دارایی های ثبت نام
 ',
-    'checkin'  					=> 'دارایی checkin',
-    'checkout'  				=> 'دارایی پرداخت',
-    'clone'  					=> 'دارایی شگرف',
-    'deployable'  				=> 'گسترش',
-    'deleted'  					=> 'این دارایی حذف شده است.
+    'checkin' => 'دارایی checkin',
+    'checkout' => 'دارایی پرداخت',
+    'clone' => 'دارایی شگرف',
+    'deployable' => 'گسترش',
+    'deleted' => 'این دارایی حذف شده است.
 ',
-    'delete_confirm'            => 'Are you sure you want to delete this asset?',
-    'edit'  					=> 'ویرایش دارایی',
-    'model_deleted'  			=> 'این مدل دارایی حذف شده است. قبل از اینکه بتوانید Asset را بازیابی کنید، باید مدل را بازیابی کنید.
+    'delete_confirm' => 'Are you sure you want to delete this asset?',
+    'edit' => 'ویرایش دارایی',
+    'model_deleted' => 'این مدل دارایی حذف شده است. قبل از اینکه بتوانید Asset را بازیابی کنید، باید مدل را بازیابی کنید.
 ',
-    'model_invalid'             => 'This model for this asset is invalid.',
-    'model_invalid_fix'         => 'The asset must be updated use a valid asset model before attempting to check it in or out, or to audit it.',
-    'requestable'               => 'در خواست شد',
-    'requested'				    => 'درخواست شده',
-    'not_requestable'           => 'غیر قابل درخواست
+    'model_invalid' => 'This model for this asset is invalid.',
+    'model_invalid_fix' => 'The asset must be updated use a valid asset model before attempting to check it in or out, or to audit it.',
+    'requestable' => 'در خواست شد',
+    'requested' => 'درخواست شده',
+    'not_requestable' => 'غیر قابل درخواست
 ',
     'requestable_status_warning' => 'Do not change requestable status',
-    'restore'  					=> 'بازیابی دارایی',
-    'pending'  					=> 'در انتظار',
-    'undeployable'  			=> 'غیرقابل گسترش',
-    'undeployable_tooltip'  	=> 'This asset has a status label that is undeployable and cannot be checked out at this time.',
-    'view'  					=> 'نمایش دارایی ها
+    'restore' => 'بازیابی دارایی',
+    'pending' => 'در انتظار',
+    'undeployable' => 'غیرقابل گسترش',
+    'undeployable_tooltip' => 'This asset has a status label that is undeployable and cannot be checked out at this time.',
+    'view' => 'نمایش دارایی ها
 ',
     'csv_error' => 'شما یک خطا در فایل CSV خود دارید:
 ',

@@ -7,11 +7,10 @@ use App\Models\Asset;
 use App\Models\User;
 use App\Notifications\CheckinAssetNotification;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Framework\Attributes\Group;
 use Tests\TestCase;
 
-/**
- * @group notifications
- */
+#[Group('notifications')]
 class EmailNotificationsUponCheckinTest extends TestCase
 {
     protected function setUp(): void

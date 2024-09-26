@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Components;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageUploadRequest;
 use App\Models\Company;
 use App\Models\Component;
-use App\Helpers\Helper;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
 
 /**
  * This class controls all actions related to Components for
@@ -26,9 +25,12 @@ class ComponentsController extends Controller
      * the content for the components listing, which is generated in getDatatable.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentsController::getDatatable() method that generates the JSON response
      * @since [v3.0]
+     *
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
@@ -38,14 +40,16 @@ class ComponentsController extends Controller
         return view('components/index');
     }
 
-
     /**
      * Returns a form to create a new component.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentsController::postCreate() method that stores the data
      * @since [v3.0]
+     *
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create()
@@ -60,29 +64,31 @@ class ComponentsController extends Controller
      * Validate and store data for new component.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentsController::getCreate() method that generates the view
      * @since [v3.0]
-     * @param ImageUploadRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(ImageUploadRequest $request)
     {
         $this->authorize('create', Component::class);
-        $component = new Component();
-        $component->name                   = $request->input('name');
-        $component->category_id            = $request->input('category_id');
-        $component->supplier_id            = $request->input('supplier_id');
-        $component->location_id            = $request->input('location_id');
-        $component->company_id             = Company::getIdForCurrentUser($request->input('company_id'));
-        $component->order_number           = $request->input('order_number', null);
-        $component->min_amt                = $request->input('min_amt', null);
-        $component->serial                 = $request->input('serial', null);
-        $component->purchase_date          = $request->input('purchase_date', null);
-        $component->purchase_cost          = $request->input('purchase_cost', null);
-        $component->qty                    = $request->input('qty');
-        $component->user_id                = Auth::id();
-        $component->notes                  = $request->input('notes');
+        $component = new Component;
+        $component->name = $request->input('name');
+        $component->category_id = $request->input('category_id');
+        $component->supplier_id = $request->input('supplier_id');
+        $component->location_id = $request->input('location_id');
+        $component->company_id = Company::getIdForCurrentUser($request->input('company_id'));
+        $component->order_number = $request->input('order_number', null);
+        $component->min_amt = $request->input('min_amt', null);
+        $component->serial = $request->input('serial', null);
+        $component->purchase_date = $request->input('purchase_date', null);
+        $component->purchase_cost = $request->input('purchase_cost', null);
+        $component->qty = $request->input('qty');
+        $component->user_id = Auth::id();
+        $component->notes = $request->input('notes');
 
         $component = $request->handleImages($component);
 
@@ -99,10 +105,13 @@ class ComponentsController extends Controller
      * Return a view to edit a component.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentsController::postEdit() method that stores the data.
      * @since [v3.0]
-     * @param int $componentId
+     *
+     * @param  int  $componentId
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit($componentId = null)
@@ -116,16 +125,18 @@ class ComponentsController extends Controller
         return redirect()->route('components.index')->with('error', trans('admin/components/message.does_not_exist'));
     }
 
-
     /**
      * Return a view to edit a component.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentsController::getEdit() method presents the form.
-     * @param ImageUploadRequest $request
-     * @param int $componentId
+     *
+     * @param  int  $componentId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @since [v3.0]
      */
     public function update(ImageUploadRequest $request, $componentId = null)
@@ -147,18 +158,18 @@ class ComponentsController extends Controller
         $this->authorize('update', $component);
 
         // Update the component data
-        $component->name                   = $request->input('name');
-        $component->category_id            = $request->input('category_id');
-        $component->supplier_id            = $request->input('supplier_id');
-        $component->location_id            = $request->input('location_id');
-        $component->company_id             = Company::getIdForCurrentUser($request->input('company_id'));
-        $component->order_number           = $request->input('order_number');
-        $component->min_amt                = $request->input('min_amt');
-        $component->serial                 = $request->input('serial');
-        $component->purchase_date          = $request->input('purchase_date');
-        $component->purchase_cost          = request('purchase_cost');
-        $component->qty                    = $request->input('qty');
-        $component->notes                  = $request->input('notes');
+        $component->name = $request->input('name');
+        $component->category_id = $request->input('category_id');
+        $component->supplier_id = $request->input('supplier_id');
+        $component->location_id = $request->input('location_id');
+        $component->company_id = Company::getIdForCurrentUser($request->input('company_id'));
+        $component->order_number = $request->input('order_number');
+        $component->min_amt = $request->input('min_amt');
+        $component->serial = $request->input('serial');
+        $component->purchase_date = $request->input('purchase_date');
+        $component->purchase_cost = request('purchase_cost');
+        $component->qty = $request->input('qty');
+        $component->notes = $request->input('notes');
 
         $component = $request->handleImages($component);
 
@@ -175,9 +186,12 @@ class ComponentsController extends Controller
      * Delete a component.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
-     * @param int $componentId
+     *
+     * @param  int  $componentId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($componentId)
@@ -206,10 +220,13 @@ class ComponentsController extends Controller
      * Return a view to display component information.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ComponentsController::getDataView() method that generates the JSON response
      * @since [v3.0]
-     * @param int $componentId
+     *
+     * @param  int  $componentId
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show($componentId = null)
@@ -221,6 +238,7 @@ class ComponentsController extends Controller
 
             return view('components/view', compact('component'));
         }
+
         // Redirect to the user management page
         return redirect()->route('components.index')
             ->with('error', trans('admin/components/message.does_not_exist'));

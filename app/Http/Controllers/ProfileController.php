@@ -6,12 +6,13 @@ use App\Http\Requests\ImageUploadRequest;
 use App\Models\Setting;
 use App\Models\User;
 use App\Notifications\CurrentInventory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+
 /**
  * This controller handles all actions related to User Profiles for
  * the Snipe-IT Asset Management application.
@@ -24,12 +25,14 @@ class ProfileController extends Controller
      * Returns a view with the user's profile form for editing
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
      */
-    public function getIndex() : View
+    public function getIndex(): View
     {
         $this->authorize('self.profile');
         $user = auth()->user();
+
         return view('account/profile', compact('user'));
     }
 
@@ -37,9 +40,10 @@ class ProfileController extends Controller
      * Validates and stores the user's update data.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
      */
-    public function postIndex(ImageUploadRequest $request) : RedirectResponse
+    public function postIndex(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('self.profile');
         $user = auth()->user();
@@ -49,6 +53,8 @@ class ProfileController extends Controller
         $user->gravatar = $request->input('gravatar');
         $user->skin = $request->input('skin');
         $user->phone = $request->input('phone');
+        $user->enable_sounds = $request->input('enable_sounds', false);
+        $user->enable_confetti = $request->input('enable_confetti', false);
 
         if (! config('app.lock_passwords')) {
             $user->locale = $request->input('locale', 'en-US');
@@ -65,14 +71,12 @@ class ProfileController extends Controller
         // Handle the avatar upload and/or delete if necessary
         app('\App\Http\Requests\ImageUploadRequest')->handleImages($user, 600, 'avatar', 'avatars', 'avatar');
 
-
         if ($user->save()) {
             return redirect()->route('profile')->with('success', trans('account/general.profile_updated'));
         }
 
         return redirect()->back()->withInput()->withErrors($user->getErrors());
     }
-
 
     /**
      * Returns a page with the API token generation interface.
@@ -81,12 +85,13 @@ class ProfileController extends Controller
      * in the routes file if you want to be able to cache the routes.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
     public function api(): View
     {
         // Make sure the self.api permission has been granted
-        if (!Gate::allows('self.api')) {
+        if (! Gate::allows('self.api')) {
             abort(403);
         }
 
@@ -95,18 +100,18 @@ class ProfileController extends Controller
 
     /**
      * User change email page.
-     *
      */
-    public function password() : View
+    public function password(): View
     {
         $user = auth()->user();
+
         return view('account/change-password', compact('user'));
     }
 
     /**
      * Users change password form processing page.
      */
-    public function passwordSave(Request $request) : RedirectResponse
+    public function passwordSave(Request $request): RedirectResponse
     {
         if (config('app.lock_passwords')) {
             return redirect()->route('account.password.index')->with('error', trans('admin/users/table.lock_passwords'));
@@ -118,8 +123,8 @@ class ProfileController extends Controller
         }
 
         $rules = [
-            'current_password'     => 'required',
-            'password'         => Setting::passwordComplexityRulesSaving('store').'|confirmed',
+            'current_password' => 'required',
+            'password' => Setting::passwordComplexityRulesSaving('store').'|confirmed',
         ];
 
         $validator = \Validator::make($request->all(), $rules);
@@ -153,14 +158,15 @@ class ProfileController extends Controller
             $user->password = Hash::make($request->input('password'));
             // We have to use saveQuietly here because for some reason this method was calling the User Oserver twice :(
             $user->saveQuietly();
-            
+
             // Log the user out of other devices
             Auth::logoutOtherDevices($request->input('password'));
+
             return redirect()->route('account')->with('success', trans('passwords.password_change'));
 
         }
-        return redirect()->back()->withInput()->withErrors($validator);
 
+        return redirect()->back()->withInput()->withErrors($validator);
 
     }
 
@@ -172,9 +178,10 @@ class ProfileController extends Controller
      * resources/views/layouts/default.blade.php
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function getMenuState(Request $request) : void
+    public function getMenuState(Request $request): void
     {
         if ($request->input('state') == 'open') {
             $request->session()->put('menu_state', 'open');
@@ -183,14 +190,14 @@ class ProfileController extends Controller
         }
     }
 
-
     /**
      * Print inventory
      *
      * @author A. Gianotto
+     *
      * @since [v6.0.12]
      */
-    public function printInventory() : View
+    public function printInventory(): View
     {
         $show_user = auth()->user();
 
@@ -207,12 +214,13 @@ class ProfileController extends Controller
      * Emails user a list of assigned assets
      *
      * @author A. Gianotto
+     *
      * @since [v6.0.12]
      */
-    public function emailAssetList() : RedirectResponse
+    public function emailAssetList(): RedirectResponse
     {
 
-        if (!$user = User::find(auth()->id())) {
+        if (! $user = User::find(auth()->id())) {
             return redirect()->back()
                 ->with('error', trans('admin/users/message.user_not_found', ['id' => $id]));
         }
@@ -221,6 +229,7 @@ class ProfileController extends Controller
         }
 
         $user->notify((new CurrentInventory($user)));
+
         return redirect()->back()->with('success', trans('admin/users/general.user_notified'));
     }
 }

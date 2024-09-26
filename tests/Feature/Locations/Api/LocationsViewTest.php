@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature\Consumables\Api;
+namespace Tests\Feature\Locations\Api;
 
-use App\Models\Location;
 use App\Models\Asset;
+use App\Models\Location;
 use App\Models\User;
 use Tests\TestCase;
 

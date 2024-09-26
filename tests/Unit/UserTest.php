@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests\Unit;
 
 use App\Models\User;
@@ -60,7 +61,7 @@ class UserTest extends TestCase
     {
         $fullname = 'Natalia';
         $expected_username = 'natalia';
-        $user = User::generateFormattedNameFromFullName($fullname, 'firstname_lastname',);
+        $user = User::generateFormattedNameFromFullName($fullname, 'firstname_lastname');
         $this->assertEquals($expected_username, $user['username']);
     }
 

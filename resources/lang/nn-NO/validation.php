@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'Verdien for :fieldname kan ikke være null.',
+    'import_field_empty' => 'Verdien for :fieldname kan ikke være null.',
     'in' => 'Det valgte attributtet :attribute er ugyldig.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,6 +125,8 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+
     'present' => 'Atributtfeltet :attribute må ha en verdi.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
     'present_unless' => 'The :attribute field must be present unless :other is :value.',
@@ -153,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'Attributtet :attribute må være en tekst.',
+    'string' => 'Attributtet :attribute må være en tekst.',
     'two_column_unique_undeleted' => ':attribute må være unik i forhold til :table1 og :table2. ',
-    'unique_undeleted'     => ':attribute må være unikt.',
-    'non_circular'         => 'Attributtet :attribute kan ikke opprette en sirkulær referanse.',
-    'not_array'            => ':attribute kan ikke være en matrise.',
+    'unique_undeleted' => ':attribute må være unikt.',
+    'non_circular' => 'Attributtet :attribute kan ikke opprette en sirkulær referanse.',
+    'not_array' => ':attribute kan ikke være en matrise.',
     'disallow_same_pwd_as_user_fields' => 'Passordet kan ikke være det samme som brukernavnet.',
-    'letters'              => 'Passordet må inneholde minst en bokstav.',
-    'numbers'              => 'Passordet må inneholde minst ett tall.',
-    'case_diff'            => 'Passordet må innehode store og små bokstaver.',
-    'symbols'              => 'Passordet må inneholde symboler.',
+    'letters' => 'Passordet må inneholde minst en bokstav.',
+    'numbers' => 'Passordet må inneholde minst ett tall.',
+    'case_diff' => 'Passordet må innehode store og små bokstaver.',
+    'symbols' => 'Passordet må inneholde symboler.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => 'Attributtet :attribute er allerede tatt.',
     'uploaded' => 'Atribbutet :attribute kunne ikke lastes opp.',
@@ -184,25 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Attributtfeltet inneholder et tegn som ikke er tillatt.',
-        'email_array'      => 'En eller flere e-postadresser er ugyldige.',
-        'hashed_pass'      => 'Gjeldende passord er feil',
-        'dumbpwd'          => 'Passordet er for vanlig.',
+        'email_array' => 'En eller flere e-postadresser er ugyldige.',
+        'hashed_pass' => 'Gjeldende passord er feil',
+        'dumbpwd' => 'Passordet er for vanlig.',
         'statuslabel_type' => 'Du må velge en gyldig statusetikett-type',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ':attribute må være en gyldig dato i YYYY-MM-DD format',
-        'last_audit_date.date_format'   =>  ':attribute må være en gyldig dato i YYYY-MM-DD hh:mm:ss format',
-        'expiration_date.date_format'   =>  ':attribute må være en gyldig dato i YYYY-MM-DD format',
-        'termination_date.date_format'  =>  ':attribute må være en gyldig dato i YYYY-MM-DD format',
-        'expected_checkin.date_format'  =>  ':attribute må være en gyldig dato i YYYY-MM-DD format',
-        'start_date.date_format'        =>  ':attribute må være en gyldig dato i YYYY-MM-DD format',
-        'end_date.date_format'          =>  ':attribute må være en gyldig dato i YYYY-MM-DD format',
-        'checkboxes'           => ':attribute inneholder ugyldige valg.',
-        'radio_buttons'        => ':attribute er ugyldig.',
+        'purchase_date.date_format' => ':attribute må være en gyldig dato i YYYY-MM-DD format',
+        'last_audit_date.date_format' => ':attribute må være en gyldig dato i YYYY-MM-DD hh:mm:ss format',
+        'expiration_date.date_format' => ':attribute må være en gyldig dato i YYYY-MM-DD format',
+        'termination_date.date_format' => ':attribute må være en gyldig dato i YYYY-MM-DD format',
+        'expected_checkin.date_format' => ':attribute må være en gyldig dato i YYYY-MM-DD format',
+        'start_date.date_format' => ':attribute må være en gyldig dato i YYYY-MM-DD format',
+        'end_date.date_format' => ':attribute må være en gyldig dato i YYYY-MM-DD format',
+        'checkboxes' => ':attribute inneholder ugyldige valg.',
+        'radio_buttons' => ':attribute er ugyldig.',
         'invalid_value_in_field' => 'Ugyldig verdi inkludert i dette feltet',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -228,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

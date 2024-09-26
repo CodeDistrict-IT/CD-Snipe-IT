@@ -2,18 +2,16 @@
 
 namespace Tests\Feature\Users\Ui;
 
-use Tests\TestCase;
+use App\Models\Accessory;
+use App\Models\Asset;
+use App\Models\Company;
 use App\Models\LicenseSeat;
 use App\Models\Location;
-use App\Models\Accessory;
 use App\Models\User;
-use App\Models\Company;
-
-use App\Models\Asset;
+use Tests\TestCase;
 
 class DeleteUserTest extends TestCase
 {
-
     public function testUserCanDeleteAnotherUser()
     {
         $user = User::factory()->deleteUsers()->viewUsers()->create();
@@ -26,7 +24,6 @@ class DeleteUserTest extends TestCase
 
         $this->followRedirects($response)->assertSee(trans('general.notification_success'));
     }
-
 
     public function testErrorReturnedIfUserDoesNotExist()
     {
@@ -45,9 +42,8 @@ class DeleteUserTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
 
-          $this->followRedirects($response)->assertSee(trans('general.error'));
+        $this->followRedirects($response)->assertSee(trans('general.error'));
     }
-
 
     public function testFmcsPermissionsToDeleteUser()
     {
@@ -60,14 +56,13 @@ class DeleteUserTest extends TestCase
         $userFromA = User::factory()->deleteUsers()->for($companyA)->create();
         $userFromB = User::factory()->deleteUsers()->for($companyB)->create();
 
-        $response =  $this->followingRedirects()->actingAs($userFromA)
+        $response = $this->followingRedirects()->actingAs($userFromA)
             ->delete(route('users.destroy', ['user' => $userFromB->id]))
             ->assertStatus(403);
         $this->followRedirects($response)->assertSee('sad-panda.png');
 
         $userFromB->refresh();
         $this->assertNull($userFromB->deleted_at);
-
 
         $response = $this->actingAs($userFromB)
             ->delete(route('users.destroy', ['user' => $userFromA->id]))
@@ -88,7 +83,6 @@ class DeleteUserTest extends TestCase
         $this->assertNotNull($userFromA->deleted_at);
 
     }
-
 
     public function testDisallowUserDeletionIfStillManagingPeople()
     {
@@ -117,7 +111,7 @@ class DeleteUserTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
 
-           $this->followRedirects($response)->assertSee('Error');
+        $this->followRedirects($response)->assertSee('Error');
     }
 
     public function testDisallowUserDeletionIfStillHaveAccessories()
@@ -149,7 +143,6 @@ class DeleteUserTest extends TestCase
 
         $this->followRedirects($response)->assertSee('Error');
     }
-
 
     public function testAllowUserDeletionIfNotManagingLocations()
     {
@@ -194,7 +187,6 @@ class DeleteUserTest extends TestCase
         $this->followRedirects($response)->assertSee('Error');
     }
 
-
     public function testUsersCannotDeleteThemselves()
     {
         $manager = User::factory()->deleteUsers()->viewUsers()->create();
@@ -207,6 +199,4 @@ class DeleteUserTest extends TestCase
 
         $this->followRedirects($response)->assertSee('Error');
     }
-
-
 }

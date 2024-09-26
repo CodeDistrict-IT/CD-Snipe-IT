@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\AssetMaintenancesController;
+use App\Http\Controllers\Assets\AssetCheckinController;
+use App\Http\Controllers\Assets\AssetCheckoutController;
+use App\Http\Controllers\Assets\AssetFilesController;
 use App\Http\Controllers\Assets\AssetsController;
 use App\Http\Controllers\Assets\BulkAssetsController;
-use App\Http\Controllers\Assets\AssetCheckoutController;
-use App\Http\Controllers\Assets\AssetCheckinController;
-use App\Http\Controllers\Assets\AssetFilesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::group(
     [
         'prefix' => 'hardware',
-        'middleware' => ['auth'], 
+        'middleware' => ['auth'],
     ],
-    
+
     function () {
-        
+
         Route::get('bulkaudit',
             [AssetsController::class, 'quickScan']
         )->name('assets.bulkaudit');
@@ -33,10 +33,10 @@ Route::group(
         )->name('hardware/quickscancheckin');
 
         // Asset Maintenances
-        Route::resource('maintenances', 
+        Route::resource('maintenances',
             AssetMaintenancesController::class, [
-            'parameters' => ['maintenance' => 'maintenance_id', 'asset' => 'asset_id'],
-        ]);
+                'parameters' => ['maintenance' => 'maintenance_id', 'asset' => 'asset_id'],
+            ]);
 
         Route::get('requested', [
             AssetsController::class, 'getRequestedIndex']
@@ -53,7 +53,7 @@ Route::group(
         Route::get('checkins/due',
             [AssetsController::class, 'dueForCheckin']
         )->name('assets.checkins.due');
-        
+
         Route::get('audit/{id}',
             [AssetsController::class, 'audit']
         )->name('asset.audit.create');
@@ -85,7 +85,6 @@ Route::group(
         Route::get('{assetId}/label',
             [AssetsController::class, 'getLabel']
         )->name('label/hardware');
-        
 
         Route::get('{assetId}/checkout',
             [AssetCheckoutController::class, 'create']
@@ -108,11 +107,11 @@ Route::group(
             return redirect()->route('hardware.show', ['hardware' => $assetId]);
         });
 
-        Route::get('{assetId}/qr_code', 
+        Route::get('{assetId}/qr_code',
             [AssetsController::class, 'getQrCode']
         )->name('qr_code/hardware');
 
-        Route::get('{assetId}/barcode', 
+        Route::get('{assetId}/barcode',
             [AssetsController::class, 'getBarCode']
         )->name('barcode/hardware');
 
@@ -163,16 +162,16 @@ Route::group(
 
     });
 
-Route::resource('hardware', 
-        AssetsController::class, 
-        [
-            'middleware' => ['auth'],
-            'parameters' => ['asset' => 'asset_id',
-                'names' => [
-                    'show' => 'view',
-                ],
+Route::resource('hardware',
+    AssetsController::class,
+    [
+        'middleware' => ['auth'],
+        'parameters' => ['asset' => 'asset_id',
+            'names' => [
+                'show' => 'view',
+            ],
         ],
-]);
+    ]);
 
 Route::get('ht/{any?}',
     [AssetsController::class, 'getAssetByTag']

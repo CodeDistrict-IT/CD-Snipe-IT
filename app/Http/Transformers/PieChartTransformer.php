@@ -2,8 +2,8 @@
 
 namespace App\Http\Transformers;
 
-
 use App\Helpers\Helper;
+
 /**
  * Class PieChartTransformer
  *
@@ -11,7 +11,9 @@ use App\Helpers\Helper;
  * the pie charts
  *
  * @return \Illuminate\Http\Response
+ *
  * @since [v6.0.11]
+ *
  * @author [A. Gianotto] [<snipe@snipe.net>]
  */
 class PieChartTransformer
@@ -28,7 +30,7 @@ class PieChartTransformer
 
             if ($total['count'] > 0) {
 
-                $labels[] = $total['label']." (".$total['count'].")";
+                $labels[] = $total['label'].' ('.$total['count'].')';
                 $counts[] = $total['count'];
 
                 if (isset($total['color'])) {
@@ -45,10 +47,9 @@ class PieChartTransformer
             'datasets' => [[
                 'data' => $counts,
                 'backgroundColor' => $colors_array,
-                'hoverBackgroundColor' =>  $colors_array,
+                'hoverBackgroundColor' => $colors_array,
             ]],
         ];
-
 
         return $results;
     }

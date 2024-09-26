@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Models\Group;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 /**
  * This controller handles all actions related to User Groups for
@@ -21,6 +21,7 @@ class GroupsController extends Controller
      * the content for the user group listing, which is generated in getDatatable.
      *
      * @author [A. Gianotto] [<snipe@snipe.net]
+     *
      * @see GroupsController::getDatatable() method that generates the JSON response
      * @since [v1.0]
      */
@@ -33,10 +34,11 @@ class GroupsController extends Controller
      * Returns a view that displays a form to create a new User Group.
      *
      * @author [A. Gianotto] [<snipe@snipe.net]
+     *
      * @see GroupsController::postCreate()
      * @since [v1.0]
      */
-    public function create(Request $request) : View
+    public function create(Request $request): View
     {
         $group = new Group;
         // Get all the available permissions
@@ -52,13 +54,14 @@ class GroupsController extends Controller
      * Validates and stores the new User Group data.
      *
      * @author [A. Gianotto] [<snipe@snipe.net]
+     *
      * @see GroupsController::getCreate()
      * @since [v1.0]
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         // create a new group instance
-        $group = new Group();
+        $group = new Group;
         $group->name = $request->input('name');
         $group->permissions = json_encode($request->input('permission'));
         $group->created_by = auth()->id();
@@ -74,11 +77,14 @@ class GroupsController extends Controller
      * Returns a view that presents a form to edit a User Group.
      *
      * @author [A. Gianotto] [<snipe@snipe.net]
+     *
      * @see GroupsController::postEdit()
-     * @param int $id
+     *
+     * @param  int  $id
+     *
      * @since [v1.0]
      */
-    public function edit($id) : View | RedirectResponse
+    public function edit($id): View|RedirectResponse
     {
         $group = Group::find($id);
 
@@ -97,11 +103,14 @@ class GroupsController extends Controller
      * Validates and stores the updated User Group data.
      *
      * @author [A. Gianotto] [<snipe@snipe.net]
+     *
      * @see GroupsController::getEdit()
-     * @param int $id
+     *
+     * @param  int  $id
+     *
      * @since [v1.0]
      */
-    public function update(Request $request, $id = null) : RedirectResponse
+    public function update(Request $request, $id = null): RedirectResponse
     {
         if (! $group = Group::find($id)) {
             return redirect()->route('groups.index')->with('error', trans('admin/groups/message.group_not_found', ['id' => $id]));
@@ -124,17 +133,21 @@ class GroupsController extends Controller
      * Validates and deletes the User Group.
      *
      * @author [A. Gianotto] [<snipe@snipe.net]
+     *
      * @see GroupsController::getEdit()
-     * @param int $id
+     *
+     * @param  int  $id
+     *
      * @since [v1.0]
      */
-    public function destroy($id) : RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         if (! config('app.lock_passwords')) {
             if (! $group = Group::find($id)) {
                 return redirect()->route('groups.index')->with('error', trans('admin/groups/message.group_not_found', ['id' => $id]));
             }
             $group->delete();
+
             return redirect()->route('groups.index')->with('success', trans('admin/groups/message.success.delete'));
         }
 
@@ -146,10 +159,10 @@ class GroupsController extends Controller
      * the content for the group detail page.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param $id
+     *
      * @since [v4.0.11]
      */
-    public function show($id) : View | RedirectResponse
+    public function show($id): View|RedirectResponse
     {
         $group = Group::find($id);
 

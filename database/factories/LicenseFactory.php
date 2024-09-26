@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Factories;
 
 use App\Models\Category;
@@ -29,7 +30,7 @@ class LicenseFactory extends Factory
             'name' => $this->faker->name(),
             'license_email' => $this->faker->safeEmail(),
             'serial' => $this->faker->uuid(),
-            'notes'   => 'Created by DB seeder',
+            'notes' => 'Created by DB seeder',
             'seats' => $this->faker->numberBetween(1, 10),
             'purchase_date' => $this->faker->dateTimeBetween('-1 years', 'now', date_default_timezone_get())->format('Y-m-d'),
             'order_number' => $this->faker->numberBetween(1000000, 50000000),
@@ -95,7 +96,6 @@ class LicenseFactory extends Factory
                     return Category::where('name', 'Graphics Software')->first() ?? Category::factory()->licenseGraphicsCategory();
                 },
             ];
-    
 
             return $data;
         });

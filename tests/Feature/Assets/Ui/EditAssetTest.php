@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Assets\Ui;
+namespace Tests\Feature\Assets\Ui;
 
 use App\Models\Asset;
 use App\Models\AssetModel;
@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class EditAssetTest extends TestCase
 {
-
     public function testPermissionRequiredToViewLicense()
     {
         $asset = Asset::factory()->create();
@@ -45,6 +44,7 @@ class EditAssetTest extends TestCase
             ->assertRedirect(route('hardware.index'));
         $this->assertDatabaseHas('assets', ['asset_tag' => 'New Asset Tag']);
     }
+
     public function testAssetEditPostIsRedirectedIfRedirectSelectionIsItem()
     {
         $asset = Asset::factory()->create();
@@ -63,5 +63,4 @@ class EditAssetTest extends TestCase
 
         $this->assertDatabaseHas('assets', ['asset_tag' => 'New Asset Tag']);
     }
-
 }

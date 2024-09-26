@@ -1,12 +1,13 @@
 <?php
+
 namespace Tests\Unit;
 
 use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\Category;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Tests\TestCase;
-use App\Models\Setting;
 
 class AssetTest extends TestCase
 {
@@ -14,8 +15,8 @@ class AssetTest extends TestCase
     {
         $this->settings->enableAutoIncrement();
 
-        $a = Asset::factory()->create(['asset_tag' => Asset::autoincrement_asset() ]);
-        $b = Asset::factory()->create(['asset_tag' => Asset::autoincrement_asset() ]);
+        $a = Asset::factory()->create(['asset_tag' => Asset::autoincrement_asset()]);
+        $b = Asset::factory()->create(['asset_tag' => Asset::autoincrement_asset()]);
 
         $this->assertModelExists($a);
         $this->assertModelExists($b);
@@ -27,8 +28,8 @@ class AssetTest extends TestCase
         $this->settings->enableAutoIncrement();
 
         // we have to do this by hand to 'simulate' two web pages being open at the same time
-        $a = Asset::factory()->make(['asset_tag' => Asset::autoincrement_asset() ]);
-        $b = Asset::factory()->make(['asset_tag' => Asset::autoincrement_asset() ]);
+        $a = Asset::factory()->make(['asset_tag' => Asset::autoincrement_asset()]);
+        $b = Asset::factory()->make(['asset_tag' => Asset::autoincrement_asset()]);
 
         $this->assertTrue($a->save());
         $this->assertFalse($b->save());
@@ -112,7 +113,7 @@ class AssetTest extends TestCase
     public function testUnzerofilledPrefixlessAutoincrementBackfill()
     {
         // TODO: COPYPASTA FROM above (AGAIN), is there a way to still run this test but not have it be so duplicative?
-        $this->settings->enableAutoIncrement()->set(['auto_increment_prefix' => '','zerofill_count' => 0]);
+        $this->settings->enableAutoIncrement()->set(['auto_increment_prefix' => '', 'zerofill_count' => 0]);
 
         $big_gap = Asset::autoincrement_asset(3);
         $final_result = Asset::autoincrement_asset(4);
@@ -142,14 +143,12 @@ class AssetTest extends TestCase
 
         // we have to do this by hand to 'simulate' two web pages being open at the same time
         $a = Asset::factory()->make(['asset_tag' => Asset::autoincrement_asset()]);
-        $b = Asset::factory()->make(['asset_tag' => 'ABCD' . (PHP_INT_MAX - 1)]);
+        $b = Asset::factory()->make(['asset_tag' => 'ABCD'.(PHP_INT_MAX - 1)]);
 
         $this->assertTrue($a->save());
         $this->assertTrue($b->save());
-        \Log::error("A asset tag is: " . $a->asset_tag);
         $matches = [];
         preg_match('/\d+/', $a->asset_tag, $matches);
-        \Log::error("digits are: " . $matches[0]);
         $this->assertEquals(Setting::getSettings()->next_auto_tag_base, $matches[0] + 1, "Next auto increment number should be the last normally-saved one plus one, but isn't");
     }
 
@@ -160,7 +159,7 @@ class AssetTest extends TestCase
 
         // we have to do this by hand to 'simulate' two web pages being open at the same time
         $a = Asset::factory()->make(['asset_tag' => Asset::autoincrement_asset()]);
-        $b = Asset::factory()->make(['asset_tag' => 'ABCD' . (PHP_INT_MAX - 2)]);
+        $b = Asset::factory()->make(['asset_tag' => 'ABCD'.(PHP_INT_MAX - 2)]);
 
         $this->assertTrue($a->save());
         $this->assertTrue($b->save());
@@ -169,24 +168,22 @@ class AssetTest extends TestCase
         $this->assertEquals(Setting::getSettings()->next_auto_tag_base, $matches[0] + 1, "Next auto increment number should be the last normally-saved one plus one, but isn't");
     }
 
-
     public function testWarrantyExpiresAttribute()
     {
 
         $asset = Asset::factory()
-        ->create(
-            [
-                'model_id' => AssetModel::factory()
-                    ->create(
-                        [
-                            'category_id' => Category::factory()->assetLaptopCategory()->create()->id
-                        ]
-                )->id,   
-                'warranty_months' => 24,
-                'purchase_date' =>   Carbon::createFromDate(2017, 1, 1)->hour(0)->minute(0)->second(0)                  
-            ]);
+            ->create(
+                [
+                    'model_id' => AssetModel::factory()
+                        ->create(
+                            [
+                                'category_id' => Category::factory()->assetLaptopCategory()->create()->id,
+                            ]
+                        )->id,
+                    'warranty_months' => 24,
+                    'purchase_date' => Carbon::createFromDate(2017, 1, 1)->hour(0)->minute(0)->second(0),
+                ]);
 
-        
         $this->assertEquals(Carbon::createFromDate(2017, 1, 1)->format('Y-m-d'), $asset->purchase_date->format('Y-m-d'));
         $this->assertEquals(Carbon::createFromDate(2019, 1, 1)->format('Y-m-d'), $asset->warranty_expires->format('Y-m-d'));
 

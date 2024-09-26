@@ -14,7 +14,6 @@ class CheckPermissions
      * 'middleware' => [authorize:superadmin']
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  string|null  $section
      * @return mixed
      */

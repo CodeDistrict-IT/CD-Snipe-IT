@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'personal_api_keys' => 'Persönliche API-Schlüssel',
     'personal_access_token' => 'Persönlicher Zugangs-Token',
     'personal_api_keys_success' => 'Persönlicher API-Schlüssel :key erfolgreich erstellt',
@@ -12,4 +12,6 @@ return array(
     'api_reference' => 'Bitte lesen Sie die <a href="https://snipe-it.readme.io/reference" target="_blank">API Dokumentation</a> um Informationen über die verfügbaren API-Endpunkte zu erhalten.',
     'profile_updated' => 'Konto erfolgreich aktualisiert',
     'no_tokens' => 'Sie haben noch keinen persönlichen Zugangs-Token erstellt.',
-);
+    'enable_sounds' => 'Soundeffekte aktivieren',
+    'enable_confetti' => 'Konfetti-Effekte aktivieren',
+];

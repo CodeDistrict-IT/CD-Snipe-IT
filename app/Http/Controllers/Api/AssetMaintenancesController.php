@@ -8,9 +8,9 @@ use App\Http\Transformers\AssetMaintenancesTransformer;
 use App\Models\Asset;
 use App\Models\AssetMaintenance;
 use App\Models\Company;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * This controller handles all actions related to Asset Maintenance for
@@ -20,21 +20,23 @@ use Illuminate\Http\JsonResponse;
  */
 class AssetMaintenancesController extends Controller
 {
-
     /**
      *  Generates the JSON response for asset maintenances listing view.
      *
      * @see AssetMaintenancesController::getIndex() method that generates view
+     *
      * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
      * @version v1.0
+     *
      * @since [v1.8]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse|array
     {
         $this->authorize('view', Asset::class);
 
         $maintenances = AssetMaintenance::select('asset_maintenances.*')
-            ->with('asset', 'asset.model', 'asset.location', 'asset.defaultLoc', 'supplier', 'asset.company',  'asset.assetstatus', 'admin');
+            ->with('asset', 'asset.model', 'asset.location', 'asset.defaultLoc', 'supplier', 'asset.company', 'asset.assetstatus', 'admin');
 
         if ($request->filled('search')) {
             $maintenances = $maintenances->TextSearch($request->input('search'));
@@ -52,28 +54,27 @@ class AssetMaintenancesController extends Controller
             $maintenances->where('asset_maintenance_type', '=', $request->input('asset_maintenance_type'));
         }
 
-
         // Make sure the offset and limit are actually integers and do not exceed system limits
         $offset = ($request->input('offset') > $maintenances->count()) ? $maintenances->count() : abs($request->input('offset'));
         $limit = app('api_limit_value');
 
         $allowed_columns = [
-                                'id',
-                                'title',
-                                'asset_maintenance_time',
-                                'asset_maintenance_type',
-                                'cost',
-                                'start_date',
-                                'completion_date',
-                                'notes',
-                                'asset_tag',
-                                'asset_name',
-                                'serial',
-                                'user_id',
-                                'supplier',
-                                'is_warranty',
-                                'status_label',
-                            ];
+            'id',
+            'title',
+            'asset_maintenance_time',
+            'asset_maintenance_type',
+            'cost',
+            'start_date',
+            'completion_date',
+            'notes',
+            'asset_tag',
+            'asset_name',
+            'serial',
+            'user_id',
+            'supplier',
+            'is_warranty',
+            'status_label',
+        ];
 
         $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
         $sort = in_array($request->input('sort'), $allowed_columns) ? e($request->input('sort')) : 'created_at';
@@ -104,25 +105,27 @@ class AssetMaintenancesController extends Controller
 
         $total = $maintenances->count();
         $maintenances = $maintenances->skip($offset)->take($limit)->get();
-        return (new AssetMaintenancesTransformer())->transformAssetMaintenances($maintenances, $total);
 
+        return (new AssetMaintenancesTransformer)->transformAssetMaintenances($maintenances, $total);
 
     }
-
 
     /**
      *  Validates and stores the new asset maintenance
      *
      * @see AssetMaintenancesController::getCreate() method for the form
+     *
      * @author  Vincent Sposato <vincent.sposato@gmail.com>
+     *
      * @version v1.0
+     *
      * @since [v1.8]
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $this->authorize('update', Asset::class);
         // create a new model instance
-        $maintenance = new AssetMaintenance();
+        $maintenance = new AssetMaintenance;
         $maintenance->fill($request->all());
         $maintenance->user_id = Auth::id();
 
@@ -140,12 +143,15 @@ class AssetMaintenancesController extends Controller
      *  Validates and stores an update to an asset maintenance
      *
      * @author  A. Gianotto <snipe@snipe.net>
-     * @param int $id
-     * @param int $request
+     *
+     * @param  int  $id
+     * @param  int  $request
+     *
      * @version v1.0
+     *
      * @since [v4.0]
      */
-    public function update(Request $request, $id) : JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         $this->authorize('update', Asset::class);
 
@@ -157,7 +163,7 @@ class AssetMaintenancesController extends Controller
             }
 
             // The asset this miantenance is attached to is not valid or has been deleted
-            if (!$maintenance->asset) {
+            if (! $maintenance->asset) {
                 return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.item_not_found', ['item_type' => trans('general.asset'), 'id' => $id])));
             }
 
@@ -178,11 +184,14 @@ class AssetMaintenancesController extends Controller
      *  Delete an asset maintenance
      *
      * @author  A. Gianotto <snipe@snipe.net>
-     * @param int $assetMaintenanceId
+     *
+     * @param  int  $assetMaintenanceId
+     *
      * @version v1.0
+     *
      * @since [v4.0]
      */
-    public function destroy($assetMaintenanceId) : JsonResponse
+    public function destroy($assetMaintenanceId): JsonResponse
     {
         $this->authorize('update', Asset::class);
         // Check if the asset maintenance exists
@@ -196,18 +205,20 @@ class AssetMaintenancesController extends Controller
 
         return response()->json(Helper::formatStandardApiResponse('success', $assetMaintenance, trans('admin/asset_maintenances/message.delete.success')));
 
-
     }
 
     /**
      *  View an asset maintenance
      *
      * @author  A. Gianotto <snipe@snipe.net>
-     * @param int $assetMaintenanceId
+     *
+     * @param  int  $assetMaintenanceId
+     *
      * @version v1.0
+     *
      * @since [v4.0]
      */
-    public function show($assetMaintenanceId) : JsonResponse
+    public function show($assetMaintenanceId): JsonResponse
     {
         $this->authorize('view', Asset::class);
         $assetMaintenance = AssetMaintenance::findOrFail($assetMaintenanceId);
@@ -215,7 +226,7 @@ class AssetMaintenancesController extends Controller
             return response()->json(Helper::formatStandardApiResponse('error', null, 'You cannot view a maintenance for that asset'));
         }
 
-        return (new AssetMaintenancesTransformer())->transformAssetMaintenance($assetMaintenance);
+        return (new AssetMaintenancesTransformer)->transformAssetMaintenance($assetMaintenance);
 
     }
 }

@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Consumables;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageUploadRequest;
+use App\Http\Requests\StoreConsumableRequest;
 use App\Models\Company;
 use App\Models\Consumable;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
-use App\Http\Requests\StoreConsumableRequest;
 
 /**
  * This controller handles all actions related to Consumables for
@@ -25,9 +25,12 @@ class ConsumablesController extends Controller
      * Return a view to display component information.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ConsumablesController::getDatatable() method that generates the JSON response
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
@@ -41,9 +44,12 @@ class ConsumablesController extends Controller
      * Return a view to display the form view to create a new consumable
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ConsumablesController::postCreate() method that stores the form data
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create()
@@ -58,32 +64,34 @@ class ConsumablesController extends Controller
      * Validate and store new consumable data.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ConsumablesController::getCreate() method that returns the form view
      * @since [v1.0]
-     * @param ImageUploadRequest $request
+     *
+     * @param  ImageUploadRequest  $request
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(StoreConsumableRequest $request)
     {
         $this->authorize('create', Consumable::class);
-        $consumable = new Consumable();
-        $consumable->name                   = $request->input('name');
-        $consumable->category_id            = $request->input('category_id');
-        $consumable->supplier_id            = $request->input('supplier_id');
-        $consumable->location_id            = $request->input('location_id');
-        $consumable->company_id             = Company::getIdForCurrentUser($request->input('company_id'));
-        $consumable->order_number           = $request->input('order_number');
-        $consumable->min_amt                = $request->input('min_amt');
-        $consumable->manufacturer_id        = $request->input('manufacturer_id');
-        $consumable->model_number           = $request->input('model_number');
-        $consumable->item_no                = $request->input('item_no');
-        $consumable->purchase_date          = $request->input('purchase_date');
-        $consumable->purchase_cost          = $request->input('purchase_cost');
-        $consumable->qty                    = $request->input('qty');
-        $consumable->user_id                = Auth::id();
-        $consumable->notes                  = $request->input('notes');
-
+        $consumable = new Consumable;
+        $consumable->name = $request->input('name');
+        $consumable->category_id = $request->input('category_id');
+        $consumable->supplier_id = $request->input('supplier_id');
+        $consumable->location_id = $request->input('location_id');
+        $consumable->company_id = Company::getIdForCurrentUser($request->input('company_id'));
+        $consumable->order_number = $request->input('order_number');
+        $consumable->min_amt = $request->input('min_amt');
+        $consumable->manufacturer_id = $request->input('manufacturer_id');
+        $consumable->model_number = $request->input('model_number');
+        $consumable->item_no = $request->input('item_no');
+        $consumable->purchase_date = $request->input('purchase_date');
+        $consumable->purchase_cost = $request->input('purchase_cost');
+        $consumable->qty = $request->input('qty');
+        $consumable->user_id = Auth::id();
+        $consumable->notes = $request->input('notes');
 
         $consumable = $request->handleImages($consumable);
 
@@ -100,11 +108,13 @@ class ConsumablesController extends Controller
      * Returns a form view to edit a consumable.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param  int $consumableId
+     *
+     * @param  int  $consumableId
+     *
      * @see ConsumablesController::postEdit() method that stores the form data.
      * @since [v1.0]
      */
-    public function edit($consumableId = null) : View | RedirectResponse
+    public function edit($consumableId = null): View|RedirectResponse
     {
         if ($item = Consumable::find($consumableId)) {
             $this->authorize($item);
@@ -119,10 +129,13 @@ class ConsumablesController extends Controller
      * Returns a form view to edit a consumable.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param ImageUploadRequest $request
-     * @param  int $consumableId
+     *
+     * @param  ImageUploadRequest  $request
+     * @param  int  $consumableId
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @see ConsumablesController::getEdit() method that stores the form data.
      * @since [v1.0]
      */
@@ -134,7 +147,7 @@ class ConsumablesController extends Controller
 
         $min = $consumable->numCheckedOut();
         $validator = Validator::make($request->all(), [
-            "qty" => "required|numeric|min:$min"
+            'qty' => "required|numeric|min:$min",
         ]);
 
         if ($validator->fails()) {
@@ -145,20 +158,20 @@ class ConsumablesController extends Controller
 
         $this->authorize($consumable);
 
-        $consumable->name                   = $request->input('name');
-        $consumable->category_id            = $request->input('category_id');
-        $consumable->supplier_id            = $request->input('supplier_id');
-        $consumable->location_id            = $request->input('location_id');
-        $consumable->company_id             = Company::getIdForCurrentUser($request->input('company_id'));
-        $consumable->order_number           = $request->input('order_number');
-        $consumable->min_amt                = $request->input('min_amt');
-        $consumable->manufacturer_id        = $request->input('manufacturer_id');
-        $consumable->model_number           = $request->input('model_number');
-        $consumable->item_no                = $request->input('item_no');
-        $consumable->purchase_date          = $request->input('purchase_date');
-        $consumable->purchase_cost          = $request->input('purchase_cost');
-        $consumable->qty                    = Helper::ParseFloat($request->input('qty'));
-        $consumable->notes                  = $request->input('notes');
+        $consumable->name = $request->input('name');
+        $consumable->category_id = $request->input('category_id');
+        $consumable->supplier_id = $request->input('supplier_id');
+        $consumable->location_id = $request->input('location_id');
+        $consumable->company_id = Company::getIdForCurrentUser($request->input('company_id'));
+        $consumable->order_number = $request->input('order_number');
+        $consumable->min_amt = $request->input('min_amt');
+        $consumable->manufacturer_id = $request->input('manufacturer_id');
+        $consumable->model_number = $request->input('model_number');
+        $consumable->item_no = $request->input('item_no');
+        $consumable->purchase_date = $request->input('purchase_date');
+        $consumable->purchase_cost = $request->input('purchase_cost');
+        $consumable->qty = Helper::ParseFloat($request->input('qty'));
+        $consumable->notes = $request->input('notes');
 
         $consumable = $request->handleImages($consumable);
 
@@ -175,9 +188,13 @@ class ConsumablesController extends Controller
      * Delete a consumable.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param  int $consumableId
+     *
+     * @param  int  $consumableId
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($consumableId)
@@ -188,6 +205,7 @@ class ConsumablesController extends Controller
         $this->authorize($consumable);
 
         $consumable->delete();
+
         // Redirect to the locations management page
         return redirect()->route('consumables.index')->with('success', trans('admin/consumables/message.delete.success'));
     }
@@ -196,10 +214,13 @@ class ConsumablesController extends Controller
      * Return a view to display component information.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ConsumablesController::getDataView() method that generates the JSON response
      * @since [v1.0]
-     * @param int $consumableId
+     *
+     * @param  int  $consumableId
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show($consumableId = null)
@@ -214,7 +235,7 @@ class ConsumablesController extends Controller
             ->with('error', trans('admin/consumables/message.does_not_exist'));
     }
 
-    public function clone(Consumable $consumable) : View
+    public function clone(Consumable $consumable): View
     {
         $this->authorize('create', $consumable);
         $consumable_to_close = $consumable;

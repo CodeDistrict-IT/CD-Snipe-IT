@@ -3,12 +3,8 @@
 namespace App\Models;
 
 use App\Http\Traits\UniqueUndeletedTrait;
-use App\Models\Asset;
-use App\Models\SnipeModel;
 use App\Models\Traits\Searchable;
-use App\Models\User;
 use App\Presenters\Presentable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,25 +16,27 @@ class Location extends SnipeModel
     use HasFactory;
 
     protected $presenter = \App\Presenters\LocationPresenter::class;
+
     use Presentable;
     use SoftDeletes;
 
     protected $table = 'locations';
+
     protected $rules = [
-        'name'          => 'required|min:2|max:255|unique_undeleted',
-        'address'       => 'max:191|nullable',
-        'address2'      => 'max:191|nullable',
-        'city'          => 'max:191|nullable',
-        'state'         => 'min:2|max:191|nullable',
-        'country'       => 'min:2|max:191|nullable',
-        'zip'           => 'max:10|nullable',
-        'manager_id'    => 'exists:users,id|nullable',
-        'parent_id'     => 'non_circular:locations,id',
+        'name' => 'required|min:2|max:255|unique_undeleted',
+        'address' => 'max:191|nullable',
+        'address2' => 'max:191|nullable',
+        'city' => 'max:191|nullable',
+        'state' => 'min:2|max:191|nullable',
+        'country' => 'min:2|max:191|nullable',
+        'zip' => 'max:10|nullable',
+        'manager_id' => 'exists:users,id|nullable',
+        'parent_id' => 'nullable|exists:locations,id|non_circular:locations,id',
     ];
 
     protected $casts = [
-        'parent_id'     => 'integer',
-        'manager_id'    => 'integer',
+        'parent_id' => 'integer',
+        'manager_id' => 'integer',
     ];
 
     /**
@@ -49,8 +47,9 @@ class Location extends SnipeModel
      * @var bool
      */
     protected $injectUniqueIdentifier = true;
-    use ValidatingTrait;
+
     use UniqueUndeletedTrait;
+    use ValidatingTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -73,6 +72,7 @@ class Location extends SnipeModel
         'manager_id',
         'image',
     ];
+
     protected $hidden = ['user_id'];
 
     use Searchable;
@@ -90,9 +90,8 @@ class Location extends SnipeModel
      * @var array
      */
     protected $searchableRelations = [
-      'parent' => ['name'],
+        'parent' => ['name'],
     ];
-
 
     /**
      * Determine whether or not this location can be deleted.
@@ -101,24 +100,29 @@ class Location extends SnipeModel
      * it can be deleted. It's tempting to load those here, but that increases the query load considerably.
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return bool
      */
     public function isDeletable()
     {
 
         return Gate::allows('delete', $this)
-                && ($this->assets_count === 0)
-                && ($this->assigned_assets_count === 0)
-                && ($this->children_count === 0)
-                && ($this->users_count === 0);
+                && ($this->assets_count == 0)
+                && ($this->assigned_assets_count == 0)
+                && ($this->children_count == 0)
+                && ($this->accessories_count == 0)
+                && ($this->users_count == 0);
     }
 
     /**
      * Establishes the user -> location relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function users()
@@ -130,7 +134,9 @@ class Location extends SnipeModel
      * Find assets with this location as their location_id
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assets()
@@ -138,17 +144,18 @@ class Location extends SnipeModel
         return $this->hasMany(\App\Models\Asset::class, 'location_id')
             ->whereHas('assetstatus', function ($query) {
                 $query->where('status_labels.deployable', '=', 1)
-                        ->orWhere('status_labels.pending', '=', 1)
-                        ->orWhere('status_labels.archived', '=', 0);
+                    ->orWhere('status_labels.pending', '=', 1)
+                    ->orWhere('status_labels.archived', '=', 0);
             });
     }
-
 
     /**
      * Establishes the  asset -> rtd_location relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function rtd_assets()
@@ -168,7 +175,9 @@ class Location extends SnipeModel
      * Establishes the consumable -> location relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function consumables()
@@ -180,7 +189,9 @@ class Location extends SnipeModel
      * Establishes the component -> location relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function components()
@@ -192,7 +203,9 @@ class Location extends SnipeModel
      * Establishes the component -> accessory relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function accessories()
@@ -204,7 +217,9 @@ class Location extends SnipeModel
      * Find the parent of a location
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function parent()
@@ -213,12 +228,13 @@ class Location extends SnipeModel
             ->with('parent');
     }
 
-
     /**
      * Find the manager of a location
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function manager()
@@ -226,12 +242,13 @@ class Location extends SnipeModel
         return $this->belongsTo(\App\Models\User::class, 'manager_id');
     }
 
-
     /**
      * Find children of a location
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v2.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function children()
@@ -244,7 +261,9 @@ class Location extends SnipeModel
      * Establishes the asset -> location assignment relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function assignedAssets()
@@ -261,9 +280,8 @@ class Location extends SnipeModel
      * Query builder scope to order on parent
      *
      * @param  Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
-     *
-     * @return Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return Illuminate\Database\Query\Builder Modified query builder
      */
     public static function indenter($locations_with_children, $parent_id = null, $prefix = '')
     {
@@ -290,9 +308,8 @@ class Location extends SnipeModel
      * Query builder scope to order on parent
      *
      * @param  Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
-     *
-     * @return Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderParent($query, $order)
     {
@@ -304,9 +321,8 @@ class Location extends SnipeModel
      * Query builder scope to order on manager name
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderManager($query, $order)
     {

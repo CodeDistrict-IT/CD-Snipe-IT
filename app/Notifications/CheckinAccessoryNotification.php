@@ -9,6 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 use NotificationChannels\GoogleChat\Card;
 use NotificationChannels\GoogleChat\GoogleChatChannel;
 use NotificationChannels\GoogleChat\GoogleChatMessage;
@@ -16,7 +17,6 @@ use NotificationChannels\GoogleChat\Section;
 use NotificationChannels\GoogleChat\Widgets\KeyValue;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsChannel;
 use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
-use Illuminate\Support\Facades\Log;
 
 class CheckinAccessoryNotification extends Notification
 {
@@ -25,7 +25,7 @@ class CheckinAccessoryNotification extends Notification
     /**
      * Create a new notification instance.
      *
-     * @param $params
+     * @param  $params
      */
     public function __construct(Accessory $accessory, $checkedOutTo, User $checkedInby, $note)
     {
@@ -54,7 +54,7 @@ class CheckinAccessoryNotification extends Notification
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = 'slack';
         }
 
@@ -92,12 +92,13 @@ class CheckinAccessoryNotification extends Notification
             ->content(':arrow_down: :keyboard: '.trans('mail.Accessory_Checkin_Notification'))
             ->from($botname)
             ->to($channel)
-            ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
+            ->attachment(function ($attachment) use ($item, $note, $fields) {
                 $attachment->title(htmlspecialchars_decode($item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($note);
             });
     }
+
     public function toMicrosoftTeams()
     {
         $admin = $this->admin;
@@ -112,10 +113,11 @@ class CheckinAccessoryNotification extends Notification
             ->addStartGroupToSection('activityText')
             ->fact(htmlspecialchars_decode($item->present()->name), '', 'activityTitle')
             ->fact(trans('mail.checked_into'), $item->location->name ? $item->location->name : '')
-            ->fact(trans('mail.Accessory_Checkin_Notification')." by ", $admin->present()->fullName())
+            ->fact(trans('mail.Accessory_Checkin_Notification').' by ', $admin->present()->fullName())
             ->fact(trans('admin/consumables/general.remaining'), $item->numRemaining())
             ->fact(trans('mail.notes'), $note ?: '');
     }
+
     public function toGoogleChat()
     {
         $item = $this->item;
@@ -134,7 +136,7 @@ class CheckinAccessoryNotification extends Notification
                             KeyValue::create(
                                 trans('mail.checked_into').': '.$item->location->name ? $item->location->name : '',
                                 trans('admin/consumables/general.remaining').': '.$item->numRemaining(),
-                                trans('admin/hardware/form.notes').": ".$note ?: '',
+                                trans('admin/hardware/form.notes').': '.$note ?: '',
                             )
                                 ->onClick(route('accessories.show', $item->id))
                         )
@@ -155,11 +157,12 @@ class CheckinAccessoryNotification extends Notification
 
         return (new MailMessage)->markdown('notifications.markdown.checkin-accessory',
             [
-                'item'          => $this->item,
-                'admin'         => $this->admin,
-                'note'          => $this->note,
-                'target'        => $this->target,
+                'item' => $this->item,
+                'admin' => $this->admin,
+                'note' => $this->note,
+                'target' => $this->target,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.Accessory_Checkin_Notification'));
     }
 }

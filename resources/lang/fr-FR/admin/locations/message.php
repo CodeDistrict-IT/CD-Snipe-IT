@@ -1,29 +1,34 @@
 <?php
 
-return array(
+return [
 
     'does_not_exist' => 'Le lieu n\'existe pas.',
-    'assoc_users'    => 'Cet emplacement n\'est pas actuellement supprimable car il s\'agit de l\'emplacement de l\'enregistrement pour au moins un actif ou un utilisateur, a des actifs qui lui sont assignés, ou est l\'emplacement parent d\'un autre emplacement. Veuillez mettre à jour vos modèles pour ne plus référencer cette entreprise et réessayez. ',
-    'assoc_assets'	 => 'Cet emplacement est actuellement associé à au moins un actif et ne peut pas être supprimé. Veuillez mettre à jour vos actifs pour ne plus faire référence à cet emplacement et réessayez. ',
-    'assoc_child_loc'	 => 'Cet emplacement est actuellement le parent d\'au moins un sous emplacement et ne peut pas être supprimé . S\'il vous plaît mettre à jour vos emplacement pour ne plus le référencer et réessayez. ',
+    'assoc_users' => 'This location is not currently deletable because it is the location of record for at least one asset or user, has assets assigned to it, or is the parent location of another location. Please update your records to no longer reference this location and try again. ',
+    'assoc_assets' => 'Cet emplacement est actuellement associé à au moins un actif et ne peut pas être supprimé. Veuillez mettre à jour vos actifs pour ne plus faire référence à cet emplacement et réessayez. ',
+    'assoc_child_loc' => 'Cet emplacement est actuellement le parent d\'au moins un sous emplacement et ne peut pas être supprimé . S\'il vous plaît mettre à jour vos emplacement pour ne plus le référencer et réessayez. ',
     'assigned_assets' => 'Actifs assignés',
     'current_location' => 'Emplacement actuel',
+    'open_map' => 'Open in :map_provider_icon Maps',
 
+    'create' => [
+        'error' => 'Le lieu n\'a pas été créé, veuillez essayer à nouveau.',
+        'success' => 'Le lieu a été créé avec succès.',
+    ],
 
-    'create' => array(
-        'error'   => 'Le lieu n\'a pas été créé, veuillez essayer à nouveau.',
-        'success' => 'Le lieu a été créé avec succès.'
-    ),
+    'update' => [
+        'error' => 'Le lieu n\'a pas été mis à jour, veuillez essayer à nouveau',
+        'success' => 'Le lieu a été mis à jour avec succès.',
+    ],
 
-    'update' => array(
-        'error'   => 'Le lieu n\'a pas été mis à jour, veuillez essayer à nouveau',
-        'success' => 'Le lieu a été mis à jour avec succès.'
-    ),
+    'restore' => [
+        'error' => 'Location was not restored, please try again',
+        'success' => 'Location restored successfully.',
+    ],
 
-    'delete' => array(
-        'confirm'   	=> 'Êtes-vous sûr de vouloir supprimer ce lieu ?',
-        'error'   => 'Un problème a eu lieu pendant la suppression du lieu. Veuillez essayer à nouveau.',
-        'success' => 'Le lieu a été supprimé avec succès.'
-    )
+    'delete' => [
+        'confirm' => 'Êtes-vous sûr de vouloir supprimer ce lieu ?',
+        'error' => 'Un problème a eu lieu pendant la suppression du lieu. Veuillez essayer à nouveau.',
+        'success' => 'Le lieu a été supprimé avec succès.',
+    ],
 
-);
+];

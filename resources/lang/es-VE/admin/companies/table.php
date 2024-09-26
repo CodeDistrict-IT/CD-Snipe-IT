@@ -1,11 +1,12 @@
 <?php
-return array(
+
+return [
     'companies' => 'Compañías',
-    'create'    => 'Crear Compañía',
-    'email'     => 'Correo electrónico de la compañía',
-    'title'     => 'Compañía',
-    'phone'     => 'Teléfono de la compañía',
-    'update'    => 'Actualizar Compañía',
-    'name'      => 'Nombre de Compañía',
-    'id'        => 'Identificación',
-);
+    'create' => 'Crear Compañía',
+    'email' => 'Correo electrónico de la compañía',
+    'title' => 'Compañía',
+    'phone' => 'Teléfono de la compañía',
+    'update' => 'Actualizar Compañía',
+    'name' => 'Nombre de Compañía',
+    'id' => 'Identificación',
+];

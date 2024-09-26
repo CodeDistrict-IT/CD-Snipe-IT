@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Assets\Ui;
+namespace Tests\Feature\Assets\Ui;
 
 use App\Models\Asset;
 use App\Models\User;
@@ -26,12 +26,12 @@ class CloneAssetTest extends TestCase
 
     public function testAssetCanBeCloned()
     {
-        $asset_to_clone = Asset::factory()->create(['name'=>'Asset to clone']);
+        $asset_to_clone = Asset::factory()->create(['name' => 'Asset to clone']);
         $this->actingAs(User::factory()->createAssets()->create())
             ->get(route('clone/hardware', $asset_to_clone))
             ->assertOk()
             ->assertSee([
-                'Asset to clone'
+                'Asset to clone',
             ], false);
     }
 }

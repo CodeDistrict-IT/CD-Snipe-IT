@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => '請選擇資產報表選項。',
+    'info' => '請選擇資產報表選項。',
     'deleted_user' => '删除的用户',
     'send_reminder' => '傳送提醒',
     'reminder_sent' => '已發送提醒',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'User City',
         'user_state' => 'User State',
         'user_country' => 'User Country',
-        'user_zip' => 'User Zip'
-    ]
+        'user_zip' => 'User Zip',
+    ],
 ];

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Pasirinkite tai, ką norite matyti savo turto ataskaitoje.',
+    'info' => 'Pasirinkite tai, ką norite matyti savo turto ataskaitoje.',
     'deleted_user' => 'Panaikintas naudotojas',
     'send_reminder' => 'Siųsti priminimą',
     'reminder_sent' => 'Priminimas išsiųstas',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Naudotojo miestas',
         'user_state' => 'Naudotojo rajonas',
         'user_country' => 'Naudotojo šalis',
-        'user_zip' => 'Naudotojo pašto kodas'
-    ]
+        'user_zip' => 'Naudotojo pašto kodas',
+    ],
 ];

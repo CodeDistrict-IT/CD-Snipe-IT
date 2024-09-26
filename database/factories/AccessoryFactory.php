@@ -125,11 +125,12 @@ class AccessoryFactory extends Factory
         })->afterCreating(function ($accessory) {
             $user = User::factory()->create();
 
-            $accessory->users()->attach($accessory->id, [
+            $accessory->checkouts()->create([
                 'accessory_id' => $accessory->id,
-                'created_at' => now(),
+                'created_at' => Carbon::now(),
                 'user_id' => $user->id,
                 'assigned_to' => $user->id,
+                'assigned_type' => User::class,
                 'note' => '',
             ]);
         });
@@ -142,14 +143,15 @@ class AccessoryFactory extends Factory
         });
     }
 
-    public function checkedOutToUser(User $user = null)
+    public function checkedOutToUser(?User $user = null)
     {
         return $this->afterCreating(function (Accessory $accessory) use ($user) {
-            $accessory->users()->attach($accessory->id, [
+            $accessory->checkouts()->create([
                 'accessory_id' => $accessory->id,
                 'created_at' => Carbon::now(),
                 'user_id' => 1,
                 'assigned_to' => $user->id ?? User::factory()->create()->id,
+                'assigned_type' => User::class,
             ]);
         });
     }

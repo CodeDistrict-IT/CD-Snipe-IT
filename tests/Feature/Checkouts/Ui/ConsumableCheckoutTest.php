@@ -3,8 +3,6 @@
 namespace Tests\Feature\Checkouts\Ui;
 
 use App\Models\Actionlog;
-use App\Models\Asset;
-use App\Models\Component;
 use App\Models\Consumable;
 use App\Models\User;
 use App\Notifications\CheckoutConsumableNotification;
@@ -100,7 +98,7 @@ class ConsumableCheckoutTest extends TestCase
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('consumables.index'))
             ->post(route('consumables.checkout.store', $consumable), [
-                'assigned_to' =>  User::factory()->create()->id,
+                'assigned_to' => User::factory()->create()->id,
                 'redirect_option' => 'index',
                 'assigned_qty' => 1,
             ])
@@ -114,8 +112,8 @@ class ConsumableCheckoutTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('consumables.index'))
-            ->post(route('consumables.checkout.store' , $consumable), [
-                'assigned_to' =>  User::factory()->create()->id,
+            ->post(route('consumables.checkout.store', $consumable), [
+                'assigned_to' => User::factory()->create()->id,
                 'redirect_option' => 'item',
                 'assigned_qty' => 1,
             ])
@@ -130,13 +128,12 @@ class ConsumableCheckoutTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('components.index'))
-            ->post(route('consumables.checkout.store' , $consumable), [
-                'assigned_to' =>  $user->id,
+            ->post(route('consumables.checkout.store', $consumable), [
+                'assigned_to' => $user->id,
                 'redirect_option' => 'target',
                 'assigned_qty' => 1,
             ])
             ->assertStatus(302)
             ->assertRedirect(route('users.show', ['user' => $user]));
     }
-
 }

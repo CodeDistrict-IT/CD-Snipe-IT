@@ -7,25 +7,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ItemImportRequest;
 use App\Http\Transformers\ImportsTransformer;
 use App\Models\Asset;
-use App\Models\Company;
 use App\Models\Import;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Database\Eloquent\JsonEncodingException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use League\Csv\Reader;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\JsonResponse;
 
 class ImportController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
      */
-    public function index() : JsonResponse | array
+    public function index(): JsonResponse|array
     {
         $this->authorize('import');
         $imports = Import::latest()->get();
@@ -38,7 +36,7 @@ class ImportController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store() : JsonResponse
+    public function store(): JsonResponse
     {
         $this->authorize('import');
         if (! config('app.lock_passwords')) {
@@ -95,7 +93,7 @@ class ImportController extends Controller
                     }
                 }
                 if (count($duplicate_headers) > 0) {
-                    return response()->json(Helper::formatStandardApiResponse('error', null, implode('; ', $duplicate_headers)),422);
+                    return response()->json(Helper::formatStandardApiResponse('error', null, implode('; ', $duplicate_headers)), 422);
                 }
 
                 try {
@@ -128,12 +126,12 @@ class ImportController extends Controller
                 $import->file_path = $file_name;
                 $import->filesize = null;
 
-                if (!file_exists($path.'/'.$file_name)) {
+                if (! file_exists($path.'/'.$file_name)) {
                     return response()->json(Helper::formatStandardApiResponse('error', null, trans('general.file_not_found')), 500);
                 }
 
                 $import->filesize = filesize($path.'/'.$file_name);
-                
+
                 $import->save();
                 $results[] = $import;
             }
@@ -152,7 +150,7 @@ class ImportController extends Controller
      *
      * @param  int  $import_id
      */
-    public function process(ItemImportRequest $request, $import_id) : JsonResponse
+    public function process(ItemImportRequest $request, $import_id): JsonResponse
     {
         $this->authorize('import');
 
@@ -166,8 +164,9 @@ class ImportController extends Controller
 
         $import = Import::find($import_id);
 
-        if(is_null($import)){
-            $error[0][0] = trans("validation.exists", ["attribute" => "file"]);
+        if (is_null($import)) {
+            $error[0][0] = trans('validation.exists', ['attribute' => 'file']);
+
             return response()->json(Helper::formatStandardApiResponse('import-errors', null, $error), 500);
         }
 
@@ -211,7 +210,7 @@ class ImportController extends Controller
      *
      * @param  int  $import_id
      */
-    public function destroy($import_id) : JsonResponse
+    public function destroy($import_id): JsonResponse
     {
         $this->authorize('create', Asset::class);
 
@@ -230,6 +229,7 @@ class ImportController extends Controller
             }
 
         }
+
         return response()->json(Helper::formatStandardApiResponse('warning', null, trans('admin/hardware/message.import.file_not_deleted_warning')));
     }
 }

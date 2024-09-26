@@ -174,7 +174,6 @@ return [
 
     'bs_table_storage' => env('BS_TABLE_STORAGE', 'cookieStorage'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Bootstrap Table Enable Deeplinking

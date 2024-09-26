@@ -64,7 +64,7 @@ class LicenseCheckoutTest extends TestCase
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('licenses.checkout', ['licenseId' => $license->id]))
             ->post(route('licenses.checkout', ['licenseId' => $license->id]), [
-                'assigned_to' =>  User::factory()->create()->id,
+                'assigned_to' => User::factory()->create()->id,
                 'redirect_option' => 'index',
                 'assigned_qty' => 1,
             ])
@@ -78,8 +78,8 @@ class LicenseCheckoutTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('licenses.checkout', ['licenseId' => $license->id]))
-            ->post(route('licenses.checkout' , ['licenseId' => $license->id]), [
-                'assigned_to' =>  User::factory()->create()->id,
+            ->post(route('licenses.checkout', ['licenseId' => $license->id]), [
+                'assigned_to' => User::factory()->create()->id,
                 'redirect_option' => 'item',
             ])
             ->assertStatus(302)
@@ -93,13 +93,14 @@ class LicenseCheckoutTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('licenses.checkout', ['licenseId' => $license->id]))
-            ->post(route('licenses.checkout' , $license), [
-                'assigned_to' =>  $user->id,
+            ->post(route('licenses.checkout', $license), [
+                'assigned_to' => $user->id,
                 'redirect_option' => 'target',
             ])
             ->assertStatus(302)
             ->assertRedirect(route('users.show', ['user' => $user->id]));
     }
+
     public function testLicenseCheckoutPagePostIsRedirectedIfRedirectSelectionIsAssetTarget()
     {
         $asset = Asset::factory()->create();
@@ -107,8 +108,8 @@ class LicenseCheckoutTest extends TestCase
 
         $this->actingAs(User::factory()->admin()->create())
             ->from(route('licenses.checkout', ['licenseId' => $license->id]))
-            ->post(route('licenses.checkout' , $license), [
-                'asset_id' =>  $asset->id,
+            ->post(route('licenses.checkout', $license), [
+                'asset_id' => $asset->id,
                 'redirect_option' => 'target',
             ])
             ->assertStatus(302)

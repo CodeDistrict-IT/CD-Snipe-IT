@@ -13,7 +13,6 @@ abstract class Presenter
 
     /**
      * Presenter constructor.
-     * @param SnipeModel $model
      */
     public function __construct(SnipeModel $model)
     {

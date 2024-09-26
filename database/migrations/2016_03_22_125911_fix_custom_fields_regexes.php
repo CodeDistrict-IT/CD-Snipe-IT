@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
 class FixCustomFieldsRegexes extends Migration
 {
@@ -27,7 +26,7 @@ class FixCustomFieldsRegexes extends Migration
                     $custom_field->format = 'IP';
                     break;
 
-                //ANYTHING ELSE.
+                    //ANYTHING ELSE.
                 default:
                     $custom_field->format = 'regex:/^'.$custom_field->format.'$/';
             }

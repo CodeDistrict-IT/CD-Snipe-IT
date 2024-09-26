@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Khetha okukhethwa kukho okufunayo kumbiko wakho wefa.',
+    'info' => 'Khetha okukhethwa kukho okufunayo kumbiko wakho wefa.',
     'deleted_user' => 'Deleted user',
     'send_reminder' => 'Send reminder',
     'reminder_sent' => 'Reminder sent',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'User City',
         'user_state' => 'User State',
         'user_country' => 'User Country',
-        'user_zip' => 'User Zip'
-    ]
+        'user_zip' => 'User Zip',
+    ],
 ];

@@ -3,27 +3,30 @@
 return [
 
     'update' => [
-        'error'                 => 'เกิด error ระหว่างการอัพเดตข้อมูล ',
-        'success'               => 'อัพเดตการตั้งค่าเรียบร้อยแล้ว',
+        'error' => 'เกิด error ระหว่างการอัพเดตข้อมูล ',
+        'success' => 'อัพเดตการตั้งค่าเรียบร้อยแล้ว',
     ],
     'backup' => [
-        'delete_confirm'        => 'คุณแน่ใจที่จะลบข้อมูลสำรองนี้? การดำเนินการนี้จะไม่สามารถกู้คืนได้ ',
-        'file_deleted'          => 'ลบข้อมูลสำรองเรียบร้อยแล้ว ',
-        'generated'             => 'ไฟล์ข้อมูลสำรองถูกสร้างเรียบร้อยแล้ว',
-        'file_not_found'        => 'ไม่พบไฟล์ข้อมูลสำรองบนเซิฟเวอร์',
-        'restore_warning'       => 'Yes, restore it. I acknowledge that this will overwrite any existing data currently in the database. This will also log out all of your existing users (including you).',
-        'restore_confirm'       => 'Are you sure you wish to restore your database from :filename?'
+        'delete_confirm' => 'คุณแน่ใจที่จะลบข้อมูลสำรองนี้? การดำเนินการนี้จะไม่สามารถกู้คืนได้ ',
+        'file_deleted' => 'ลบข้อมูลสำรองเรียบร้อยแล้ว ',
+        'generated' => 'ไฟล์ข้อมูลสำรองถูกสร้างเรียบร้อยแล้ว',
+        'file_not_found' => 'ไม่พบไฟล์ข้อมูลสำรองบนเซิฟเวอร์',
+        'restore_warning' => 'Yes, restore it. I acknowledge that this will overwrite any existing data currently in the database. This will also log out all of your existing users (including you).',
+        'restore_confirm' => 'Are you sure you wish to restore your database from :filename?',
+    ],
+    'restore' => [
+        'success' => 'Your system backup has been restored. Please log in again.',
     ],
     'purge' => [
-        'error'     => 'เกิดข้อผิดพลาดขณะล้างข้อมูล',
-        'validation_failed'     => 'การยืนยันการล้างข้อมูลของคุณไม่ถูกต้อง โปรดพิมพ์คำว่า "DELETE" ในช่องยืนยัน',
-        'success'               => 'ล้างระเบียนเรียบร้อยแล้ว',
+        'error' => 'เกิดข้อผิดพลาดขณะล้างข้อมูล',
+        'validation_failed' => 'การยืนยันการล้างข้อมูลของคุณไม่ถูกต้อง โปรดพิมพ์คำว่า "DELETE" ในช่องยืนยัน',
+        'success' => 'ล้างระเบียนเรียบร้อยแล้ว',
     ],
     'mail' => [
         'sending' => 'Sending Test Email...',
         'success' => 'Mail sent!',
         'error' => 'Mail could not be sent.',
-        'additional' => 'No additional error message provided. Check your mail settings and your app log.'
+        'additional' => 'No additional error message provided. Check your mail settings and your app log.',
     ],
     'ldap' => [
         'testing' => 'Testing LDAP Connection, Binding & Query ...',
@@ -31,7 +34,7 @@ return [
         'error' => 'Something went wrong :(',
         'sync_success' => 'A sample of 10 users returned from the LDAP server based on your settings:',
         'testing_authentication' => 'Testing LDAP Authentication...',
-        'authentication_success' => 'User authenticated against LDAP successfully!'
+        'authentication_success' => 'User authenticated against LDAP successfully!',
     ],
     'webhook' => [
         'sending' => 'Sending :app test message...',
@@ -42,5 +45,5 @@ return [
         'error' => 'Something went wrong. :app responded with: :error_message',
         'error_redirect' => 'ERROR: 301/302 :endpoint returns a redirect. For security reasons, we don’t follow redirects. Please use the actual endpoint.',
         'error_misc' => 'Something went wrong. :( ',
-    ]
+    ],
 ];

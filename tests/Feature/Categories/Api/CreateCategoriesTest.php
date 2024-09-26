@@ -2,17 +2,12 @@
 
 namespace Tests\Feature\Categories\Api;
 
-use App\Models\Asset;
-use App\Models\AssetModel;
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class CreateCategoriesTest extends TestCase
 {
-
-
     public function testRequiresPermissionToCreateCategory()
     {
         $this->actingAsForApi(User::factory()->create())
@@ -52,7 +47,7 @@ class CreateCategoriesTest extends TestCase
             ->assertStatusMessageIs('error')
             ->assertJson([
                 'messages' => [
-                    'category_type'    => ['The category type field is required.'],
+                    'category_type' => ['The category type field is required.'],
                 ],
             ]);
         $this->assertFalse(Category::where('name', 'Test Category')->exists());
@@ -72,12 +67,11 @@ class CreateCategoriesTest extends TestCase
             ->assertStatusMessageIs('error')
             ->assertJson([
                 'messages' => [
-                    'category_type'    => ['The selected category type is invalid.'],
+                    'category_type' => ['The selected category type is invalid.'],
                 ],
             ]);
-        
+
         $this->assertFalse(Category::where('name', 'Test Category')->exists());
 
     }
-
 }

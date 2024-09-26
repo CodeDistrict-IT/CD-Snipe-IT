@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 // Asset Model Management
 
-
 Route::group(['prefix' => 'models', 'middleware' => ['auth']], function () {
 
     Route::post('{modelID}/upload',
@@ -25,68 +24,66 @@ Route::group(['prefix' => 'models', 'middleware' => ['auth']], function () {
     Route::get(
         '{modelId}/clone',
         [
-            AssetModelsController::class, 
-            'getClone'
+            AssetModelsController::class,
+            'getClone',
         ]
     )->name('models.clone.create');
 
     Route::post(
         '{modelId}/clone',
         [
-            AssetModelsController::class, 
-            'postCreate'
+            AssetModelsController::class,
+            'postCreate',
         ]
     )->name('models.clone.store');
 
     Route::get(
         '{modelId}/view',
         [
-            AssetModelsController::class, 
-            'getView'
+            AssetModelsController::class,
+            'getView',
         ]
     )->name('view/model');
 
     Route::post(
         '{modelID}/restore',
         [
-            AssetModelsController::class, 
-            'getRestore'
+            AssetModelsController::class,
+            'getRestore',
         ]
     )->name('models.restore.store');
 
     Route::get(
         '{modelId}/custom_fields',
         [
-            AssetModelsController::class, 
-            'getCustomFields'
+            AssetModelsController::class,
+            'getCustomFields',
         ]
     )->name('custom_fields/model');
 
     Route::post(
         'bulkedit',
         [
-            BulkAssetModelsController::class, 
-            'edit'
+            BulkAssetModelsController::class,
+            'edit',
         ]
     )->name('models.bulkedit.index');
 
     Route::post(
         'bulksave',
         [
-            BulkAssetModelsController::class, 
-            'update'
+            BulkAssetModelsController::class,
+            'update',
         ]
     )->name('models.bulkedit.store');
 
     Route::post(
         'bulkdelete',
         [
-            BulkAssetModelsController::class, 
-            'destroy'
+            BulkAssetModelsController::class,
+            'destroy',
         ]
     )->name('models.bulkdelete.store');
-
-
 
 });
 

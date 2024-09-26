@@ -9,6 +9,7 @@ class DepreciationPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -35,16 +36,36 @@ class DepreciationPresenter extends Presenter
                 'field' => 'months',
                 'searchable' => true,
                 'sortable' => true,
-                'title' =>  trans('admin/depreciations/table.term'),
+                'title' => trans('admin/depreciations/table.term'),
                 'visible' => true,
             ],
 
             [
-                "field" => 'depreciation_min',
-                "searchable" => false,
-                "sortable" => true,
-                "title" => trans('admin/depreciations/table.depreciation_min'),
-                "visible" => true,
+                'field' => 'depreciation_min',
+                'searchable' => false,
+                'sortable' => true,
+                'title' => trans('admin/depreciations/table.depreciation_min'),
+                'visible' => true,
+            ],
+            [
+                'field' => 'assets_count',
+                'searchable' => false,
+                'sortable' => true,
+                'title' => trans('general.assets'),
+                'visible' => true,
+            ],
+            [
+                'field' => 'models_count',
+                'searchable' => false,
+                'sortable' => true,
+                'title' => trans('general.asset_models'),
+                'visible' => true,
+            ], [
+                'field' => 'licenses_count',
+                'searchable' => false,
+                'sortable' => true,
+                'title' => trans('general.licenses'),
+                'visible' => true,
             ],
             [
                 'field' => 'actions',

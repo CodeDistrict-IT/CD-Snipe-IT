@@ -20,8 +20,8 @@ class UserSearchTest extends TestCase
         $results = collect($response->json('rows'));
 
         $this->assertEquals(1, $results->count());
-        $this->assertTrue($results->pluck('name')->contains(fn($text) => str_contains($text, 'Luke')));
-        $this->assertFalse($results->pluck('name')->contains(fn($text) => str_contains($text, 'Darth')));
+        $this->assertTrue($results->pluck('name')->contains(fn ($text) => str_contains($text, 'Luke')));
+        $this->assertFalse($results->pluck('name')->contains(fn ($text) => str_contains($text, 'Darth')));
     }
 
     public function testResultsWhenSearchingForActiveUsers()
@@ -101,11 +101,11 @@ class UserSearchTest extends TestCase
         $results = collect($response->json('rows'));
 
         $this->assertTrue(
-            $results->pluck('name')->contains(fn($text) => str_contains($text, 'Company A')),
+            $results->pluck('name')->contains(fn ($text) => str_contains($text, 'Company A')),
             'User index does not contain expected user'
         );
         $this->assertFalse(
-            $results->pluck('name')->contains(fn($text) => str_contains($text, 'Company B')),
+            $results->pluck('name')->contains(fn ($text) => str_contains($text, 'Company B')),
             'User index contains unexpected user from another company'
         );
     }
@@ -136,11 +136,11 @@ class UserSearchTest extends TestCase
         $results = collect($response->json('rows'));
 
         $this->assertTrue(
-            $results->pluck('name')->contains(fn($text) => str_contains($text, 'Company A')),
+            $results->pluck('name')->contains(fn ($text) => str_contains($text, 'Company A')),
             'User index does not contain expected user'
         );
         $this->assertFalse(
-            $results->pluck('name')->contains(fn($text) => str_contains($text, 'Company B')),
+            $results->pluck('name')->contains(fn ($text) => str_contains($text, 'Company B')),
             'User index contains unexpected user from another company'
         );
     }

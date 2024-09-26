@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Demirbaş Raporu için istediğiniz seçenekleri seçiniz.',
+    'info' => 'Demirbaş Raporu için istediğiniz seçenekleri seçiniz.',
     'deleted_user' => 'Kullanıcı silindi',
     'send_reminder' => 'Hatırlatma gönder',
     'reminder_sent' => 'Hatırlatıcı gönderildi',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Kullanıcı Şehri',
         'user_state' => 'Kullanıcı Durumu',
         'user_country' => 'Kullanıcı Ülkesi',
-        'user_zip' => 'Kullanıcı Posta Kodu'
-    ]
+        'user_zip' => 'Kullanıcı Posta Kodu',
+    ],
 ];

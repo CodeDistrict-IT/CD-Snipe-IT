@@ -3,13 +3,12 @@
 namespace Tests\Feature\Users\Ui;
 
 use App\Models\Accessory;
+use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\Consumable;
 use App\Models\LicenseSeat;
 use App\Models\User;
-use App\Models\Actionlog;
 use Tests\TestCase;
-
 
 class MergeUsersTest extends TestCase
 {
@@ -27,7 +26,7 @@ class MergeUsersTest extends TestCase
             ->post(route('users.merge.save', $user1->id),
                 [
                     'ids_to_merge' => [$user1->id, $user2->id],
-                    'merge_into_id' => $user_to_merge_into->id
+                    'merge_into_id' => $user_to_merge_into->id,
                 ])
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
@@ -55,7 +54,7 @@ class MergeUsersTest extends TestCase
             ->post(route('users.merge.save', $user1->id),
                 [
                     'ids_to_merge' => [$user1->id, $user2->id],
-                    'merge_into_id' => $user_to_merge_into->id
+                    'merge_into_id' => $user_to_merge_into->id,
                 ])
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
@@ -83,7 +82,7 @@ class MergeUsersTest extends TestCase
             ->post(route('users.merge.save', $user1->id),
                 [
                     'ids_to_merge' => [$user1->id, $user2->id],
-                    'merge_into_id' => $user_to_merge_into->id
+                    'merge_into_id' => $user_to_merge_into->id,
                 ])
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
@@ -111,7 +110,7 @@ class MergeUsersTest extends TestCase
             ->post(route('users.merge.save', $user1->id),
                 [
                     'ids_to_merge' => [$user1->id, $user2->id],
-                    'merge_into_id' => $user_to_merge_into->id
+                    'merge_into_id' => $user_to_merge_into->id,
                 ])
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
@@ -139,7 +138,7 @@ class MergeUsersTest extends TestCase
             ->post(route('users.merge.save', $user1->id),
                 [
                     'ids_to_merge' => [$user1->id, $user2->id],
-                    'merge_into_id' => $user_to_merge_into->id
+                    'merge_into_id' => $user_to_merge_into->id,
                 ])
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
@@ -167,7 +166,7 @@ class MergeUsersTest extends TestCase
             ->post(route('users.merge.save', $user1->id),
                 [
                     'ids_to_merge' => [$user1->id, $user2->id],
-                    'merge_into_id' => $user_to_merge_into->id
+                    'merge_into_id' => $user_to_merge_into->id,
                 ])
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
@@ -195,7 +194,7 @@ class MergeUsersTest extends TestCase
             ->post(route('users.merge.save', $user1->id),
                 [
                     'ids_to_merge' => [$user1->id, $user2->id],
-                    'merge_into_id' => $user_to_merge_into->id
+                    'merge_into_id' => $user_to_merge_into->id,
                 ])
             ->assertStatus(302)
             ->assertRedirect(route('users.index'));
@@ -208,6 +207,4 @@ class MergeUsersTest extends TestCase
         $this->assertEquals(2, $user2->refresh()->userlog->count());
 
     }
-
-
 }

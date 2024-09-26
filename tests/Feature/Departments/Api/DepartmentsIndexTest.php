@@ -39,7 +39,7 @@ class DepartmentsIndexTest extends TestCase
                 'total',
                 'rows',
             ])
-            ->assertJson(fn(AssertableJson $json) => $json->has('rows', 3)->etc());
+            ->assertJson(fn (AssertableJson $json) => $json->has('rows', 3)->etc());
     }
 
     public function testDepartmentIndexAdheresToCompanyScoping()

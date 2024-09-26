@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Zvolte možnosti zprávy o majetku.',
+    'info' => 'Zvolte možnosti zprávy o majetku.',
     'deleted_user' => 'Odstraněný uživatel',
     'send_reminder' => 'Poslat připomínku',
     'reminder_sent' => 'Připomínka odeslána',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Město uživatele',
         'user_state' => 'Stav uživatele',
         'user_country' => 'Země uživatele',
-        'user_zip' => 'PSČ uživatele'
-    ]
+        'user_zip' => 'PSČ uživatele',
+    ],
 ];

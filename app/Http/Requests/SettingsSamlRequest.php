@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\Setting;
 use Illuminate\Foundation\Http\FormRequest;
 use OneLogin\Saml2\IdPMetadataParser as OneLogin_Saml2_IdPMetadataParser;
-use OneLogin\Saml2\Utils as OneLogin_Saml2_Utils;
 
 /**
  * This handles validating and cleaning SAML settings provided by the user.

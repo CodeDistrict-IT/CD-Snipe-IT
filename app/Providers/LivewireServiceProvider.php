@@ -22,11 +22,11 @@ class LivewireServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Livewire::setUpdateRoute(function ($handle) {
-            return Route::post('/' . config('livewire.url_prefix') . '/livewire/update', $handle);
+            return Route::post('/'.config('livewire.url_prefix').'/livewire/update', $handle);
         });
 
         Livewire::setScriptRoute(function ($handle) {
-            return Route::get('/' . config('livewire.url_prefix') . '/livewire/livewire.js', $handle);
+            return Route::get('/'.config('livewire.url_prefix').'/livewire/livewire.js', $handle);
         });
     }
 }

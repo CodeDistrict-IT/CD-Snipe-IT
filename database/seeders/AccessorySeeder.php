@@ -16,7 +16,7 @@ class AccessorySeeder extends Seeder
     public function run()
     {
         Accessory::truncate();
-        DB::table('accessories_users')->truncate();
+        DB::table('accessories_checkout')->truncate();
 
         if (! Location::count()) {
             $this->call(LocationSeeder::class);
@@ -55,7 +55,6 @@ class AccessorySeeder extends Seeder
             'supplier_id' => $supplierIds->random(),
             'user_id' => $admin->id,
         ]);
-
 
         $src = public_path('/img/demo/accessories/');
         $dst = 'accessories'.'/';

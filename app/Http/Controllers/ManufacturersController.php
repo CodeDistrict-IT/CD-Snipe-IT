@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ImageUploadRequest;
 use App\Models\Actionlog;
 use App\Models\Manufacturer;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
-use \Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * This controller handles all actions related to Manufacturers for
@@ -25,12 +25,14 @@ class ManufacturersController extends Controller
      * the content for the manufacturers listing, which is generated in getDatatable.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see Api\ManufacturersController::index() method that generates the JSON response
      * @since [v1.0]
      */
-    public function index() : View
+    public function index(): View
     {
         $this->authorize('index', Manufacturer::class);
+
         return view('manufacturers/index');
     }
 
@@ -38,10 +40,11 @@ class ManufacturersController extends Controller
      * Returns a view that displays a form to create a new manufacturer.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ManufacturersController::store()
      * @since [v1.0]
      */
-    public function create() : View
+    public function create(): View
     {
         $this->authorize('create', Manufacturer::class);
 
@@ -52,11 +55,11 @@ class ManufacturersController extends Controller
      * Validates and stores the data for a new manufacturer.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ManufacturersController::create()
      * @since [v1.0]
-     * @param ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize('create', Manufacturer::class);
         $manufacturer = new Manufacturer;
@@ -80,11 +83,14 @@ class ManufacturersController extends Controller
      * Returns a view that displays a form to edit a manufacturer.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ManufacturersController::update()
-     * @param int $manufacturerId
+     *
+     * @param  int  $manufacturerId
+     *
      * @since [v1.0]
      */
-    public function edit($manufacturerId = null) : View | RedirectResponse
+    public function edit($manufacturerId = null): View|RedirectResponse
     {
         // Handles manufacturer checks and permissions.
         $this->authorize('update', Manufacturer::class);
@@ -102,12 +108,15 @@ class ManufacturersController extends Controller
      * Validates and stores the updated manufacturer data.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see ManufacturersController::getEdit()
-     * @param Request $request
-     * @param int $manufacturerId
+     *
+     * @param  Request  $request
+     * @param  int  $manufacturerId
+     *
      * @since [v1.0]
      */
-    public function update(ImageUploadRequest $request, $manufacturerId = null) : RedirectResponse
+    public function update(ImageUploadRequest $request, $manufacturerId = null): RedirectResponse
     {
         $this->authorize('update', Manufacturer::class);
         // Check if the manufacturer exists
@@ -142,10 +151,12 @@ class ManufacturersController extends Controller
      * Deletes a manufacturer.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $manufacturerId
+     *
+     * @param  int  $manufacturerId
+     *
      * @since [v1.0]
      */
-    public function destroy($manufacturerId) : RedirectResponse
+    public function destroy($manufacturerId): RedirectResponse
     {
         $this->authorize('delete', Manufacturer::class);
         if (is_null($manufacturer = Manufacturer::withTrashed()->withCount('models as models_count')->find($manufacturerId))) {
@@ -170,6 +181,7 @@ class ManufacturersController extends Controller
         } else {
             $manufacturer->forceDelete();
         }
+
         // Redirect to the manufacturers management page
         return redirect()->route('manufacturers.index')->with('success', trans('admin/manufacturers/message.delete.success'));
     }
@@ -180,10 +192,12 @@ class ManufacturersController extends Controller
      * This data contains a listing of all assets that belong to that manufacturer.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $manufacturerId
+     *
+     * @param  int  $manufacturerId
+     *
      * @since [v1.0]
      */
-    public function show($manufacturerId = null) : View | RedirectResponse
+    public function show($manufacturerId = null): View|RedirectResponse
     {
         $this->authorize('view', Manufacturer::class);
         $manufacturer = Manufacturer::find($manufacturerId);
@@ -193,6 +207,7 @@ class ManufacturersController extends Controller
         }
 
         $error = trans('admin/manufacturers/message.does_not_exist');
+
         // Redirect to the user management page
         return redirect()->route('manufacturers.index')->with('error', $error);
     }
@@ -201,10 +216,12 @@ class ManufacturersController extends Controller
      * Restore a given Manufacturer (mark as un-deleted)
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.1.15]
-     * @param int $manufacturers_id
+     *
+     * @param  int  $manufacturers_id
      */
-    public function restore($id) : RedirectResponse
+    public function restore($id): RedirectResponse
     {
         $this->authorize('delete', Manufacturer::class);
 
@@ -215,7 +232,7 @@ class ManufacturersController extends Controller
             }
 
             if ($manufacturer->restore()) {
-                $logaction = new Actionlog();
+                $logaction = new Actionlog;
                 $logaction->item_type = Manufacturer::class;
                 $logaction->item_id = $manufacturer->id;
                 $logaction->created_at = date('Y-m-d H:i:s');
@@ -227,6 +244,7 @@ class ManufacturersController extends Controller
                 if ($deleted_manufacturers > 0) {
                     return redirect()->back()->with('success', trans('admin/manufacturers/message.success.restored'));
                 }
+
                 return redirect()->route('manufacturers.index')->with('success', trans('admin/manufacturers/message.restore.success'));
             }
 

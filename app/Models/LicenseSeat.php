@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use App\Models\Traits\Acceptable;
-use App\Notifications\CheckinLicenseNotification;
-use App\Notifications\CheckoutLicenseNotification;
 use App\Presenters\Presentable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,9 +15,11 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
     use SoftDeletes;
 
     protected $presenter = \App\Presenters\LicenseSeatPresenter::class;
+
     use Presentable;
 
     protected $guarded = 'id';
+
     protected $table = 'license_seats';
 
     /**
@@ -43,7 +43,9 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
      * Determine whether the user should be required to accept the license
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return bool
      */
     public function requireAcceptance()
@@ -51,6 +53,7 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
         if ($this->license && $this->license->category) {
             return $this->license->category->require_acceptance;
         }
+
         return false;
     }
 
@@ -63,7 +66,9 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
      * Establishes the seat -> license relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function license()
@@ -75,7 +80,9 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
      * Establishes the seat -> assignee relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function user()
@@ -87,7 +94,9 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
      * Establishes the seat -> asset relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function asset()
@@ -100,7 +109,9 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
      * or asset its assigned to
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return string
      */
     public function location()
@@ -118,9 +129,8 @@ class LicenseSeat extends SnipeModel implements ICompanyableChild
      * Query builder scope to order on department
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order         Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderDepartments($query, $order)
     {

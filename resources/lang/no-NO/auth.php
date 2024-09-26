@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -17,4 +17,4 @@ return array(
     'password' => 'Angitt passord er feil.',
     'throttle' => 'For mange innloggingsforsøk. Prøv igjen om :seconds sekunder.',
 
-);
+];

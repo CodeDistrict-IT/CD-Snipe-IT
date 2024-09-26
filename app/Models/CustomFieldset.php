@@ -5,8 +5,6 @@ namespace App\Models;
 use Gate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 use Watson\Validating\ValidatingTrait;
 
 class CustomFieldset extends Model
@@ -18,6 +16,7 @@ class CustomFieldset extends Model
 
     /**
      * Validation rules
+     *
      * @var array
      */
     public $rules = [
@@ -37,7 +36,9 @@ class CustomFieldset extends Model
      * Establishes the fieldset -> field relationship
      *
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function fields()
@@ -49,7 +50,9 @@ class CustomFieldset extends Model
      * Establishes the fieldset -> models relationship
      *
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function models()
@@ -61,7 +64,9 @@ class CustomFieldset extends Model
      * Establishes the fieldset -> admin user relationship
      *
      * @author [Brady Wetherington] [<uberbrady@gmail.com>]
+     *
      * @since [v3.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function user()
@@ -74,7 +79,9 @@ class CustomFieldset extends Model
      * custom field format
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
+     *
      * @return array
      */
     public function validation_rules()
@@ -85,11 +92,11 @@ class CustomFieldset extends Model
 
             if (($field->field_encrypted != '1') ||
                   (($field->field_encrypted == '1') && (Gate::allows('admin')))) {
-                    $rule[] = ($field->pivot->required == '1') ? 'required' : 'nullable';
+                $rule[] = ($field->pivot->required == '1') ? 'required' : 'nullable';
             }
 
             if ($field->is_unique == '1') {
-                    $rule[] = 'unique_undeleted';
+                $rule[] = 'unique_undeleted';
             }
 
             array_push($rule, $field->attributes['format']);

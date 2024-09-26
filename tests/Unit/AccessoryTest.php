@@ -1,11 +1,12 @@
 <?php
+
 namespace Tests\Unit;
 
 use App\Models\Accessory;
-use App\Models\Manufacturer;
-use App\Models\Location;
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\Location;
+use App\Models\Manufacturer;
 use Tests\TestCase;
 
 class AccessoryTest extends TestCase
@@ -13,10 +14,9 @@ class AccessoryTest extends TestCase
     public function testAnAccessoryBelongsToACompany()
     {
         $accessory = Accessory::factory()
-        ->create(
-            [
-                'company_id' => 
-                    Company::factory()->create()->id]);
+            ->create(
+                [
+                    'company_id' => Company::factory()->create()->id]);
         $this->assertInstanceOf(Company::class, $accessory->company);
     }
 
@@ -25,7 +25,7 @@ class AccessoryTest extends TestCase
         $accessory = Accessory::factory()
             ->create(
                 [
-                    'location_id' => Location::factory()->create()->id
+                    'location_id' => Location::factory()->create()->id,
                 ]);
         $this->assertInstanceOf(Location::class, $accessory->location);
     }
@@ -35,12 +35,11 @@ class AccessoryTest extends TestCase
         $accessory = Accessory::factory()->appleBtKeyboard()
             ->create(
                 [
-                    'category_id' => 
-                        Category::factory()->create(
-                            [
-                                'category_type' => 'accessory'
-                            ]
-                )->id]);
+                    'category_id' => Category::factory()->create(
+                        [
+                            'category_type' => 'accessory',
+                        ]
+                    )->id]);
         $this->assertInstanceOf(Category::class, $accessory->category);
         $this->assertEquals('accessory', $accessory->category->category_type);
     }
@@ -50,7 +49,7 @@ class AccessoryTest extends TestCase
         $accessory = Accessory::factory()->appleBtKeyboard()->create(
             [
                 'category_id' => Category::factory()->create(),
-                'manufacturer_id' => Manufacturer::factory()->apple()->create()
+                'manufacturer_id' => Manufacturer::factory()->apple()->create(),
             ]);
         $this->assertInstanceOf(Manufacturer::class, $accessory->manufacturer);
     }

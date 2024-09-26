@@ -28,11 +28,12 @@ class LocationImporter extends ItemImporter
 
     /**
      * Create a location if a duplicate does not exist.
+     *
      * @todo Investigate how this should interact with Importer::createLocationIfNotExists
      *
      * @author A. Gianotto
+     *
      * @since 6.1.0
-     * @param array $row
      */
     public function createLocationIfNotExists(array $row)
     {
@@ -43,6 +44,7 @@ class LocationImporter extends ItemImporter
         if ($location) {
             if (! $this->updating) {
                 $this->log('A matching Location '.$this->item['name'].' already exists');
+
                 return;
             }
 
@@ -71,7 +73,7 @@ class LocationImporter extends ItemImporter
             $this->item['parent_id'] = $this->createOrFetchLocation(trim($this->findCsvMatch($row, 'parent_location')));
         }
 
-        if (!empty($this->item['manager'])) {
+        if (! empty($this->item['manager'])) {
             if ($manager = $this->createOrFetchUser($row, 'manager')) {
                 $this->item['manager_id'] = $manager->id;
             }
@@ -79,7 +81,6 @@ class LocationImporter extends ItemImporter
 
         Log::debug('Item array is: ');
         Log::debug(print_r($this->item, true));
-
 
         if ($editingLocation) {
             Log::debug('Updating existing location');
@@ -91,13 +92,14 @@ class LocationImporter extends ItemImporter
 
         if ($location->save()) {
             $this->log('Location '.$location->name.' created or updated from CSV import');
+
             return $location;
 
         } else {
             Log::debug($location->getErrors());
+
             return $location->errors;
         }
-
 
     }
 }

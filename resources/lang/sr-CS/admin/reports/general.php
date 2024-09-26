@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Odaberite željene opcije za izveštaj o imovini.',
+    'info' => 'Odaberite željene opcije za izveštaj o imovini.',
     'deleted_user' => 'Izbrisan korisnika',
     'send_reminder' => 'Pošalji podsetnik',
     'reminder_sent' => 'Podsetnik je poslat',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Grad korisnika',
         'user_state' => 'Pokrajina korisnika',
         'user_country' => 'Država korisnika',
-        'user_zip' => 'Poštanski broj korisnika'
-    ]
+        'user_zip' => 'Poštanski broj korisnika',
+    ],
 ];

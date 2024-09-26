@@ -4,8 +4,8 @@ namespace App\Http\Transformers;
 
 use App\Helpers\Helper;
 use App\Models\Supplier;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class SuppliersTransformer
@@ -20,13 +20,13 @@ class SuppliersTransformer
         return (new DatatablesTransformer)->transformDatatables($array, $total);
     }
 
-    public function transformSupplier(Supplier $supplier = null)
+    public function transformSupplier(?Supplier $supplier = null)
     {
         if ($supplier) {
             $array = [
                 'id' => (int) $supplier->id,
                 'name' => e($supplier->name),
-                'image' =>   ($supplier->image) ? Storage::disk('public')->url('suppliers/'.e($supplier->image)) : null,
+                'image' => ($supplier->image) ? Storage::disk('public')->url('suppliers/'.e($supplier->image)) : null,
                 'url' => e($supplier->url),
                 'address' => e($supplier->address),
                 'address2' => e($supplier->address2),

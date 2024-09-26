@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImageUploadRequest;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Http\Transformers\SuppliersTransformer;
 use App\Models\Supplier;
-use Illuminate\Http\Request;
-use App\Http\Requests\ImageUploadRequest;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SuppliersController extends Controller
 {
@@ -18,7 +18,9 @@ class SuppliersController extends Controller
      * Display a listing of the resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request): array
@@ -40,15 +42,14 @@ class SuppliersController extends Controller
             'consumables_count',
             'url',
         ];
-        
-        $suppliers = Supplier::select(
-                ['id', 'name', 'address', 'address2', 'city', 'state', 'country', 'fax', 'phone', 'email', 'contact', 'created_at', 'updated_at', 'deleted_at', 'image', 'notes', 'url'])
-                    ->withCount('assets as assets_count')
-                    ->withCount('licenses as licenses_count')
-                    ->withCount('accessories as accessories_count')
-                    ->withCount('components as components_count')
-                    ->withCount('consumables as consumables_count');
 
+        $suppliers = Supplier::select(
+            ['id', 'name', 'address', 'address2', 'city', 'state', 'country', 'fax', 'phone', 'email', 'contact', 'created_at', 'updated_at', 'deleted_at', 'image', 'notes', 'url'])
+            ->withCount('assets as assets_count')
+            ->withCount('licenses as licenses_count')
+            ->withCount('accessories as accessories_count')
+            ->withCount('components as components_count')
+            ->withCount('consumables as consumables_count');
 
         if ($request->filled('search')) {
             $suppliers = $suppliers->TextSearch($request->input('search'));
@@ -108,15 +109,14 @@ class SuppliersController extends Controller
         return (new SuppliersTransformer)->transformSuppliers($suppliers, $total);
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\ImageUploadRequest  $request
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Supplier::class);
         $supplier = new Supplier;
@@ -126,6 +126,7 @@ class SuppliersController extends Controller
         if ($supplier->save()) {
             return response()->json(Helper::formatStandardApiResponse('success', $supplier, trans('admin/suppliers/message.create.success')));
         }
+
         return response()->json(Helper::formatStandardApiResponse('error', null, $supplier->getErrors()));
 
     }
@@ -134,10 +135,12 @@ class SuppliersController extends Controller
      * Display the specified resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function show($id) : array
+    public function show($id): array
     {
         $this->authorize('view', Supplier::class);
         $supplier = Supplier::findOrFail($id);
@@ -145,16 +148,16 @@ class SuppliersController extends Controller
         return (new SuppliersTransformer)->transformSupplier($supplier);
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\ImageUploadRequest  $request
+     *
      * @param  int  $id
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Supplier::class);
         $supplier = Supplier::findOrFail($id);
@@ -172,15 +175,16 @@ class SuppliersController extends Controller
      * Remove the specified resource from storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Supplier::class);
         $supplier = Supplier::with('asset_maintenances', 'assets', 'licenses')->withCount('asset_maintenances as asset_maintenances_count', 'assets as assets_count', 'licenses as licenses_count')->findOrFail($id);
         $this->authorize('delete', $supplier);
-
 
         if ($supplier->assets_count > 0) {
             return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/suppliers/message.delete.assoc_assets', ['asset_count' => (int) $supplier->assets_count])));
@@ -203,10 +207,11 @@ class SuppliersController extends Controller
      * Gets a paginated collection for the select2 menus
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
 
         $this->authorize('view.selectlists');

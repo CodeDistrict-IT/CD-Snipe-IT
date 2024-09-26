@@ -15,7 +15,9 @@ use Illuminate\Support\Str;
  * as a one-time fix.
  *
  * @author [A. Gianotto] [<snipe@snipe.net>]
+ *
  * @since [v4.0]
+ *
  * @return array
  */
 function updateLegacyColumnName($customfield)

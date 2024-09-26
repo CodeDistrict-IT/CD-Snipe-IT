@@ -9,15 +9,11 @@ use Illuminate\Notifications\Notification;
 class ExpectedCheckinAdminNotification extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
-     *
-     * @param $params
      */
     public function __construct($params)
     {
@@ -46,7 +42,7 @@ class ExpectedCheckinAdminNotification extends Notification
     {
         $message = (new MailMessage)->markdown('notifications.markdown.report-expected-checkins',
             [
-                'assets'  => $this->assets,
+                'assets' => $this->assets,
             ])
             ->subject(trans('mail.Expected_Checkin_Report'));
 

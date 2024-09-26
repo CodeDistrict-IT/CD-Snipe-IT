@@ -9,6 +9,7 @@ class ComponentPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -146,6 +147,7 @@ class ComponentPresenter extends Presenter
 
     /**
      * Generate html link to this items name.
+     *
      * @return string
      */
     public function nameUrl()
@@ -155,6 +157,7 @@ class ComponentPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

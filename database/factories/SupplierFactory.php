@@ -31,9 +31,9 @@ class SupplierFactory extends Factory
             'country' => $this->faker->countryCode(),
             'contact' => $this->faker->name(),
             'phone' => $this->faker->phoneNumber(),
-            'fax'   => $this->faker->phoneNumber(),
+            'fax' => $this->faker->phoneNumber(),
             'email' => $this->faker->safeEmail(),
-            'url'   => $this->faker->url(),
+            'url' => $this->faker->url(),
             'notes' => $this->faker->text(191), // Supplier notes can be a max of 255 characters.
         ];
     }

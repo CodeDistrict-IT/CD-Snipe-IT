@@ -9,6 +9,7 @@ class ManufacturerPresenter extends Presenter
 {
     /**
      * Json Column Layout for bootstrap table
+     *
      * @return string
      */
     public static function dataTableLayout()
@@ -94,36 +95,36 @@ class ManufacturerPresenter extends Presenter
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' => ' <span class="hidden-md hidden-lg">Assets</span>'
-                    .'<span class="hidden-xs"><i class="fas fa-barcode fa-lg"></i></span>',
+                'title' => trans('general.assets'),
                 'visible' => true,
+                'class' => 'css-barcode',
             ],
             [
                 'field' => 'licenses_count',
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' => ' <span class="hidden-md hidden-lg">Licenses</span>'
-                    .'<span class="hidden-xs"><i class="far fa-save fa-lg"></i></span>',
+                'title' => trans('general.licenses'),
                 'visible' => true,
+                'class' => 'css-license',
             ],
             [
                 'field' => 'consumables_count',
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' => ' <span class="hidden-md hidden-lg">Consumables</span>'
-                    .'<span class="hidden-xs"><i class="fas fa-tint fa-lg"></i></span>',
+                'title' => trans('general.consumables'),
                 'visible' => true,
+                'class' => 'css-consumable',
             ],
             [
                 'field' => 'accessories_count',
                 'searchable' => false,
                 'sortable' => true,
                 'switchable' => true,
-                'title' => ' <span class="hidden-md hidden-lg">Accessories</span>'
-                    .'<span class="hidden-xs"><i class="far fa-keyboard fa-lg"></i></span>',
+                'title' => trans('general.accessories'),
                 'visible' => true,
+                'class' => 'css-accessory',
             ],
             [
                 'field' => 'created_at',
@@ -151,6 +152,7 @@ class ManufacturerPresenter extends Presenter
 
     /**
      * Link to this manufacturers name
+     *
      * @return string
      */
     public function nameUrl()
@@ -160,6 +162,7 @@ class ManufacturerPresenter extends Presenter
 
     /**
      * Url to view this item.
+     *
      * @return string
      */
     public function viewUrl()

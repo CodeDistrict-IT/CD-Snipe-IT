@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Transformers\ActionlogsTransformer;
 use App\Models\Actionlog;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
@@ -14,9 +14,10 @@ class ReportsController extends Controller
      * Returns Activity Report JSON.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse|array
     {
         $this->authorize('reports.view');
 
@@ -32,15 +33,13 @@ class ReportsController extends Controller
         }
 
         if (($request->filled('item_type')) && ($request->filled('item_id'))) {
-            $actionlogs = $actionlogs->where(function($query) use ($request)
-            {
+            $actionlogs = $actionlogs->where(function ($query) use ($request) {
                 $query->where('item_id', '=', $request->input('item_id'))
-                ->where('item_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')))
-                ->orWhere(function($query) use ($request)
-                {
-                    $query->where('target_id', '=', $request->input('item_id'))
-                    ->where('target_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')));
-                });
+                    ->where('item_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')))
+                    ->orWhere(function ($query) use ($request) {
+                        $query->where('target_id', '=', $request->input('item_id'))
+                            ->where('target_type', '=', 'App\\Models\\'.ucwords($request->input('item_type')));
+                    });
             });
         }
 
@@ -77,17 +76,24 @@ class ReportsController extends Controller
             'action_source',
         ];
 
-
         $total = $actionlogs->count();
         // Make sure the offset and limit are actually integers and do not exceed system limits
         $offset = ($request->input('offset') > $total) ? $total : app('api_offset_value');
         $limit = app('api_limit_value');
 
-        $sort = in_array($request->input('sort'), $allowed_columns) ? e($request->input('sort')) : 'created_at';
         $order = ($request->input('order') == 'asc') ? 'asc' : 'desc';
 
+        switch ($request->input('sort')) {
+            case 'admin':
+                $actionlogs->OrderAdmin($order);
+                break;
+            default:
+                $sort = in_array($request->input('sort'), $allowed_columns) ? e($request->input('sort')) : 'created_at';
+                $actionlogs = $actionlogs->orderBy($sort, $order);
+                break;
+        }
 
-        $actionlogs = $actionlogs->orderBy($sort, $order)->skip($offset)->take($limit)->get();
+        $actionlogs = $actionlogs->skip($offset)->take($limit)->get();
 
         return response()->json((new ActionlogsTransformer)->transformActionlogs($actionlogs, $total), 200, ['Content-Type' => 'application/json;charset=utf8'], JSON_UNESCAPED_UNICODE);
     }

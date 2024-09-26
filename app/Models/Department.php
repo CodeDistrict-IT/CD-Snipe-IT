@@ -21,19 +21,19 @@ class Department extends SnipeModel
      */
     protected $injectUniqueIdentifier = true;
 
-    use ValidatingTrait, UniqueUndeletedTrait;
+    use UniqueUndeletedTrait, ValidatingTrait;
 
     protected $casts = [
-        'manager_id'   => 'integer',
-        'location_id'  => 'integer',
-        'company_id'   => 'integer',
+        'manager_id' => 'integer',
+        'location_id' => 'integer',
+        'company_id' => 'integer',
     ];
 
     protected $rules = [
-        'name'                  => 'required|max:255|is_unique_department',
-        'location_id'           => 'numeric|nullable',
-        'company_id'            => 'numeric|nullable',
-        'manager_id'            => 'numeric|nullable',
+        'name' => 'required|max:255|is_unique_department',
+        'location_id' => 'numeric|nullable',
+        'company_id' => 'numeric|nullable',
+        'manager_id' => 'numeric|nullable',
     ];
 
     /**
@@ -72,7 +72,9 @@ class Department extends SnipeModel
      * Establishes the department -> company relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function company()
@@ -84,7 +86,9 @@ class Department extends SnipeModel
      * Establishes the department -> users relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function users()
@@ -96,7 +100,9 @@ class Department extends SnipeModel
      * Establishes the department -> manager relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function manager()
@@ -108,7 +114,9 @@ class Department extends SnipeModel
      * Establishes the department -> location relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function location()
@@ -120,9 +128,8 @@ class Department extends SnipeModel
      * Query builder scope to order on location name
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderLocation($query, $order)
     {
@@ -133,9 +140,8 @@ class Department extends SnipeModel
      * Query builder scope to order on manager name
      *
      * @param  \Illuminate\Database\Query\Builder  $query  Query builder instance
-     * @param  text                              $order       Order
-     *
-     * @return \Illuminate\Database\Query\Builder          Modified query builder
+     * @param  text  $order  Order
+     * @return \Illuminate\Database\Query\Builder Modified query builder
      */
     public function scopeOrderManager($query, $order)
     {

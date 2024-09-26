@@ -20,15 +20,13 @@ use NotificationChannels\MicrosoftTeams\MicrosoftTeamsMessage;
 class CheckinLicenseSeatNotification extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
      *
-     * @param $params
+     * @param  $params
      */
     public function __construct(LicenseSeat $licenseSeat, $checkedOutTo, User $checkedInBy, $note)
     {
@@ -57,7 +55,7 @@ class CheckinLicenseSeatNotification extends Notification
             $notifyBy[] = MicrosoftTeamsChannel::class;
         }
 
-        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general' ) {
+        if (Setting::getSettings()->webhook_selected == 'slack' || Setting::getSettings()->webhook_selected == 'general') {
             $notifyBy[] = 'slack';
         }
 
@@ -97,12 +95,13 @@ class CheckinLicenseSeatNotification extends Notification
             ->content(':arrow_down: :floppy_disk: '.trans('mail.License_Checkin_Notification'))
             ->from($botname)
             ->to($channel)
-            ->attachment(function ($attachment) use ($item, $note, $admin, $fields) {
+            ->attachment(function ($attachment) use ($item, $note, $fields) {
                 $attachment->title(htmlspecialchars_decode($item->present()->name), $item->present()->viewUrl())
                     ->fields($fields)
                     ->content($note);
             });
     }
+
     public function toMicrosoftTeams()
     {
         $target = $this->target;
@@ -117,11 +116,12 @@ class CheckinLicenseSeatNotification extends Notification
             ->title(trans('mail.License_Checkin_Notification'))
             ->addStartGroupToSection('activityText')
             ->fact(htmlspecialchars_decode($item->present()->name), '', 'header')
-            ->fact(trans('mail.License_Checkin_Notification')." by ", $admin->present()->fullName() ?: 'CLI tool')
+            ->fact(trans('mail.License_Checkin_Notification').' by ', $admin->present()->fullName() ?: 'CLI tool')
             ->fact(trans('mail.checkedin_from'), $target->present()->fullName())
             ->fact(trans('admin/consumables/general.remaining'), $item->availCount()->count())
             ->fact(trans('mail.notes'), $note ?: '');
     }
+
     public function toGoogleChat()
     {
         $target = $this->target;
@@ -140,7 +140,7 @@ class CheckinLicenseSeatNotification extends Notification
                         Section::create(
                             KeyValue::create(
                                 trans('mail.checkedin_from') ?: '',
-                                $target->present()->fullName() ?:  '',
+                                $target->present()->fullName() ?: '',
                                 trans('admin/consumables/general.remaining').': '.$item->availCount()->count(),
                             )
                                 ->onClick(route('licenses.show', $item->id))
@@ -149,7 +149,6 @@ class CheckinLicenseSeatNotification extends Notification
             );
 
     }
-
 
     /**
      * Get the mail representation of the notification.
@@ -161,11 +160,12 @@ class CheckinLicenseSeatNotification extends Notification
     {
         return (new MailMessage)->markdown('notifications.markdown.checkin-license',
             [
-                'item'          => $this->item,
-                'admin'         => $this->admin,
-                'note'          => $this->note,
-                'target'        => $this->target,
+                'item' => $this->item,
+                'admin' => $this->admin,
+                'note' => $this->note,
+                'target' => $this->target,
             ])
+            ->cc(env('MAIL_CC_ADDR'))
             ->subject(trans('mail.License_Checkin_Notification'));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Selecteer de opties die je wilt voor je assetrapport.',
+    'info' => 'Selecteer de opties die je wilt voor je assetrapport.',
     'deleted_user' => 'Verwijderde gebruiker',
     'send_reminder' => 'Stuur herinnering',
     'reminder_sent' => 'Herinnering verzonden',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Gebruiker Stad',
         'user_state' => 'Gebruiker Provincie',
         'user_country' => 'Gebruiker Land',
-        'user_zip' => 'Gebruiker Postcode'
-    ]
+        'user_zip' => 'Gebruiker Postcode',
+    ],
 ];

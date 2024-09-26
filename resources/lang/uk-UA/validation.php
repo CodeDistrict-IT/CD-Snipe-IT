@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'Значення для :fieldname не може бути null.',
+    'import_field_empty' => 'Значення для :fieldname не може бути null.',
     'in' => 'Обрана валюта недійсна.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,6 +125,8 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+
     'present' => 'Поле :attribute повинне бути присутнім.',
     'present_if' => 'The :attribute field must be present when :other is :value.',
     'present_unless' => 'The :attribute field must be present unless :other is :value.',
@@ -153,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => 'Поле :attribute повинне містити текст.',
+    'string' => 'Поле :attribute повинне містити текст.',
     'two_column_unique_undeleted' => 'Поле :attribute має бути унікальним для :table1 і :table2. ',
-    'unique_undeleted'     => 'Поле :attribute має бути унікальним.',
-    'non_circular'         => 'Поле :attribute не повинне створювати круглие посилання.',
-    'not_array'            => ':attribute не може бути масивом.',
+    'unique_undeleted' => 'Поле :attribute має бути унікальним.',
+    'non_circular' => 'Поле :attribute не повинне створювати круглие посилання.',
+    'not_array' => ':attribute не може бути масивом.',
     'disallow_same_pwd_as_user_fields' => 'Пароль не може бути таким же, як ім\'я користувача.',
-    'letters'              => 'Пароль має містити принаймні одну букву.',
-    'numbers'              => 'Пароль має містити принаймні одну цифру.',
-    'case_diff'            => 'Пароль повинен використовувати змішаний випадок.',
-    'symbols'              => 'Пароль має містити символи.',
+    'letters' => 'Пароль має містити принаймні одну букву.',
+    'numbers' => 'Пароль має містити принаймні одну цифру.',
+    'case_diff' => 'Пароль повинен використовувати змішаний випадок.',
+    'symbols' => 'Пароль має містити символи.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => ':attribute вже зайнятий.',
     'uploaded' => 'Завантаження поля :attribute не вдалося.',
@@ -184,25 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Поле :attribute містить символ, який не допускається.',
-        'email_array'      => 'Одна або кілька адрес електронної пошти не правильні.',
-        'hashed_pass'      => 'Поточний пароль неправильний',
-        'dumbpwd'          => 'Цей пароль занадто вживаний.',
+        'email_array' => 'Одна або кілька адрес електронної пошти не правильні.',
+        'hashed_pass' => 'Поточний пароль неправильний',
+        'dumbpwd' => 'Цей пароль занадто вживаний.',
         'statuslabel_type' => 'Ви повинні вибрати правильний тип статуса',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
-        'last_audit_date.date_format'   =>  'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD hh:mm:ss',
-        'expiration_date.date_format'   =>  'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
-        'termination_date.date_format'  =>  'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
-        'expected_checkin.date_format'  =>  'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
-        'start_date.date_format'        =>  'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
-        'end_date.date_format'          =>  'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
-        'checkboxes'           => ':attribute містить неприпустимі параметри.',
-        'radio_buttons'        => ':attribute є неприпустимим.',
+        'purchase_date.date_format' => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
+        'last_audit_date.date_format' => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD hh:mm:ss',
+        'expiration_date.date_format' => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
+        'termination_date.date_format' => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
+        'expected_checkin.date_format' => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
+        'start_date.date_format' => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
+        'end_date.date_format' => 'Поле :attribute має містити коректну дату в форматі YYYY-MM-DD',
+        'checkboxes' => ':attribute містить неприпустимі параметри.',
+        'radio_buttons' => ':attribute є неприпустимим.',
         'invalid_value_in_field' => 'Невірне значення включене в це поле',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -228,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

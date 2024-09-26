@@ -2,13 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Consumable;
 use App\Models\Category;
+use App\Models\Consumable;
 use Illuminate\Support\Facades\Gate;
 
 class StoreConsumableRequest extends ImageUploadRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -46,6 +45,7 @@ class StoreConsumableRequest extends ImageUploadRequest
     public function messages(): array
     {
         $messages = ['category_type.in' => trans('admin/consumables/message.invalid_category_type')];
+
         return $messages;
     }
 

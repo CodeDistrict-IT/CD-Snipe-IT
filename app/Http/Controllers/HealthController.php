@@ -11,7 +11,6 @@ use Illuminate\Routing\Controller as BaseController;
  * @version   v1.0
  *
  * @return \Illuminate\Http\JsonResponse
-
  */
 class HealthController extends BaseController
 {

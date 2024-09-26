@@ -3,7 +3,6 @@
 namespace Tests\Feature\Departments\Ui;
 
 use App\Models\Department;
-use App\Models\Category;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -18,7 +17,6 @@ class UpdateDepartmentsTest extends TestCase
             ->assertStatus(403)
             ->assertForbidden();
     }
-
 
     public function testUserCanEditDepartments()
     {
@@ -37,7 +35,4 @@ class UpdateDepartmentsTest extends TestCase
         $this->assertTrue(Department::where('name', 'Test Department Edited')->exists());
 
     }
-
-
-
 }

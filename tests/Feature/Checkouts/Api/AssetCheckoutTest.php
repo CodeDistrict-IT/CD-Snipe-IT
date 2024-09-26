@@ -9,6 +9,7 @@ use App\Models\Statuslabel;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class AssetCheckoutTest extends TestCase
@@ -82,7 +83,7 @@ class AssetCheckoutTest extends TestCase
      * This data provider contains checkout targets along with the
      * asset's expected location after the checkout process.
      */
-    public function checkoutTargets(): array
+    public static function checkoutTargets(): array
     {
         return [
             'Checkout to User' => [
@@ -95,7 +96,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $user,
                         'expected_location' => $userLocation,
                     ];
-                }
+                },
             ],
             'Checkout to User without location set' => [
                 function () {
@@ -107,7 +108,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $user,
                         'expected_location' => null,
                     ];
-                }
+                },
             ],
             'Checkout to Asset with location set' => [
                 function () {
@@ -120,7 +121,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $asset,
                         'expected_location' => $location,
                     ];
-                }
+                },
             ],
             'Checkout to Asset without location set' => [
                 function () {
@@ -132,7 +133,7 @@ class AssetCheckoutTest extends TestCase
                         'target' => $asset,
                         'expected_location' => null,
                     ];
-                }
+                },
             ],
             'Checkout to Location' => [
                 function () {
@@ -143,12 +144,12 @@ class AssetCheckoutTest extends TestCase
                         'target' => $location,
                         'expected_location' => $location,
                     ];
-                }
+                },
             ],
         ];
     }
 
-    /** @dataProvider checkoutTargets */
+    #[DataProvider('checkoutTargets')]
     public function testAssetCanBeCheckedOut($data)
     {
         ['checkout_type' => $type, 'target' => $target, 'expected_location' => $expectedLocation] = $data();

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'personal_api_keys' => 'کلیدهای API شخصی',
     'personal_access_token' => 'Personal Access Token',
     'personal_api_keys_success' => 'Personal API Key :key created sucessfully',
@@ -14,4 +14,6 @@ return array(
     'api_reference' => 'Please check the <a href="https://snipe-it.readme.io/reference" target="_blank">API reference</a> to find specific API endpoints and additional API documentation.',
     'profile_updated' => 'Account successfully updated',
     'no_tokens' => 'You have not created any personal access tokens.',
-);
+    'enable_sounds' => 'Enable sound effects',
+    'enable_confetti' => 'Enable confetti effects',
+];

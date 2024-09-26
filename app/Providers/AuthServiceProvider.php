@@ -93,13 +93,11 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::cookie(config('passport.cookie_name'));
 
-
         /**
          * BEFORE ANYTHING ELSE
          *
          * If this condition is true, ANYTHING else below will be assumed to be true.
          * This is where we set the superadmin permission to allow superadmins to be able to do everything within the system.
-         *
          */
         Gate::before(function ($user) {
             if ($user->isSuperUser()) {
@@ -107,14 +105,12 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-
         /**
          * GENERAL GATES
          *
          * These control general sections of the admin. These definitions are used in our blades via @can('blah) and also
          * use in our controllers to determine if a user has access to a certain area.
          */
-
         Gate::define('admin', function ($user) {
             if ($user->hasAccess('admin')) {
                 return true;
@@ -146,7 +142,6 @@ class AuthServiceProvider extends ServiceProvider
             }
         });
 
-
         Gate::define('licenses.files', function ($user) {
             if ($user->hasAccess('licenses.files')) {
                 return true;
@@ -154,7 +149,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('assets.view.encrypted_custom_fields', function ($user) {
-            if($user->hasAccess('assets.view.encrypted_custom_fields')){
+            if ($user->hasAccess('assets.view.encrypted_custom_fields')) {
                 return true;
             }
         });
@@ -193,7 +188,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasAccess('self.view_purchase_cost');
         });
 
-        // This is largely used to determine whether to display the gear icon sidenav 
+        // This is largely used to determine whether to display the gear icon sidenav
         // in the left-side navigation
         Gate::define('backend.interact', function ($user) {
             return $user->can('view', Statuslabel::class)
@@ -210,29 +205,28 @@ class AuthServiceProvider extends ServiceProvider
                 || $user->can('view', Depreciation::class);
         });
 
-
         // This  determines whether or not an API user should be able to get the selectlists.
         // This can seem a little confusing, since view properties may not have been granted
-        // to the logged in API user, but creating assets, licenses, etc won't work 
+        // to the logged in API user, but creating assets, licenses, etc won't work
         // if the user can't view and interact with the select lists.
         Gate::define('view.selectlists', function ($user) {
-            return $user->can('update', Asset::class) 
-                || $user->can('create', Asset::class)    
+            return $user->can('update', Asset::class)
+                || $user->can('create', Asset::class)
                 || $user->can('checkout', Asset::class)
                 || $user->can('checkin', Asset::class)
-                || $user->can('audit', Asset::class)       
-                || $user->can('update', License::class)   
-                || $user->can('create', License::class)   
+                || $user->can('audit', Asset::class)
+                || $user->can('update', License::class)
+                || $user->can('create', License::class)
                 || $user->can('update', Component::class)
-                || $user->can('create', Component::class)   
-                || $user->can('update', Consumable::class)   
-                || $user->can('create', Consumable::class)   
+                || $user->can('create', Component::class)
+                || $user->can('update', Consumable::class)
+                || $user->can('create', Consumable::class)
                 || $user->can('update', Accessory::class)
-                || $user->can('create', Accessory::class)   
+                || $user->can('create', Accessory::class)
                 || $user->can('update', User::class)
-                || $user->can('create', User::class);  
+                || $user->can('create', User::class)
+                || ($user->hasAccess('reports.view'));
         });
-
 
         // This determines whether the user can edit their profile based on the setting in Admin > General
         Gate::define('self.profile', function ($user) {

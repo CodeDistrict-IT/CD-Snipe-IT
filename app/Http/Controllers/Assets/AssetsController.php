@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Assets;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageUploadRequest;
-use App\Models\Actionlog;
 use App\Http\Requests\UploadFileRequest;
-use Illuminate\Support\Facades\Log;
+use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\AssetModel;
 use App\Models\CheckoutRequest;
@@ -16,19 +15,20 @@ use App\Models\Location;
 use App\Models\Setting;
 use App\Models\Statuslabel;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\View\Label;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use League\Csv\Reader;
-use Illuminate\Http\Response;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
@@ -36,11 +36,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
  * the Snipe-IT Asset Management application.
  *
  * @version    v1.0
+ *
  * @author [A. Gianotto] [<snipe@snipe.net>]
  */
 class AssetsController extends Controller
 {
     protected $qrCodeDimensions = ['height' => 3.5, 'width' => 3.5];
+
     protected $barCodeDimensions = ['height' => 2, 'width' => 22];
 
     public function __construct()
@@ -54,11 +56,11 @@ class AssetsController extends Controller
      * the content for the assets listing, which is generated in getDatatable.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see AssetController::getDatatable() method that generates the JSON response
      * @since [v1.0]
-     * @param Request $request
      */
-    public function index(Request $request) : View
+    public function index(Request $request): View
     {
         $this->authorize('index', Asset::class);
         $company = Company::find($request->input('company_id'));
@@ -70,11 +72,12 @@ class AssetsController extends Controller
      * Returns a view that presents a form to create a new asset.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param Request $request
+     *
      * @internal param int $model_id
      */
-    public function create(Request $request) : View
+    public function create(Request $request): View
     {
         $this->authorize('create', Asset::class);
         $view = view('hardware/edit')
@@ -94,9 +97,10 @@ class AssetsController extends Controller
      * Validate and process new asset form data.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
      */
-    public function store(ImageUploadRequest $request) : RedirectResponse
+    public function store(ImageUploadRequest $request): RedirectResponse
     {
         $this->authorize(Asset::class);
 
@@ -115,7 +119,7 @@ class AssetsController extends Controller
         $serials = $request->input('serials');
 
         for ($a = 1; $a <= count($asset_tags); $a++) {
-            $asset = new Asset();
+            $asset = new Asset;
             $asset->model()->associate(AssetModel::find($request->input('model_id')));
             $asset->name = $request->input('name');
 
@@ -128,28 +132,28 @@ class AssetsController extends Controller
                 $asset->asset_tag = $asset_tags[$a];
             }
 
-            $asset->company_id              = Company::getIdForCurrentUser($request->input('company_id'));
-            $asset->model_id                = $request->input('model_id');
-            $asset->order_number            = $request->input('order_number');
-            $asset->notes                   = $request->input('notes');
-            $asset->user_id                 = Auth::id();
-            $asset->status_id               = request('status_id');
-            $asset->warranty_months         = request('warranty_months', null);
-            $asset->purchase_cost           = request('purchase_cost');
-            $asset->purchase_date           = request('purchase_date', null);
-            $asset->asset_eol_date          = request('asset_eol_date', null);
-            $asset->assigned_to             = request('assigned_to', null);
-            $asset->supplier_id             = request('supplier_id', null);
-            $asset->requestable             = request('requestable', 0);
-            $asset->rtd_location_id         = request('rtd_location_id', null);
-            $asset->byod                    = request('byod', 0);
+            $asset->company_id = Company::getIdForCurrentUser($request->input('company_id'));
+            $asset->model_id = $request->input('model_id');
+            $asset->order_number = $request->input('order_number');
+            $asset->notes = $request->input('notes');
+            $asset->user_id = Auth::id();
+            $asset->status_id = request('status_id');
+            $asset->warranty_months = request('warranty_months', null);
+            $asset->purchase_cost = request('purchase_cost');
+            $asset->purchase_date = request('purchase_date', null);
+            $asset->asset_eol_date = request('asset_eol_date', null);
+            $asset->assigned_to = request('assigned_to', null);
+            $asset->supplier_id = request('supplier_id', null);
+            $asset->requestable = request('requestable', 0);
+            $asset->rtd_location_id = request('rtd_location_id', null);
+            $asset->byod = request('byod', 0);
 
             if (! empty($settings->audit_interval)) {
                 $asset->next_audit_date = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
             }
 
             // Set location_id to rtd_location_id ONLY if the asset isn't being checked out
-            if (!request('assigned_user') && !request('assigned_asset') && !request('assigned_location')) {
+            if (! request('assigned_user') && ! request('assigned_asset') && ! request('assigned_location')) {
                 $asset->location_id = $request->input('rtd_location_id', null);
             }
 
@@ -165,7 +169,7 @@ class AssetsController extends Controller
             if (($model) && ($model->fieldset)) {
                 foreach ($model->fieldset->fields as $field) {
                     if ($field->field_encrypted == '1') {
-                        if (Gate::allows('admin')) {
+                        if (Gate::allows('assets.view.encrypted_custom_fields')) {
                             if (is_array($request->input($field->db_column))) {
                                 $asset->{$field->db_column} = Crypt::encrypt(implode(', ', $request->input($field->db_column)));
                             } else {
@@ -200,34 +204,34 @@ class AssetsController extends Controller
                 }
 
                 $success = true;
-                
+
             }
         }
 
         session()->put(['redirect_option' => $request->get('redirect_option'), 'checkout_to_type' => $request->get('checkout_to_type')]);
 
-
         if ($success) {
 
             return redirect()->to(Helper::getRedirectOption($request, $asset->id, 'Assets'))
                 ->with('success-unescaped', trans('admin/hardware/message.create.success_linked', ['link' => route('hardware.show', ['hardware' => $asset->id]), 'id', 'tag' => e($asset->asset_tag)]));
-               
-      
+
         }
 
         return redirect()->back()->withInput()->withErrors($asset->getErrors());
     }
 
-
     /**
      * Returns a view that presents a form to edit an existing asset.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $assetId
+     *
+     * @param  int  $assetId
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit($assetId = null) : View | RedirectResponse
+    public function edit($assetId = null): View|RedirectResponse
     {
         if (! $item = Asset::find($assetId)) {
             // Redirect to the asset management page with error
@@ -241,16 +245,18 @@ class AssetsController extends Controller
             ->with('statuslabel_types', Helper::statusTypeList());
     }
 
-
     /**
      * Returns a view that presents information about an asset for detail view.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $assetId
+     *
+     * @param  int  $assetId
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
      */
-    public function show($assetId = null) : View | RedirectResponse
+    public function show($assetId = null): View|RedirectResponse
     {
         $asset = Asset::withTrashed()->find($assetId);
         $this->authorize('view', $asset);
@@ -287,11 +293,13 @@ class AssetsController extends Controller
     /**
      * Validate and process asset edit form.
      *
-     * @param int $assetId
+     * @param  int  $assetId
+     *
      * @since [v1.0]
+     *
      * @author [A. Gianotto] [<snipe@snipe.net>]
      */
-    public function update(ImageUploadRequest $request, $assetId = null) : RedirectResponse
+    public function update(ImageUploadRequest $request, $assetId = null): RedirectResponse
     {
 
         // Check if the asset exists
@@ -306,25 +314,25 @@ class AssetsController extends Controller
         $asset->purchase_cost = $request->input('purchase_cost', null);
         $asset->purchase_date = $request->input('purchase_date', null);
         $asset->next_audit_date = $request->input('next_audit_date', null);
-        if ($request->filled('purchase_date') && !$request->filled('asset_eol_date') && ($asset->model->eol > 0)) {
-            $asset->purchase_date = $request->input('purchase_date', null); 
+        if ($request->filled('purchase_date') && ! $request->filled('asset_eol_date') && ($asset->model->eol > 0)) {
+            $asset->purchase_date = $request->input('purchase_date', null);
             $asset->asset_eol_date = Carbon::parse($request->input('purchase_date'))->addMonths($asset->model->eol)->format('Y-m-d');
             $asset->eol_explicit = false;
         } elseif ($request->filled('asset_eol_date')) {
-           $asset->asset_eol_date = $request->input('asset_eol_date', null);
-           $months = Carbon::parse($asset->asset_eol_date)->diffInMonths($asset->purchase_date);
-           if($asset->model->eol) {
-               if($months != $asset->model->eol > 0) {
-                   $asset->eol_explicit = true;
-               } else {
-                   $asset->eol_explicit = false;
-               }
-           } else {
-               $asset->eol_explicit = true;
-           }
-        } elseif (!$request->filled('asset_eol_date') && (($asset->model->eol) == 0)) {
-           $asset->asset_eol_date = null;
-		   $asset->eol_explicit = false;
+            $asset->asset_eol_date = $request->input('asset_eol_date', null);
+            $months = Carbon::parse($asset->asset_eol_date)->diffInMonths($asset->purchase_date);
+            if ($asset->model->eol) {
+                if ($months != $asset->model->eol > 0) {
+                    $asset->eol_explicit = true;
+                } else {
+                    $asset->eol_explicit = false;
+                }
+            } else {
+                $asset->eol_explicit = true;
+            }
+        } elseif (! $request->filled('asset_eol_date') && (($asset->model->eol) == 0)) {
+            $asset->asset_eol_date = null;
+            $asset->eol_explicit = false;
         }
         $asset->supplier_id = $request->input('supplier_id', null);
         $asset->expected_checkin = $request->input('expected_checkin', null);
@@ -343,7 +351,6 @@ class AssetsController extends Controller
         if ($asset->assigned_to == '') {
             $asset->location_id = $request->input('rtd_location_id', null);
         }
-
 
         if ($request->filled('image_delete')) {
             try {
@@ -388,7 +395,7 @@ class AssetsController extends Controller
             foreach ($model->fieldset->fields as $field) {
 
                 if ($field->field_encrypted == '1') {
-                    if (Gate::allows('admin')) {
+                    if (Gate::allows('assets.view.encrypted_custom_fields')) {
                         if (is_array($request->input($field->db_column))) {
                             $asset->{$field->db_column} = Crypt::encrypt(implode(', ', $request->input($field->db_column)));
                         } else {
@@ -419,10 +426,12 @@ class AssetsController extends Controller
      * Delete a given asset (mark as deleted).
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $assetId
+     *
+     * @param  int  $assetId
+     *
      * @since [v1.0]
      */
-    public function destroy($assetId) : RedirectResponse
+    public function destroy($assetId): RedirectResponse
     {
         // Check if the asset exists
         if (is_null($asset = Asset::find($assetId))) {
@@ -453,16 +462,18 @@ class AssetsController extends Controller
      * Searches the assets table by serial, and redirects if it finds one
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
      */
-    public function getAssetBySerial(Request $request) : RedirectResponse
+    public function getAssetBySerial(Request $request): RedirectResponse
     {
-        $topsearch = ($request->get('topsearch')=="true");
+        $topsearch = ($request->get('topsearch') == 'true');
 
-        if (!$asset = Asset::where('serial', '=', $request->get('serial'))->first()) {
+        if (! $asset = Asset::where('serial', '=', $request->get('serial'))->first()) {
             return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
         }
         $this->authorize('view', $asset);
+
         return redirect()->route('hardware.show', $asset->id)->with('topsearch', $topsearch);
     }
 
@@ -470,31 +481,39 @@ class AssetsController extends Controller
      * Searches the assets table by asset tag, and redirects if it finds one
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.0]
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function getAssetByTag(Request $request, $tag=null) : RedirectResponse
+    public function getAssetByTag(Request $request, $tag = null): RedirectResponse
     {
         $tag = $tag ? $tag : $request->get('assetTag');
         $topsearch = ($request->get('topsearch') == 'true');
 
-        if (! $asset = Asset::where('asset_tag', '=', $tag)->first()) {
-            return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
+        // Search for an exact and unique asset tag match
+        $assets = Asset::where('asset_tag', '=', $tag);
+
+        // If not a unique result, redirect to the index view
+        if ($assets->count() != 1) {
+            return redirect()->route('hardware.index')
+                ->with('search', $tag)
+                ->with('warning', trans('admin/hardware/message.does_not_exist_var', ['asset_tag' => $tag]));
         }
+        $asset = $assets->first();
         $this->authorize('view', $asset);
 
         return redirect()->route('hardware.show', $asset->id)->with('topsearch', $topsearch);
     }
 
-
     /**
      * Return a QR code for the asset
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $assetId
+     *
+     * @param  int  $assetId
+     *
      * @since [v1.0]
      */
-    public function getQrCode($assetId = null) : Response | BinaryFileResponse | string | bool
+    public function getQrCode($assetId = null): Response|BinaryFileResponse|string|bool
     {
         $settings = Setting::getSettings();
 
@@ -510,7 +529,7 @@ class AssetsController extends Controller
 
                         return response()->file($qr_file, $header);
                     } else {
-                        $barcode = new \Com\Tecnick\Barcode\Barcode();
+                        $barcode = new \Com\Tecnick\Barcode\Barcode;
                         $barcode_obj = $barcode->getBarcodeObj($settings->barcode_type, route('hardware.show', $asset->id), $size['height'], $size['width'], 'black', [-2, -2, -2, -2]);
                         file_put_contents($qr_file, $barcode_obj->getPngData());
 
@@ -521,6 +540,7 @@ class AssetsController extends Controller
 
             return 'That asset is invalid';
         }
+
         return false;
     }
 
@@ -528,8 +548,11 @@ class AssetsController extends Controller
      * Return a 2D barcode for the asset
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $assetId
+     *
+     * @param  int  $assetId
+     *
      * @since [v1.0]
+     *
      * @return Response
      */
     public function getBarCode($assetId = null)
@@ -547,7 +570,7 @@ class AssetsController extends Controller
                     // Calculate barcode width in pixel based on label width (inch)
                     $barcode_width = ($settings->labels_width - $settings->labels_display_sgutter) * 200.000000000001;
 
-                    $barcode = new \Com\Tecnick\Barcode\Barcode();
+                    $barcode = new \Com\Tecnick\Barcode\Barcode;
                     try {
                         $barcode_obj = $barcode->getBarcodeObj($settings->alt_barcode, $asset->asset_tag, ($barcode_width < 300 ? $barcode_width : 300), 50);
                         file_put_contents($barcode_file, $barcode_obj->getPngData());
@@ -561,6 +584,7 @@ class AssetsController extends Controller
                 }
             }
         }
+
         return null;
     }
 
@@ -568,7 +592,8 @@ class AssetsController extends Controller
      * Return a label for an individual asset.
      *
      * @author [L. Swartzendruber] [<logan.swartzendruber@gmail.com>
-     * @param int $assetId
+     *
+     * @param  int  $assetId
      * @return \Illuminate\Contracts\View\View
      */
     public function getLabel($assetId = null)
@@ -577,8 +602,8 @@ class AssetsController extends Controller
             $asset = Asset::find($assetId);
             $this->authorize('view', $asset);
 
-            return (new Label())
-                ->with('assets', collect([ $asset ]))
+            return (new Label)
+                ->with('assets', collect([$asset]))
                 ->with('settings', Setting::getSettings())
                 ->with('template', request()->get('template'))
                 ->with('offset', request()->get('offset'))
@@ -591,8 +616,11 @@ class AssetsController extends Controller
      * Returns a view that presents a form to clone an asset.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $assetId
+     *
+     * @param  int  $assetId
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function getClone(Asset $asset)
@@ -615,7 +643,9 @@ class AssetsController extends Controller
      * Return history import view
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function getImportHistory()
@@ -637,7 +667,9 @@ class AssetsController extends Controller
      * Checkin date in future or empty, check the item out to the user.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.3]
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function postImportHistory(Request $request)
@@ -657,7 +689,7 @@ class AssetsController extends Controller
             $results = $csv->getRecords();
         } catch (\Exception $e) {
             return back()->with('error', trans('general.error_in_import_file', ['error' => $e->getMessage()]));
-        } 
+        }
         $item = [];
         $status = [];
         $status['error'] = [];
@@ -732,12 +764,12 @@ class AssetsController extends Controller
                         Actionlog::firstOrCreate([
                             'item_id' => $asset->id,
                             'item_type' => Asset::class,
-                            'user_id' =>  auth()->id(),
+                            'user_id' => auth()->id(),
                             'note' => 'Checkout imported by '.auth()->user()->present()->fullName().' from history importer',
                             'target_id' => $item[$asset_tag][$batch_counter]['user_id'],
                             'target_type' => User::class,
-                            'created_at' =>  $item[$asset_tag][$batch_counter]['checkout_date'],
-                            'action_type'   => 'checkout',
+                            'created_at' => $item[$asset_tag][$batch_counter]['checkout_date'],
+                            'action_type' => 'checkout',
                         ]);
 
                         $checkin_date = $item[$asset_tag][$batch_counter]['checkin_date'];
@@ -747,8 +779,7 @@ class AssetsController extends Controller
                             // if checkin date header exists, assume that empty or future date is still checked out
                             // if checkin is before today's date, assume it's checked in and do not assign user ID, if checkin date is in the future or blank, this is the expected checkin date, items are checked out
 
-                            if ((strtotime($checkin_date) > strtotime(Carbon::now())) || (empty($checkin_date)))
-                            {
+                            if ((strtotime($checkin_date) > strtotime(Carbon::now())) || (empty($checkin_date))) {
                                 //only do this if item is checked out
                                 $asset->assigned_to = $user->id;
                                 $asset->assigned_type = User::class;
@@ -796,8 +827,11 @@ class AssetsController extends Controller
      * Restore a deleted asset.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @param int $assetId
+     *
+     * @param  int  $assetId
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function getRestore($assetId = null)
@@ -815,6 +849,7 @@ class AssetsController extends Controller
                 if ($deleted_assets > 0) {
                     return redirect()->back()->with('success', trans('admin/hardware/message.restore.success'));
                 }
+
                 return redirect()->route('hardware.index')->with('success', trans('admin/hardware/message.restore.success'));
             }
 
@@ -837,7 +872,7 @@ class AssetsController extends Controller
     {
         $this->authorize('checkin', Asset::class);
 
-        return view('hardware/quickscan-checkin');
+        return view('hardware/quickscan-checkin')->with('statusLabel_list', Helper::statusLabelList());
     }
 
     public function audit($id)
@@ -863,7 +898,6 @@ class AssetsController extends Controller
 
         return view('hardware/checkin-due');
     }
-
 
     public function auditStore(UploadFileRequest $request, $id)
     {
@@ -907,7 +941,6 @@ class AssetsController extends Controller
         if ($request->input('update_location') == '1') {
             $asset->location_id = $request->input('location_id');
         }
-        
 
         /**
          * Invoke Watson Validating to check the asset itself and check to make sure it saved correctly.
@@ -922,6 +955,7 @@ class AssetsController extends Controller
             }
 
             $asset->logAudit($request->input('note'), $request->input('location_id'), $file_name);
+
             return redirect()->route('assets.audit.due')->with('success', trans('admin/hardware/message.audit.success'));
         }
 

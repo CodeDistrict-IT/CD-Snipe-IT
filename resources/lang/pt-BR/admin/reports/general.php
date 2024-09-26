@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Selecione as opções que você quer para o seu relatório de ativos.',
+    'info' => 'Selecione as opções que você quer para o seu relatório de ativos.',
     'deleted_user' => 'Usuário excluído',
     'send_reminder' => 'Enviar lembrete',
     'reminder_sent' => 'Lembrete enviado',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Cidade do usuário',
         'user_state' => 'Estado do Usuário',
         'user_country' => 'País do usuário',
-        'user_zip' => 'CEP do Usuário'
-    ]
+        'user_zip' => 'CEP do Usuário',
+    ],
 ];

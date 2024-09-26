@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -17,4 +17,4 @@ return array(
     'password' => 'Adgangskoden er forkert.',
     'throttle' => 'For mange loginforsøg. Prøv igen om :seconds sekunder.',
 
-);
+];

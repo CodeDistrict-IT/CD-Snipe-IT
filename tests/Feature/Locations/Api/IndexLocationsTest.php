@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Locations\Api;
 
-use App\Models\Company;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -39,7 +38,6 @@ class IndexLocationsTest extends TestCase
                 'total',
                 'rows',
             ])
-            ->assertJson(fn(AssertableJson $json) => $json->has('rows', 3)->etc());
+            ->assertJson(fn (AssertableJson $json) => $json->has('rows', 3)->etc());
     }
-
 }

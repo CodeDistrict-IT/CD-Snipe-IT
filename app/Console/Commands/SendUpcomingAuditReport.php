@@ -7,7 +7,6 @@ use App\Models\Recipients\AlertRecipient;
 use App\Models\Setting;
 use App\Notifications\SendUpcomingAuditNotification;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 
 class SendUpcomingAuditReport extends Command
@@ -50,7 +49,6 @@ class SendUpcomingAuditReport extends Command
 
         $assets = Asset::whereNull('deleted_at')->DueOrOverdueForAudit($settings)->orderBy('assets.next_audit_date', 'desc')->get();
         $this->info($assets->count().' assets must be audited in on or before '.$interval_date.' is deadline');
-
 
         if (($assets) && ($assets->count() > 0) && ($settings->alert_email != '')) {
             // Send a rollup to the admin, if settings dictate

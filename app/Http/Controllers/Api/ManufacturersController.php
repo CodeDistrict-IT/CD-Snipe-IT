@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImageUploadRequest;
 use App\Http\Transformers\ManufacturersTransformer;
 use App\Http\Transformers\SelectlistTransformer;
 use App\Models\Actionlog;
 use App\Models\Manufacturer;
-use Illuminate\Http\Request;
-use App\Http\Requests\ImageUploadRequest;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ManufacturersController extends Controller
 {
@@ -19,10 +19,12 @@ class ManufacturersController extends Controller
      * Display a listing of the resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) : JsonResponse | array
+    public function index(Request $request): JsonResponse|array
     {
         $this->authorize('view', Manufacturer::class);
         $allowed_columns = ['id', 'name', 'url', 'support_url', 'support_email', 'warranty_lookup_url', 'support_phone', 'created_at', 'updated_at', 'image', 'assets_count', 'consumables_count', 'components_count', 'licenses_count'];
@@ -81,10 +83,10 @@ class ManufacturersController extends Controller
      * Store a newly created resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\ImageUploadRequest $request
      */
-    public function store(ImageUploadRequest $request) : JsonResponse
+    public function store(ImageUploadRequest $request): JsonResponse
     {
         $this->authorize('create', Manufacturer::class);
         $manufacturer = new Manufacturer;
@@ -94,6 +96,7 @@ class ManufacturersController extends Controller
         if ($manufacturer->save()) {
             return response()->json(Helper::formatStandardApiResponse('success', $manufacturer, trans('admin/manufacturers/message.create.success')));
         }
+
         return response()->json(Helper::formatStandardApiResponse('error', null, $manufacturer->getErrors()));
 
     }
@@ -102,10 +105,12 @@ class ManufacturersController extends Controller
      * Display the specified resource.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function show($id) : JsonResponse | array
+    public function show($id): JsonResponse|array
     {
         $this->authorize('view', Manufacturer::class);
         $manufacturer = Manufacturer::withCount('assets as assets_count')->withCount('licenses as licenses_count')->withCount('consumables as consumables_count')->withCount('accessories as accessories_count')->findOrFail($id);
@@ -117,11 +122,12 @@ class ManufacturersController extends Controller
      * Update the specified resource in storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
-     * @param  \App\Http\Requests\ImageUploadRequest  $request
+     *
      * @param  int  $id
      */
-    public function update(ImageUploadRequest $request, $id) : JsonResponse
+    public function update(ImageUploadRequest $request, $id): JsonResponse
     {
         $this->authorize('update', Manufacturer::class);
         $manufacturer = Manufacturer::findOrFail($id);
@@ -139,10 +145,12 @@ class ManufacturersController extends Controller
      * Remove the specified resource from storage.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0]
+     *
      * @param  int  $id
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->authorize('delete', Manufacturer::class);
         $manufacturer = Manufacturer::findOrFail($id);
@@ -150,10 +158,11 @@ class ManufacturersController extends Controller
 
         if ($manufacturer->isDeletable()) {
             $manufacturer->delete();
-            return response()->json(Helper::formatStandardApiResponse('success', null,  trans('admin/manufacturers/message.delete.success')));
+
+            return response()->json(Helper::formatStandardApiResponse('success', null, trans('admin/manufacturers/message.delete.success')));
         }
 
-        return response()->json(Helper::formatStandardApiResponse('error', null,  trans('admin/manufacturers/message.assoc_users')));
+        return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/manufacturers/message.assoc_users')));
 
     }
 
@@ -161,11 +170,14 @@ class ManufacturersController extends Controller
      * Restore a given Manufacturer (mark as un-deleted)
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v6.3.4]
-     * @param int $id
+     *
+     * @param  int  $id
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function restore($id) : JsonResponse
+    public function restore($id): JsonResponse
     {
         $this->authorize('delete', Manufacturer::class);
 
@@ -177,7 +189,7 @@ class ManufacturersController extends Controller
 
             if ($manufacturer->restore()) {
 
-                $logaction = new Actionlog();
+                $logaction = new Actionlog;
                 $logaction->item_type = Manufacturer::class;
                 $logaction->item_id = $manufacturer->id;
                 $logaction->created_at = date('Y-m-d H:i:s');
@@ -191,17 +203,18 @@ class ManufacturersController extends Controller
             return response()->json(Helper::formatStandardApiResponse('error', trans('general.could_not_restore', ['item_type' => trans('general.manufacturer'), 'error' => $manufacturer->getErrors()->first()])), 200);
         }
 
-        return response()->json(Helper::formatStandardApiResponse('error', null,  trans('admin/manufacturers/message.does_not_exist')));
+        return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/manufacturers/message.does_not_exist')));
     }
 
     /**
      * Gets a paginated collection for the select2 menus
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v4.0.16]
      * @see \App\Http\Transformers\SelectlistTransformer
      */
-    public function selectlist(Request $request) : array
+    public function selectlist(Request $request): array
     {
 
         $this->authorize('view.selectlists');

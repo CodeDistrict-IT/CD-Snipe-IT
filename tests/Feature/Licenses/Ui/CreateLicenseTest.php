@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature\Consumables\Ui;
+namespace Tests\Feature\Licenses\Ui;
 
 use App\Models\AssetModel;
 use App\Models\Category;
-use App\Models\License;
 use App\Models\Depreciation;
+use App\Models\License;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -19,8 +19,6 @@ class CreateLicenseTest extends TestCase
             ->assertForbidden();
     }
 
-
-
     public function testLicenseWithoutPurchaseDateFailsValidation()
     {
         $response = $this->actingAs(User::factory()->superuser()->create())
@@ -29,7 +27,7 @@ class CreateLicenseTest extends TestCase
                 'name' => 'Test Invalid License',
                 'seats' => '10',
                 'category_id' => Category::factory()->forLicenses()->create()->id,
-                'depreciation_id' => Depreciation::factory()->create()->id
+                'depreciation_id' => Depreciation::factory()->create()->id,
             ]);
         $response->assertStatus(302);
         $response->assertRedirect(route('licenses.create'));

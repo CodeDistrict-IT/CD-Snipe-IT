@@ -13,17 +13,14 @@ use App\Models\Company;
 use App\Models\Group;
 use App\Models\Setting;
 use App\Models\User;
+use App\Notifications\CurrentInventory;
 use App\Notifications\WelcomeNotification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Storage;
 use Redirect;
-use Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use App\Notifications\CurrentInventory;
 
 /**
  * This controller handles all actions related to Users for
@@ -38,9 +35,12 @@ class UsersController extends Controller
      * the content for the users listing, which is generated in getDatatable().
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @see UsersController::getDatatable() method that generates the JSON response
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
@@ -54,8 +54,11 @@ class UsersController extends Controller
      * Returns a view that displays the user creation form.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
+     *
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create(Request $request)
@@ -83,9 +86,11 @@ class UsersController extends Controller
      * Validate and store the new user data, or return an error.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param SaveUserRequest $request
+     *
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(SaveUserRequest $request)
@@ -176,17 +181,21 @@ class UsersController extends Controller
      * Returns a view that displays the edit user form
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param $permissions
+     *
+     * @param  $permissions
      * @return \Illuminate\Contracts\View\View
+     *
      * @internal param int $id
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit($id)
     {
 
         $this->authorize('update', User::class);
-        $user = User::with('assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc')->withTrashed()->find($id);
+        $user = User::with(['assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc'])->withTrashed()->find($id);
 
         if ($user) {
 
@@ -208,132 +217,126 @@ class UsersController extends Controller
      * Validate and save edited user data from edit form.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param SaveUserRequest $request
-     * @param  int $id
+     *
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(SaveUserRequest $request, $id = null)
+    public function update(SaveUserRequest $request, User $user)
     {
         $this->authorize('update', User::class);
 
         // This is a janky hack to prevent people from changing admin demo user data on the public demo.
         // The $ids 1 and 2 are special since they are seeded as superadmins in the demo seeder.
         // Thanks, jerks. You are why we can't have nice things. - snipe
-
-        if ((($id == 1) || ($id == 2)) && (config('app.lock_passwords'))) {
+        if ((($user->id == 1) || ($user->id == 2)) && (config('app.lock_passwords'))) {
             return redirect()->route('users.index')->with('error', trans('general.permission_denied_superuser_demo'));
         }
-
 
         // We need to reverse the UI specific logic for our
         // permissions here before we update the user.
         $permissions = $request->input('permissions', []);
         app('request')->request->set('permissions', $permissions);
 
-        $user = User::with('assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc')->withTrashed()->find($id);
+        $user->load(['assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc'])->withTrashed();
 
-        // User is valid - continue...
-        if ($user) {
-            $this->authorize('update', $user);
+        $this->authorize('update', $user);
 
-            // Figure out of this user was an admin before this edit
-            $orig_permissions_array = $user->decodePermissions();
-            $orig_superuser = '0';
-            if (is_array($orig_permissions_array)) {
-                if (array_key_exists('superuser', $orig_permissions_array)) {
-                    $orig_superuser = $orig_permissions_array['superuser'];
-                }
+        // Figure out of this user was an admin before this edit
+        $orig_permissions_array = $user->decodePermissions();
+        $orig_superuser = '0';
+        if (is_array($orig_permissions_array)) {
+            if (array_key_exists('superuser', $orig_permissions_array)) {
+                $orig_superuser = $orig_permissions_array['superuser'];
             }
+        }
 
-            // Only save groups if the user is a superuser
-            if (auth()->user()->isSuperUser()) {
-                $user->groups()->sync($request->input('groups'));
-            }
+        // Only save groups if the user is a superuser
+        if (auth()->user()->isSuperUser()) {
+            $user->groups()->sync($request->input('groups'));
+        }
 
-            // Update the user fields
-            $user->username = trim($request->input('username'));
-            $user->email = trim($request->input('email'));
-            $user->first_name = $request->input('first_name');
-            $user->last_name = $request->input('last_name');
-            $user->two_factor_optin = $request->input('two_factor_optin') ?: 0;
-            $user->locale = $request->input('locale');
-            $user->employee_num = $request->input('employee_num');
-            $user->activated = $request->input('activated', 0);
-            $user->jobtitle = $request->input('jobtitle', null);
-            $user->phone = $request->input('phone');
-            $user->location_id = $request->input('location_id', null);
-            $user->company_id = Company::getIdForUser($request->input('company_id', null));
-            $user->manager_id = $request->input('manager_id', null);
-            $user->notes = $request->input('notes');
-            $user->department_id = $request->input('department_id', null);
-            $user->address = $request->input('address', null);
-            $user->city = $request->input('city', null);
-            $user->state = $request->input('state', null);
-            $user->country = $request->input('country', null);
-            // if a user is editing themselves we should always keep activated true
-            $user->activated = $request->input('activated', $request->user()->is($user) ? 1 : 0);
-            $user->zip = $request->input('zip', null);
-            $user->remote = $request->input('remote', 0);
-            $user->vip = $request->input('vip', 0);
-            $user->website = $request->input('website', null);
-            $user->start_date = $request->input('start_date', null);
-            $user->end_date = $request->input('end_date', null);
-            $user->autoassign_licenses = $request->input('autoassign_licenses', 0);
+        // Update the user fields
+        $user->username = trim($request->input('username'));
+        $user->email = trim($request->input('email'));
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->two_factor_optin = $request->input('two_factor_optin') ?: 0;
+        $user->locale = $request->input('locale');
+        $user->employee_num = $request->input('employee_num');
+        $user->activated = $request->input('activated', 0);
+        $user->jobtitle = $request->input('jobtitle', null);
+        $user->phone = $request->input('phone');
+        $user->location_id = $request->input('location_id', null);
+        $user->company_id = Company::getIdForUser($request->input('company_id', null));
+        $user->manager_id = $request->input('manager_id', null);
+        $user->notes = $request->input('notes');
+        $user->department_id = $request->input('department_id', null);
+        $user->address = $request->input('address', null);
+        $user->city = $request->input('city', null);
+        $user->state = $request->input('state', null);
+        $user->country = $request->input('country', null);
+        // if a user is editing themselves we should always keep activated true
+        $user->activated = $request->input('activated', $request->user()->is($user) ? 1 : 0);
+        $user->zip = $request->input('zip', null);
+        $user->remote = $request->input('remote', 0);
+        $user->vip = $request->input('vip', 0);
+        $user->website = $request->input('website', null);
+        $user->start_date = $request->input('start_date', null);
+        $user->end_date = $request->input('end_date', null);
+        $user->autoassign_licenses = $request->input('autoassign_licenses', 0);
 
-            // Update the location of any assets checked out to this user
-            Asset::where('assigned_type', User::class)
-                ->where('assigned_to', $user->id)
-                ->update(['location_id' => $request->input('location_id', null)]);
+        // Update the location of any assets checked out to this user
+        Asset::where('assigned_type', User::class)
+            ->where('assigned_to', $user->id)
+            ->update(['location_id' => $request->input('location_id', null)]);
 
-            // Do we want to update the user password?
-            if ($request->filled('password')) {
-                $user->password = bcrypt($request->input('password'));
-            }
-
+        // Do we want to update the user password?
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
 
         // Update the location of any assets checked out to this user
         Asset::where('assigned_type', User::class)
             ->where('assigned_to', $user->id)
             ->update(['location_id' => $user->location_id]);
 
-            $permissions_array = $request->input('permission');
+        $permissions_array = $request->input('permission');
 
-
-            // Strip out the superuser permission if the user isn't a superadmin
-            if (! auth()->user()->isSuperUser()) {
-                unset($permissions_array['superuser']);
-                $permissions_array['superuser'] = $orig_superuser;
-            }
-
-            $user->permissions = json_encode($permissions_array);
-
-            // Handle uploaded avatar
-            app(ImageUploadRequest::class)->handleImages($user, 600, 'avatar', 'avatars', 'avatar');
-            session()->put(['redirect_option' => $request->get('redirect_option')]);
-
-            if ($user->save()) {
-                // Redirect to the user page
-                return redirect()->to(Helper::getRedirectOption($request, $user->id, 'Users'))
-                    ->with('success', trans('admin/users/message.success.update'));
-            }
-
-            return redirect()->back()->withInput()->withErrors($user->getErrors());
-
-
+        // Strip out the superuser permission if the user isn't a superadmin
+        if (! auth()->user()->isSuperUser()) {
+            unset($permissions_array['superuser']);
+            $permissions_array['superuser'] = $orig_superuser;
         }
 
-        return redirect()->route('users.index')->with('error', trans('admin/users/message.user_not_found', compact('id')));
+        $user->permissions = json_encode($permissions_array);
+
+        // Handle uploaded avatar
+        app(ImageUploadRequest::class)->handleImages($user, 600, 'avatar', 'avatars', 'avatar');
+        session()->put(['redirect_option' => $request->get('redirect_option')]);
+
+        if ($user->save()) {
+            // Redirect to the user page
+            return redirect()->to(Helper::getRedirectOption($request, $user->id, 'Users'))
+                ->with('success', trans('admin/users/message.success.update'));
+        }
+
+        return redirect()->back()->withInput()->withErrors($user->getErrors());
     }
 
     /**
      * Delete a user
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param  int $id
+     *
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(DeleteUserRequest $request, $id = null)
@@ -345,16 +348,18 @@ class UsersController extends Controller
             $this->authorize('delete', $user);
 
             if ($user->delete()) {
-                if (Storage::disk('public')->exists('avatars/' . $user->avatar)) {
+                if (Storage::disk('public')->exists('avatars/'.$user->avatar)) {
                     try {
-                        Storage::disk('public')->delete('avatars/' . $user->avatar);
+                        Storage::disk('public')->delete('avatars/'.$user->avatar);
                     } catch (\Exception $e) {
                         Log::debug($e);
                     }
                 }
+
                 return redirect()->route('users.index')->with('success', trans('admin/users/message.success.delete'));
             }
         }
+
         return redirect()->route('users.index')->with('error', trans('admin/users/message.user_not_found'));
 
     }
@@ -363,9 +368,12 @@ class UsersController extends Controller
      * Restore a deleted user
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param  int $id
+     *
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function getRestore($id = null)
@@ -378,7 +386,7 @@ class UsersController extends Controller
             }
 
             if ($user->restore()) {
-                $logaction = new Actionlog();
+                $logaction = new Actionlog;
                 $logaction->item_type = User::class;
                 $logaction->item_id = $user->id;
                 $logaction->created_at = date('Y-m-d H:i:s');
@@ -390,6 +398,7 @@ class UsersController extends Controller
                 if ($deleted_users > 0) {
                     return redirect()->back()->with('success', trans('admin/users/message.success.restored'));
                 }
+
                 return redirect()->route('users.index')->with('success', trans('admin/users/message.success.restored'));
 
             }
@@ -405,9 +414,12 @@ class UsersController extends Controller
      * Return a view with user detail
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param  int $userId
+     *
+     * @param  int  $userId
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show($userId = null)
@@ -422,6 +434,7 @@ class UsersController extends Controller
 
         if ($user) {
             $userlog = $user->userlog->load('item');
+
             return view('users/view', compact('user', 'userlog'))->with('settings', Setting::getSettings());
         }
 
@@ -429,15 +442,17 @@ class UsersController extends Controller
 
     }
 
-
     /**
      * Return a view containing a pre-populated new user form,
      * populated with some fields from an existing user.
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v1.0]
-     * @param  int $id
+     *
+     * @param  int  $id
      * @return \Illuminate\Contracts\View\View
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function getClone(Request $request, $id = null)
@@ -449,14 +464,11 @@ class UsersController extends Controller
         $permissions = $request->input('permissions', []);
         app('request')->request->set('permissions', $permissions);
 
-
         $user_to_clone = User::with('assets', 'assets.model', 'consumables', 'accessories', 'licenses', 'userloc')->withTrashed()->find($id);
         // Make sure they can view this particular user
         $this->authorize('view', $user_to_clone);
 
-
         if ($user_to_clone) {
-
 
             $user = clone $user_to_clone;
 
@@ -491,8 +503,11 @@ class UsersController extends Controller
      * Exports users to CSV
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]
+     *
      * @since [v3.5]
+     *
      * @return StreamedResponse
+     *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function getExportUserCsv()
@@ -548,16 +563,13 @@ class UsersController extends Controller
                             $user_groups .= $user_group->name.', ';
                         }
 
+                        $permissionstring = '';
 
-                        $permissionstring = "";
-                        
-                        if($user->isSuperUser()) {
+                        if ($user->isSuperUser()) {
                             $permissionstring = trans('general.superuser');
-                        }
-                        elseif($user->hasAccess('admin')) {
+                        } elseif ($user->hasAccess('admin')) {
                             $permissionstring = trans('general.admin');
-                        }
-                        else {
+                        } else {
                             $permissionstring = trans('general.user');
                         }
 
@@ -601,36 +613,39 @@ class UsersController extends Controller
     /**
      * Print inventory
      *
-     * @author Aladin Alaily
      * @since [v1.8]
-     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @author Aladin Alaily
      */
     public function printInventory($id)
     {
         $this->authorize('view', User::class);
-        $user = User::where('id', $id)->withTrashed()->first();
-      
+        if ($user = User::where('id', $id)->withTrashed()->first()) {
 
-        // Make sure they can view this particular user
-        $this->authorize('view', $user);
+            $this->authorize('view', $user);
+            $assets = Asset::where('assigned_to', $id)->where('assigned_type', User::class)->with('model', 'model.category')->get();
+            $accessories = $user->accessories()->get();
+            $consumables = $user->consumables()->get();
 
-        $assets = Asset::where('assigned_to', $id)->where('assigned_type', User::class)->with('model', 'model.category')->get();
-        $accessories = $user->accessories()->get();
-        $consumables = $user->consumables()->get();
+            return view('users/print')->with('assets', $assets)
+                ->with('licenses', $user->licenses()->get())
+                ->with('accessories', $accessories)
+                ->with('consumables', $consumables)
+                ->with('show_user', $user)
+                ->with('settings', Setting::getSettings());
+        }
 
-        return view('users/print')->with('assets', $assets)
-            ->with('licenses', $user->licenses()->get())
-            ->with('accessories', $accessories)
-            ->with('consumables', $consumables)
-            ->with('show_user', $user)
-            ->with('settings', Setting::getSettings());
+        return redirect()->route('users.index')->with('error', trans('admin/users/message.user_not_found', compact('id')));
+
     }
 
     /**
      * Emails user a list of assigned assets
      *
      * @author [G. Martinez] [<godmartinz@gmail.com>]
+     *
      * @since [v6.0.5]
+     *
      * @param  \App\Http\Controllers\Users\UsersController  $id
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -650,6 +665,7 @@ class UsersController extends Controller
             }
 
             $user->notify((new CurrentInventory($user)));
+
             return redirect()->back()->with('success', trans('admin/users/general.user_notified'));
         }
 
@@ -661,7 +677,9 @@ class UsersController extends Controller
      * Send individual password reset email
      *
      * @author A. Gianotto
+     *
      * @since [v5.0.15]
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function sendPasswordReset($id)
@@ -674,6 +692,7 @@ class UsersController extends Controller
             try {
 
                 Password::sendResetLink($credentials);
+
                 return redirect()->back()->with('success', trans('admin/users/message.password_reset_sent', ['email' => $user->email]));
 
             } catch (\Exception $e) {

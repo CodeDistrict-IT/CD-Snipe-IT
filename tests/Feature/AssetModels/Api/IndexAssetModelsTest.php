@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\AssetModels\Api;
 
-use App\Models\Company;
 use App\Models\AssetModel;
 use App\Models\User;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -39,7 +38,7 @@ class IndexAssetModelsTest extends TestCase
                 'total',
                 'rows',
             ])
-            ->assertJson(fn(AssertableJson $json) => $json->has('rows', 3)->etc());
+            ->assertJson(fn (AssertableJson $json) => $json->has('rows', 3)->etc());
     }
 
     public function testAssetModelIndexSearchReturnsExpectedAssetModels()
@@ -61,7 +60,6 @@ class IndexAssetModelsTest extends TestCase
                 'total',
                 'rows',
             ])
-            ->assertJson(fn(AssertableJson $json) => $json->has('rows', 1)->etc());
+            ->assertJson(fn (AssertableJson $json) => $json->has('rows', 1)->etc());
     }
-
 }

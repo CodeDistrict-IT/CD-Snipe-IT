@@ -70,7 +70,7 @@ return [
     ],
     'hex_color' => 'The :attribute field must be a valid hexadecimal color.',
     'image' => 'The :attribute field must be an image.',
-    'import_field_empty'    => 'Qiimaha :fieldname ma noqon karo waxba.',
+    'import_field_empty' => 'Qiimaha :fieldname ma noqon karo waxba.',
     'in' => 'Xulashada :attribute waa mid aan sax ahayn.',
     'in_array' => 'The :attribute field must exist in :other.',
     'integer' => 'The :attribute field must be an integer.',
@@ -125,6 +125,8 @@ return [
         'symbols' => 'The :attribute field must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
+    'percent' => 'The depreciation minimum must be between 0 and 100 when depreciation type is percentage.',
+
     'present' => 'Goobta :attribute waa inay jirtaa',
     'present_if' => 'The :attribute field must be present when :other is :value.',
     'present_unless' => 'The :attribute field must be present unless :other is :value.',
@@ -153,16 +155,16 @@ return [
         'string' => 'The :attribute field must be :size characters.',
     ],
     'starts_with' => 'The :attribute field must start with one of the following: :values.',
-    'string'               => ' :attribute ku waa inuu noqdaa xadhig',
+    'string' => ' :attribute ku waa inuu noqdaa xadhig',
     'two_column_unique_undeleted' => 'The :attribute must be unique across :table1 and :table2. ',
-    'unique_undeleted'     => ' :attribute ku waa inuu noqdaa mid gaar ah',
-    'non_circular'         => ' :attribute waa inaanu samayn tixraac wareeg ah.',
-    'not_array'            => ':attribute cannot be an array.',
+    'unique_undeleted' => ' :attribute ku waa inuu noqdaa mid gaar ah',
+    'non_circular' => ' :attribute waa inaanu samayn tixraac wareeg ah.',
+    'not_array' => ':attribute cannot be an array.',
     'disallow_same_pwd_as_user_fields' => 'Password ma la mid noqon karo magaca isticmaalaha',
-    'letters'              => 'Furaha waa in uu ka kooban yahay ugu yaraan hal xaraf.',
-    'numbers'              => 'Furaha waa in uu ka kooban yahay ugu yaraan hal lambar.',
-    'case_diff'            => 'Furaha waa in uu isticmaalo kiis isku dhafan.',
-    'symbols'              => 'Erayga sirta ah waa inuu ka kooban yahay calaamado.',
+    'letters' => 'Furaha waa in uu ka kooban yahay ugu yaraan hal xaraf.',
+    'numbers' => 'Furaha waa in uu ka kooban yahay ugu yaraan hal lambar.',
+    'case_diff' => 'Furaha waa in uu isticmaalo kiis isku dhafan.',
+    'symbols' => 'Erayga sirta ah waa inuu ka kooban yahay calaamado.',
     'timezone' => 'The :attribute field must be a valid timezone.',
     'unique' => ' :attribute waa la qaatay mar hore',
     'uploaded' => ' :attribute ku wuu ku guul daraystay inuu soo geliyo',
@@ -184,25 +186,27 @@ return [
 
     'custom' => [
         'alpha_space' => 'Goobta :attribute waxay ka kooban tahay xarfo aan la oggolayn.',
-        'email_array'      => 'Hal ama ka badan ciwaanka iimaylka waa mid aan shaqayn.',
-        'hashed_pass'      => 'Eraygaaga hadda jira waa khalad',
-        'dumbpwd'          => 'Furahaas aad buu u badan yahay.',
+        'email_array' => 'Hal ama ka badan ciwaanka iimaylka waa mid aan shaqayn.',
+        'hashed_pass' => 'Eraygaaga hadda jira waa khalad',
+        'dumbpwd' => 'Furahaas aad buu u badan yahay.',
         'statuslabel_type' => 'Waa inaad doorataa nooca summada heerka ansax ah',
+        'custom_field_not_found' => 'This field does not seem to exist, please double check your custom field names.',
+        'custom_field_not_found_on_model' => 'This field seems to exist, but is not available on this Asset Model\'s fieldset.',
 
         // date_format validation with slightly less stupid messages. It duplicates a lot, but it gets the job done :(
         // We use this because the default error message for date_format is reflects php Y-m-d, which non-PHP
         // people won't know how to format.
-        'purchase_date.date_format'     => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
-        'last_audit_date.date_format'   =>  ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD hh:mm:ss ',
-        'expiration_date.date_format'   =>  ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
-        'termination_date.date_format'  =>  ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
-        'expected_checkin.date_format'  =>  ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
-        'start_date.date_format'        =>  ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
-        'end_date.date_format'          =>  ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
-        'checkboxes'           => ':attribute contains invalid options.',
-        'radio_buttons'        => ':attribute is invalid.',
+        'purchase_date.date_format' => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
+        'last_audit_date.date_format' => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD hh:mm:ss ',
+        'expiration_date.date_format' => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
+        'termination_date.date_format' => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
+        'expected_checkin.date_format' => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
+        'start_date.date_format' => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
+        'end_date.date_format' => ' :attribute ku waa inuu ahaado taariikh ansax ah oo qaabaysan YYY-MM-DD',
+        'checkboxes' => ':attribute contains invalid options.',
+        'radio_buttons' => ':attribute is invalid.',
         'invalid_value_in_field' => 'Invalid value included in this field',
-        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Attributes
@@ -228,6 +232,5 @@ return [
         'required' => 'This field is required',
         'email' => 'Please enter a valid email address',
     ],
-
 
 ];

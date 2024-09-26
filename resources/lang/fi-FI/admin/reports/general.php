@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'info'   => 'Valitse vaihtoehdot jotka haluat laiteraportillesi.',
+    'info' => 'Valitse vaihtoehdot jotka haluat laiteraportillesi.',
     'deleted_user' => 'Poistettu käyttäjä',
     'send_reminder' => 'Lähetä muistutus',
     'reminder_sent' => 'Muistutus lähetetty',
@@ -12,6 +12,6 @@ return [
         'user_city' => 'Käyttäjän Kaupunki',
         'user_state' => 'Käyttäjän Tila',
         'user_country' => 'Käyttäjän Maa',
-        'user_zip' => 'Käyttäjän Zip'
-    ]
+        'user_zip' => 'Käyttäjän Zip',
+    ],
 ];

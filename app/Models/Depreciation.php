@@ -12,7 +12,9 @@ class Depreciation extends SnipeModel
     use HasFactory;
 
     protected $presenter = \App\Presenters\DepreciationPresenter::class;
+
     use Presentable;
+
     // Declare the rules for the form validation
     protected $rules = [
         'name' => 'required|min:3|max:255|unique:depreciations,name',
@@ -27,6 +29,7 @@ class Depreciation extends SnipeModel
      * @var bool
      */
     protected $injectUniqueIdentifier = true;
+
     use ValidatingTrait;
 
     /**
@@ -56,7 +59,9 @@ class Depreciation extends SnipeModel
      * Establishes the depreciation -> models relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v5.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function models()
@@ -68,11 +73,27 @@ class Depreciation extends SnipeModel
      * Establishes the depreciation -> licenses relationship
      *
      * @author A. Gianotto <snipe@snipe.net>
+     *
      * @since [v5.0]
+     *
      * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function licenses()
     {
         return $this->hasMany(\App\Models\License::class, 'depreciation_id');
+    }
+
+    /**
+     * Establishes the depreciation -> assets relationship
+     *
+     * @author A. Gianotto <snipe@snipe.net>
+     *
+     * @since [v5.0]
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\Relation
+     */
+    public function assets()
+    {
+        return $this->hasManyThrough(\App\Models\Asset::class, \App\Models\AssetModel::class, 'depreciation_id', 'model_id');
     }
 }

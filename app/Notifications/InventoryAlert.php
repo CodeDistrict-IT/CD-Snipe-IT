@@ -9,15 +9,11 @@ use Illuminate\Notifications\Notification;
 class InventoryAlert extends Notification
 {
     use Queueable;
-    /**
-     * @var
-     */
+
     private $params;
 
     /**
      * Create a new notification instance.
-     *
-     * @param $params
      */
     public function __construct($params, $threshold)
     {
@@ -47,8 +43,8 @@ class InventoryAlert extends Notification
         $message = (new MailMessage)->markdown(
             'notifications.markdown.report-low-inventory',
             [
-                'items'  => $this->items,
-                'threshold'  => $this->threshold,
+                'items' => $this->items,
+                'threshold' => $this->threshold,
             ]
         )
             ->subject(trans('mail.Low_Inventory_Report'));

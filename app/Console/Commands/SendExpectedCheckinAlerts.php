@@ -45,14 +45,13 @@ class SendExpectedCheckinAlerts extends Command
         $interval = $settings->audit_warning_days ?? 0;
         $today = Carbon::now();
         $interval_date = $today->copy()->addDays($interval);
-        
+
         $assets = Asset::whereNull('deleted_at')->DueOrOverdueForCheckin($settings)->orderBy('assets.expected_checkin', 'desc')->get();
 
         $this->info($assets->count().' assets must be checked in on or before '.$interval_date.' is deadline');
 
-
         foreach ($assets as $asset) {
-            if ($asset->assignedTo && (isset($asset->assignedTo->email)) && ($asset->assignedTo->email!='') && $asset->checkedOutToUser()) {
+            if ($asset->assignedTo && (isset($asset->assignedTo->email)) && ($asset->assignedTo->email != '') && $asset->checkedOutToUser()) {
                 $this->info('Sending User ExpectedCheckinNotification to: '.$asset->assignedTo->email);
                 $asset->assignedTo->notify((new ExpectedCheckinNotification($asset)));
             }

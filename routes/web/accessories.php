@@ -17,15 +17,8 @@ Route::group(['prefix' => 'accessories', 'middleware' => ['auth']], function () 
         [Accessories\AccessoryCheckoutController::class, 'store']
     )->name('accessories.checkout.store');
 
-    Route::get(
-        '{accessoryID}/checkin/{backto?}',
-        [Accessories\AccessoryCheckinController::class, 'create']
-    )->name('accessories.checkin.show');
-
-    Route::post(
-        '{accessoryID}/checkin/{backto?}',
-        [Accessories\AccessoryCheckinController::class, 'store']
-    )->name('accessories.checkin.store');
+    Route::get('{accessoryID}/checkin/{backto?}', [Accessories\AccessoryCheckinController::class, 'create'])->name('accessories.checkin.show');
+    Route::post('{accessoryID}/checkin/{backto?}', [Accessories\AccessoryCheckinController::class, 'store'])->name('accessories.checkin.store');
 
     Route::post(
         '{accessoryId}/upload',
@@ -43,10 +36,10 @@ Route::group(['prefix' => 'accessories', 'middleware' => ['auth']], function () 
     )->name('show.accessoryfile');
 
     Route::get('{accessoryId}/clone',
-            [Accessories\AccessoriesController::class, 'getClone']
-        )->name('clone/accessories');
+        [Accessories\AccessoriesController::class, 'getClone']
+    )->name('clone/accessories');
 
-    Route::post('{accessoryId}/clone', 
+    Route::post('{accessoryId}/clone',
         [Accessories\AccessoriesController::class, 'postCreate']
     );
 

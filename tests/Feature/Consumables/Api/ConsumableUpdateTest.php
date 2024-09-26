@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Consumables\Api;
 
-use App\Models\Consumable;
 use App\Models\Category;
+use App\Models\Consumable;
 use App\Models\User;
 use Tests\TestCase;
 
 class ConsumableUpdateTest extends TestCase
 {
-
     public function testCanUpdateConsumableViaPatchWithoutCategoryType()
     {
         $consumable = Consumable::factory()->create();
@@ -48,5 +47,4 @@ class ConsumableUpdateTest extends TestCase
         $this->assertNotEquals('consumable', $consumable->category_id, 'Category was not updated');
 
     }
-
 }

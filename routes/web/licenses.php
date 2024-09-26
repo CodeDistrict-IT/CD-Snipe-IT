@@ -10,7 +10,7 @@ Route::group(['prefix' => 'licenses', 'middleware' => ['auth']], function () {
     Route::get('{licenseId}/freecheckout',
         [Licenses\LicensesController::class, 'getFreeLicense']
     )->name('licenses.freecheckout');
-    Route::get('{licenseId}/checkout/{seatId?}', 
+    Route::get('{licenseId}/checkout/{seatId?}',
         [Licenses\LicenseCheckoutController::class, 'create']
     )->name('licenses.checkout');
     Route::post(
@@ -36,23 +36,23 @@ Route::group(['prefix' => 'licenses', 'middleware' => ['auth']], function () {
     )->name('licenses.bulkcheckout');
 
     Route::post(
-    '{licenseId}/upload',
+        '{licenseId}/upload',
         [Licenses\LicenseFilesController::class, 'store']
     )->name('upload/license');
 
     Route::delete(
-    '{licenseId}/deletefile/{fileId}',
+        '{licenseId}/deletefile/{fileId}',
         [Licenses\LicenseFilesController::class, 'destroy']
     )->name('delete/licensefile');
     Route::get(
-    '{licenseId}/showfile/{fileId}/{download?}',
+        '{licenseId}/showfile/{fileId}/{download?}',
         [Licenses\LicenseFilesController::class, 'show']
     )->name('show.licensefile');
     Route::get(
         'export',
         [
             Licenses\LicensesController::class,
-            'getExportLicensesCsv'
+            'getExportLicensesCsv',
         ]
     )->name('licenses.export');
 });
